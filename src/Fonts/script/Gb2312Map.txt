@@ -1,0 +1,3 @@
+const uint16_t GBKToUnicodeMap[][2] PROGMEM = {
+0xc4e3bac32c20cac0bde7a3a1, 0x63,
+};
