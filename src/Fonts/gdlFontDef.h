@@ -1,7 +1,7 @@
 #ifndef _GDLFONTDEF_H_
 #define _GDLFONTDEF_H_
 #include "Arduino.h"
-#include <DFRobot_TypeDefine.h>
+#include <DFRobot_Type.h>
 
 /// Font data stored PER GLYPH
 typedef struct{

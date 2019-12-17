@@ -3,7 +3,9 @@
 #include "DFRobot_ST7735S.h"
 #include "DFRobot_SSD1306.h"
 #include "DFRobot_ILI9488.h"
+#include "DFRobot_ST7789.h"
 
+GDL_PB_DEV(gdl_dev_st7789_240x240_hw_spi, (uint8_t *)DFRobot_ST7789_initCmd, GDL_COM_HW_SPI);
 GDL_PB_DEV(gdl_dev_st7735s_80x160_hw_spi, (uint8_t *)DFRobot_ST7735S_initCmd, GDL_COM_HW_SPI);
 GDL_PB_DEV(gdl_dev_ssd1306_128x32_hw_iic, (uint8_t *)DFRobot_SSD1306_initCmd, GDL_COM_HW_IIC);
 GDL_PB_DEV(gdl_dev_ssd1306_128x32_8080_p16, (uint8_t *)DFRobot_ILI9488_initCmd, GDL_COM_8080_P16);
@@ -214,3 +216,32 @@ DFRobot_ILI9488_320x480_DMA_SPI::DFRobot_ILI9488_320x480_DMA_SPI(uint8_t dc, uin
   //setColorMode(cMode);
 }*/
 #endif
+
+DFRobot_ST7789_240x240_HW_SPI::DFRobot_ST7789_240x240_HW_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
+  :DFRobot_GDL(&gdl_dev_st7789_240x240_hw_spi, 240, 240, dc, cs, rst, bl){}
+DFRobot_ST7789_240x240_HW_SPI::~DFRobot_ST7789_240x240_HW_SPI(){}
+void DFRobot_ST7789_240x240_HW_SPI::begin(){
+  init_interface();//接口初始化
+  initDisplay();//显示屏初始化
+}
+void DFRobot_ST7789_240x240_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
+{
+  uint8_t buf[3], len = 0, pixel = 0;
+  //getColorFormat(buf, len, pixel, color);
+  uint16_t x1 = x + w -1;
+  uint16_t y1 = y + h -1;
+  sendCommand(0x2A);
+  sendArgument(x);
+  sendArgument(x1);
+  sendCommand(0x2B);
+  sendArgument(y);
+  sendArgument(y1);
+  sendCommand(0x2C);
+
+  for(uint16_t i = 0; i < w; i++){
+      for(uint16_t j = 0; j < h; j++){
+          sendData16(color);
+      }
+  }
+}
+

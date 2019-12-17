@@ -1,5 +1,5 @@
-#ifndef __DFROBOT_TYPEDEFINE_H
-#define __DFROBOT_TYPEDEFINE_H
+#ifndef __DFROBOT_TYPE_H
+#define __DFROBOT_TYPE_H
 
 #include <Arduino.h>
 #include <SPI.h>

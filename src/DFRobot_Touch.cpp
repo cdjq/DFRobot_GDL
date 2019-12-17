@@ -1,6 +1,6 @@
 #include "DFRobot_Touch.h"
 //#include "DFRobot_GDL.h"
-#include <DFRobot_TypeDefine.h>
+#include <DFRobot_Type.h>
 #include "Interface/DFRobot_Interface.h"
 #include "Wire.h"
 #define ADDR 0x5D

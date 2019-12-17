@@ -1,6 +1,6 @@
 #ifndef __DFROBOT_IF_H
 #define __DFROBOT_IF_H
-#include "DFRobot_TypeDefine.h"
+#include "DFRobot_Type.h"
 #include "Interface/DFRobot_Interface.h"
 /*硬件IIC一次能传输的最大字节数*/
 #ifndef I2C_BUFFER_LENGTH//ESP32(fireBeetle系列定义了I2C_BUFFER_LENGTH)

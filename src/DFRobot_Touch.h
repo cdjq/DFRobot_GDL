@@ -4,7 +4,7 @@
 #include "Wire.h"
 #include "TouchDrivers/DFRobot_GT911.h"
 #include "TouchDrivers/DFRobot_GT5688.h"
-#include <DFRobot_TypeDefine.h>
+#include <DFRobot_Type.h>
 #include "DFRobot_IF.h"
 
 class DFRobot_Touch: public DFRobot_IF{

@@ -1,6 +1,6 @@
 #ifndef __DFROBOT_INTERFACE_H
 #define __DFROBOT_INTERFACE_H
-#include <DFRobot_TypeDefine.h>
+#include <DFRobot_Type.h>
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>

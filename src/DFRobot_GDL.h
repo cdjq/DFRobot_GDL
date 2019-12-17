@@ -6,10 +6,11 @@
 #include <SPI.h>
 #include <Wire.h>
 #include "Frame/Adafruit_GFX.h"
-#include <DFRobot_TypeDefine.h>
+#include <DFRobot_Type.h>
 #include "Drivers/DFRobot_ST7735S.h"
 #include "Fonts/gdlFontDef.h"
 #include "DFRobot_3WireSPI.h"
+//#include "Drivers/DFRobot_Display_Series.h"
 //#include "Fonts/SIMKAIFont12pt.h"
 
 #if 1
@@ -95,7 +96,6 @@ private:
 class DFRobot_ST7735S_80x160: public DFRobot_GDL{
 public:
   DFRobot_ST7735S_80x160(uint8_t dc, uint8_t cs = GDL_PIN_NONE, uint8_t rst = GDL_PIN_NONE, uint8_t bl = GDL_PIN_NONE);
-  //DFRobot_ST7735S_80x160(uint8_t sck, uint8_t mosi, uint8_t dc, uint8_t cs,  uint8_t rst, uint8_t bl = GDL_PIN_NONE, uint8_t miso = GDL_PIN_NONE);
   ~DFRobot_ST7735S_80x160(){}
   void begin();
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
@@ -165,5 +165,14 @@ private:
   uint8_t _cs;
 };
 #endif
+
+class DFRobot_ST7789_240x240_HW_SPI: public DFRobot_GDL{
+public:
+  DFRobot_ST7789_240x240_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NONE, uint8_t rst = GDL_PIN_NONE, uint8_t bl = GDL_PIN_NONE);
+  ~DFRobot_ST7789_240x240_HW_SPI();
+  void begin();
+  void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+ // void setColorMode(uint8_t mode);
+};
 
 #endif
