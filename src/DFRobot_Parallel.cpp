@@ -133,7 +133,7 @@ void DFRobot_Parallel::writeBits(uint32_t value, uint8_t bits){
 		sendData();
 	  }
   }
-#esle
+#else
   //set_pin_out();
   //value = (uint16_t)(value << 11)|(value&0x7E)|(value>>11);
   while(count--){

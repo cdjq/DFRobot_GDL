@@ -102,8 +102,8 @@
 typedef struct _sGdlDev sGdlDev_t;
 typedef struct sGdlIF sGdlIF_t;
 
-typedef uint8_t(*gdl_dev_interface_fp)(sGdlDev_t *gdl, uint8_t step, uint8_t *addr, uint16_t len);
-typedef uint8_t(*devInterfaceFunctionPtr)(sGdlIF_t *gdl, uint8_t step, uint8_t *addr, uint16_t len);//FP->function pointer函数指针
+typedef uint8_t(*gdl_dev_interface_fp)(sGdlDev_t *gdl, uint8_t step, uint8_t *addr, uint32_t len);
+typedef uint8_t(*devInterfaceFunctionPtr)(sGdlIF_t *gdl, uint8_t step, uint8_t *addr, uint32_t len);//FP->function pointer函数指针
 
 
 typedef struct{

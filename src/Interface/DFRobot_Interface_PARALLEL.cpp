@@ -1,6 +1,6 @@
 #include "DFRobot_Interface.h"
 
-uint8_t gdl_com_8080_p16(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len){
+uint8_t gdl_com_8080_p16(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint32_t len){
   switch(function){
     case GDL_COM_INTERFACE_INIT:
           pGdl->pro.paral =&PARAL;

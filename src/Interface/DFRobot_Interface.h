@@ -48,17 +48,21 @@
 #define GDL_COM_DISPLAY_INIT 6
 #define GDL_COM_WRITE_BUFFER 7
 #define GDL_COM_READ_BUFFER 8
+#define IF_COM_WRITE_COLOR 9 
+ /*
+    IF_COM_WRITE_COLOR: 第一个字节代表一个像素点用几个字节表示,紧接着的是像素点数据
+*/
 
-uint8_t gdl_com_hw_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
-uint8_t gdl_com_hw_iic(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
-uint8_t gdl_com_hw_iic(sGdlIF_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
+uint8_t gdl_com_hw_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint32_t len);
+uint8_t gdl_com_hw_iic(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint32_t len);
+uint8_t gdl_com_hw_iic(sGdlIF_t *pGdl, uint8_t function, uint8_t *addr, uint32_t len);
 //extern uint8_t gdl_com_sw_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
 //extern uint8_t gdl_com_hw_iic(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
 //extern uint8_t gdl_com_sw_iic(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
 //extern uint8_t gdl_com_6800_p16(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
-uint8_t gdl_com_8080_p16(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
+uint8_t gdl_com_8080_p16(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint32_t len);
 #ifdef ARDUINO_SAM_ZERO
-uint8_t gdl_com_dma_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint16_t len);
+uint8_t gdl_com_dma_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *addr, uint32_t len);
 #define GDL_COM_DMA_SPI gdl_com_dma_spi
 #endif
 

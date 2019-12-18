@@ -168,6 +168,24 @@ void DFRobot_GDL::sendData(uint8_t *pBuf, uint16_t len){
   _gdl.dev->talk(&_gdl, GDL_COM_WRITE_DATA, pBuf, len);
 }
 void DFRobot_GDL::sendData16(uint16_t data){
-  uint8_t temp[2] = {(data >> 8),data};
+  uint8_t temp[2];
+  temp[0] = data >> 8;
+  temp[1] = data;
   _gdl.dev->talk(&_gdl, GDL_COM_WRITE_DATA, temp, 2);
+}
+void DFRobot_GDL::writeColor(uint16_t color, uint32_t len){
+  uint8_t buf[2 + 1];
+  buf[0] = 2;
+  buf[1] = color >> 8;
+  buf[2] = color;
+  _gdl.dev->talk(&_gdl, IF_COM_WRITE_COLOR, buf, len);
+}
+void DFRobot_GDL::writeColor(uint8_t *colorBuf, uint8_t pixelBytes, uint32_t len)
+{
+  uint8_t buf[pixelBytes + 1];
+  buf[0] = pixelBytes;
+  for(uint8_t i = 0; i < pixelBytes; i++){
+	  buf[1+i] = colorBuf[i];
+  }
+  _gdl.dev->talk(&_gdl, IF_COM_WRITE_COLOR, buf, len);
 }

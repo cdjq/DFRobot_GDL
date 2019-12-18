@@ -67,21 +67,21 @@ void DFRobot_Touch_GTxxx::begin(){
   uint16_t sizeReg = 0;
   readBuf(0x8140,temp,4);
   id = temp;
-  Serial.println(id);
-  if(id = "5688"){
+  //Serial.println(id);
+  //while(1);
+  if(id == "5688"){
       _if.dev->addr = (uint8_t *)touchGt5688ConfigTable;
       sizeReg = 0x8051;
-  }else if(id = "911"){
+  }else if(id == "911"){
       _if.dev->addr = (uint8_t *)touchGT911ConfigTable;
       sizeReg = 0x8048;
   }
   uint8_t *addr = _if.dev->addr;
   touchConfig(addr);
   readBuf(sizeReg,temp,4);
-  _size.xw = temp[0] + (temp[1] << 8);
-  _size.yh = temp[2] + (temp[3] << 8);
-  Serial.println(_size.xw);
-  Serial.println(_size.yh);
+
+  _size.xw = ((uint8_t)temp[1] << 8) | (uint8_t)temp[0];
+  _size.yh = ((uint8_t)temp[3] << 8) | (uint8_t)temp[2];
 }
 String DFRobot_Touch_GTxxx::scan(){
   uint8_t flag = 0;
@@ -89,7 +89,7 @@ String DFRobot_Touch_GTxxx::scan(){
   String s = "";
   memset(_p, 0, sizeof(_p));
   readBuf(0x814E, &flag, 1);
-  Serial.print("flag = ");Serial.println(flag,HEX);
+  //Serial.print("flag = ");Serial.println(flag,HEX);
   if((flag & 0x80) ||((flag&0x0F)<6)){
       writeBuf(0x814E, &val, 1);
   }
@@ -109,8 +109,12 @@ String DFRobot_Touch_GTxxx::scan(){
           }
       }
   }
+  if(s.length() == 0){
+     s = "255,0,0,0,0 ";
+  }
+    // Serial.println(s);
+   delay(10);
   _points = s;
-  Serial.println(s);
   return s;
 }
 

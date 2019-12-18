@@ -50,7 +50,7 @@ void DFRobot_IF::initHWIIC(sGdlIFDev_t *dev, uint8_t addr, uint8_t rst, uint8_t 
 void DFRobot_IF::writeBuf(uint16_t reg, void *pBuf, uint16_t len, bool flag)
 {
   if(pBuf == NULL){
-	  return;
+      return;
   }
   uint8_t *_pBuf = (uint8_t *)pBuf;
   uint8_t bufPre[3] = {0};
@@ -63,9 +63,10 @@ void DFRobot_IF::writeBuf(uint16_t reg, void *pBuf, uint16_t len, bool flag)
       bufPre[1] = reg >> 8;
       bufPre[2] = reg & 0xFF;
       len = (left > _if.length ? _if.length : left);
-	  uint8_t buf[3+len] = {0};
-	  memcpy(buf, bufPre, 3);
-	  memcpy(buf+3, _pBuf, len);
+      uint8_t buf[3+len];
+      memset(buf, 0, sizeof(buf));
+      memcpy(buf, bufPre, 3);
+      memcpy(buf+3, _pBuf, len);
       _if.dev->talk(&_if, GDL_COM_WRITE_BUFFER, buf, len);
       left -= len;
       _pBuf += len;
@@ -88,11 +89,12 @@ void DFRobot_IF::readBuf(uint16_t reg, void *pBuf, uint16_t len, bool flag)
       bufPre[1] = reg >> 8;
       bufPre[2] = reg & 0xFF;
       len = (left > _if.length ? _if.length : left);
-	  uint8_t buf[3+len] = {0};
-	  memcpy(buf, bufPre, 3);
+            uint8_t buf[3+len];
+      memset(buf, 0, sizeof(buf));
+      memcpy(buf, bufPre, 3);
       _if.dev->talk(&_if, GDL_COM_READ_BUFFER, buf, len);
-	  memcpy(_pBuf, buf, len);
+      memcpy(_pBuf, buf, len);
       left -= len;
-	  _pBuf += len;
+      _pBuf += len;
   }
 }

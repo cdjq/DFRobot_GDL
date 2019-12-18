@@ -54,12 +54,12 @@ public:
     uint16_t hSize;
   } sPoint_t;
   typedef struct {
-    uint16_t pos_x;
-    uint16_t pos_y;
+    uint16_t posx;
+    uint16_t posy;
     uint16_t  width ;
     uint16_t  height ;
-    uint16_t fg_color;
-    uint16_t bg_color;
+    uint16_t fgColor;
+    uint16_t bgColor;
     bool change;
     uint8_t  laststate;
     uint8_t  state;
@@ -67,18 +67,18 @@ public:
   
   } sSwitch_t;
   typedef struct {
-    uint16_t pos_x;
-    uint16_t pos_y;
-    int16_t max_value;
-    int16_t min_value;
-    uint16_t slider_height;
-    uint16_t slider_width;
-    uint16_t fg_color;
-    uint16_t bg_color;
+    uint16_t posx;
+    uint16_t posy;
+    int16_t maxValue;
+    int16_t minValue;
+    uint16_t sliderHeight;
+    uint16_t sliderWidth;
+    uint16_t fgColor;
+    uint16_t bgColor;
     uint16_t  width;
     uint16_t  height ;
     uint16_t range;
-    uint16_t  slider_pos;
+    uint16_t  sliderPos;
     int16_t value;
     bool change;
     sliderCallback *callBack;
@@ -86,12 +86,12 @@ public:
   } sSlider_t;
   
   typedef struct {
-    uint16_t pos_x;
-    uint16_t pos_y;
+    uint16_t posx;
+    uint16_t posy;
     uint16_t  width ;
     uint16_t  height ;
-    uint16_t fg_color;
-    uint16_t bg_color;
+    uint16_t fgColor;
+    uint16_t bgColor;
     uint8_t fontSize;
     char  text[10] ;
     bool click;
@@ -103,18 +103,18 @@ public:
   } sTheme_t;
   
   typedef struct {
-    uint16_t pos_x;
-    uint16_t pos_y;
+    uint16_t posx;
+    uint16_t posy;
     uint16_t  width;
     uint16_t  height;
-    uint16_t fg_color;
-    uint16_t bg_color;
+    uint16_t fgColor;
+    uint16_t bgColor;
     uint8_t fontSize;
     sTextState_t state;
     char cache ;
     char  text[50] ;
-    uint16_t cursor_x;
-    uint16_t cursor_y;
+    uint16_t cursorx;
+    uint16_t cursory;
   } sTextBox_t;
 
   typedef struct {
@@ -131,8 +131,16 @@ public:
     RIGHT,
     LEFT,
   } sLocation;
-
-
+typedef enum {
+  UPGLIDE ,
+  DOWNGLIDE,
+  LEFTGLIDE,
+  RIGHTGLIDE,
+  LONGPRESSDE,
+  SINGLECLICK,
+  DOUBLECLICK,
+  NONE,
+} sGestures_t;
 protected:
   scanF * scan;
 public:
@@ -173,8 +181,8 @@ public:
   void refreshTextBox(sTextBox_t *te);
   uint8_t pointNum(String str);
   uint8_t stringToPoint(String str, sPoint_t *point);
-  String pointToString(uint16_t *point);
   void updateCoordinate();
+  sGestures_t getGestures();
 private:
   void drawClickButton(sButton_t *bu);
   void drawButtonString(sButton_t *bu , sLocation x, sLocation y, char * c);
@@ -183,15 +191,23 @@ private:
   bool judgePress(sButton_t *bu, uint16_t x, uint16_t y);
   bool buttonPressed(sButton_t *bu , uint16_t touch_x, uint16_t touch_y);
   bool buttonRelease(sButton_t *bu, uint16_t touch_x, uint16_t touch_y);
+  bool release(uint16_t x,uint16_t y);
+  bool press(uint16_t x,uint16_t y);
+  bool focus(uint16_t x,uint16_t y);
   sPoint_t * position;
   DFRobot_GDL *_gdl;
   uint8_t number;
-
+  long long timer;
+  long long timer1;
   sTheme_t theme;
   bool cursorState;
-  uint16_t bg_color;
-  uint16_t lcd_width;
-  uint16_t lcd_height;
+  uint16_t bgColor;
+  uint16_t lcdWidth;
+  uint16_t lcdHeight;
   uint8_t pressed;
+  uint8_t screenPressed; 
+  sGestures_t lastGestute;
+  uint16_t bx1,by1,bx2,by2;
+  uint8_t click;
 };
 #endif

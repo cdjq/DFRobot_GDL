@@ -1,12 +1,8 @@
 #include "DFRobot_Interface.h"
-#ifndef I2C_BUFFER_LENGTH//ESP32(fireBeetle系列定义了I2C_BUFFER_LENGTH)
-#ifdef ARDUINO_ARCH_AVR  //AVR系列单片机一次最多传32字节数据
-#define I2C_BUFFER_LENGTH  32
-#endif
-#endif
+#include "DFRobot_IF.h"
 
 /*寄存器的底层处理数据不超过I2C_BUFFER_LENGTH*/
-uint8_t gdl_com_hw_iic(sGdlDev_t *pGdl, uint8_t function, uint8_t *pBuf, uint16_t len){
+uint8_t gdl_com_hw_iic(sGdlDev_t *pGdl, uint8_t function, uint8_t *pBuf, uint32_t len){
   switch(function){
     case GDL_COM_INTERFACE_INIT:
           pGdl->pro.iic = &Wire;
@@ -75,7 +71,7 @@ uint8_t gdl_com_hw_iic(sGdlDev_t *pGdl, uint8_t function, uint8_t *pBuf, uint16_
             break;
   }
 }
-uint8_t gdl_com_hw_iic(sGdlIF_t *pGdl, uint8_t function, uint8_t *pBuf, uint16_t len){
+uint8_t gdl_com_hw_iic(sGdlIF_t *pGdl, uint8_t function, uint8_t *pBuf, uint32_t len){
   switch(function){
     case GDL_COM_INTERFACE_INIT:
           pGdl->pro.iic = &Wire;

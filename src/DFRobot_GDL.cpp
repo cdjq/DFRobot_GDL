@@ -116,6 +116,14 @@ uint16_t DFRobot_GDL::rgb888ToRGB565(uint8_t r, uint8_t g, uint8_t b){
   uint16_t color = ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3);
   return color;
 }
+
+
+
+
+
+
+
+
 #ifdef ARDUINO_AVR_UNO
 DFRobot_LT768_320x480_3W_SPI::DFRobot_LT768_320x480_3W_SPI(uint8_t cs)
   :DFRobot_GDL(800,480),_cs(cs){

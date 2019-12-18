@@ -2,7 +2,7 @@
 #ifdef ARDUINO_SAM_ZERO
 #define DF_DMA_SPI_TX_REG 0x42001828
 
-uint8_t gdl_com_dma_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *pBuf, uint16_t len){
+uint8_t gdl_com_dma_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *pBuf, uint32_t len){
   switch(function){
     case GDL_COM_INTERFACE_INIT:
           pGdl->pro.dma = &DMASPI;

@@ -193,7 +193,8 @@ void DFRobot_GDL::drawCharBitmaps(uint16_t x, uint16_t y, gdl_Font_t *gdlFont, u
 
 uint32_t DFRobot_GDL::utf8ToUnicode(uint8_t num, uint8_t *buf){
   uint32_t unicode = 0;
-  uint8_t Byte[num]={0};
+  uint8_t Byte[num];
+  memset(Byte, 0, sizeof(Byte));
   // Serial.println((char*)buf);
   // for(int i = 0; i<num; i++){
       // Serial.println(buf[i],HEX);
