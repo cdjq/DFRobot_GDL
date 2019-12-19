@@ -256,10 +256,6 @@ void DFRobot_ST7789_240x320_HW_SPI::begin(){
 }
 void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
- // Serial.print("w = ");Serial.println(w);
-  //Serial.print("h = ");Serial.println(h);
-  //uint16_t x1 = x + w -1;
-  //uint16_t y1 = y + h -1;
   sendCommand(0x2A);
   sendArgument(x);
   sendArgument(x + w -1);
@@ -268,20 +264,4 @@ void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint1
   sendArgument(y + h -1);
   sendCommand(0x2C);
   writeColor(color, uint32_t(w*h));
-  //digitalWrite(27, 1);
-  //uint8_t temp[2];
-  //temp[0] = color >> 8;
-  //temp[1] = color;
-  //uint32_t num = 0;
-  // for(uint16_t i = 0; i < w; i++){
-      // for(uint16_t j = 0; j < h; j++){
-          // sendData16(color);
-		  // _gdl.dev->talk(&_gdl, GDL_COM_WRITE_DATA, (uint8_t *)&color, 2);
-		  // num = i*j;
-		  // if(num > 50000)
-			  // yield(); 
-      // }
-	  // Serial.println(i);
-  // }
-  
 }

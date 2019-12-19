@@ -17,31 +17,19 @@ uint8_t gdl_com_hw_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *pBuf, uint32_
           GDL_DC_HIGH(pGdl->pinList[GDL_PIN_DC]);
           do{
               uint32_t pixelNums = len;
-			  uint32_t arg = 50000/(14*12);
+              uint32_t arg = 50000/pBuf[0];
               if(pixelNums > arg) pixelNums = arg;
-			  len -= pixelNums;
-			  #if defined(ESP8266)
+              len -= pixelNums;
+              #if defined(ESP8266)
               yield();
               #endif
-			  while(pixelNums--){
-				  for(uint8_t i = 0; i < 14;i++){
-					  //pGdl->pro.spi->transfer(pBuf[i+1]);
-					  pGdl->pro.spi->transfer(0xF8);
-					  pGdl->pro.spi->transfer(0x00);
-					  pGdl->pro.spi->transfer(0xF8);
-					  pGdl->pro.spi->transfer(0x00);
-					  pGdl->pro.spi->transfer(0xF8);
-					  pGdl->pro.spi->transfer(0x00);
-					  pGdl->pro.spi->transfer(0xF8);
-					  pGdl->pro.spi->transfer(0x00);
-					  pGdl->pro.spi->transfer(0xF8);
-					  pGdl->pro.spi->transfer(0x00);
-					  pGdl->pro.spi->transfer(0xF8);
-					  pGdl->pro.spi->transfer(0x00);
-				  }
-			  }
+              while(pixelNums--){
+                  for(uint8_t i = 0; i < pBuf[0];i++){
+                      pGdl->pro.spi->transfer(pBuf[i+1]);
+                  }
+              }
           }while(len);
-		  GDL_CS_HIGH(pGdl->pinList[GDL_PIN_CS]);
+          GDL_CS_HIGH(pGdl->pinList[GDL_PIN_CS]);
           GDL_DC_HIGH(pGdl->pinList[GDL_PIN_DC]);
     }
           break;
@@ -75,8 +63,7 @@ uint8_t gdl_com_hw_spi(sGdlDev_t *pGdl, uint8_t function, uint8_t *pBuf, uint32_
     default:
             break;
   }
-                #if defined(ESP8266)
-       
-                      yield();
-              #endif
+#if defined(ESP8266)
+yield();
+#endif
 }
