@@ -6,34 +6,24 @@
 //#define pgm_read_byte(addr)  (*(const unsigned char *)(addr))
 
 void DFRobot_GDL::initDisplay(){
-  int16_t length = 2, n = 0;
   const uint8_t *addr = _gdl.dev->addr;
-  //Serial.print("addr = ");Serial.println(addr[0],HEX);Serial.println(pgm_read_byte(&length), HEX);
-  //DBG(*(const unsigned char *)(addr));
   uint8_t flag, cmd, argsNum, val;
   uint16_t time = 0;
- // DBG("Error2!");
   if(addr == NULL){
       DBG("addr error!");
       return;
   }
   while(((flag = pgm_read_byte(addr++)) > 0)) {
-       //DBG(flag);
        cmd = pgm_read_byte(addr++);
-       //DBG(cmd,HEX);
-       //_gdl.dev->talk(&_gdl, GDL_COM_WRITE_CMD, &cmd, 1);
        val = pgm_read_byte(addr++);
        argsNum = val & 0x7F;
-       //DBG(*addr,HEX);
-       sendCommand(cmd, addr, argsNum);
-       addr += argsNum;
        if(val & 0x80) {
            time = pgm_read_byte(addr++)*255 + pgm_read_byte(addr++);
-           //DBG("time: ");DBG(time);
            delay(time);
        }
+       sendCommand(cmd, addr, argsNum);
+       addr += argsNum;
   }
-  
 }
 
 void DFRobot_GDL::drawPixel(int16_t x, int16_t y, uint16_t color){
@@ -338,68 +328,68 @@ void DFRobot_LT768_320x480_3W_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16
   uint16_t x1 = x + w;
   uint16_t y1 = y + h;
   uint8_t temp;
-	/*WriteCommand(0x10);
-	temp = LCD_DataRead();
-	Serial.print("temp 0x10= ");Serial.print(temp,HEX);
+    /*WriteCommand(0x10);
+    temp = LCD_DataRead();
+    Serial.print("temp 0x10= ");Serial.print(temp,HEX);
     temp &= 0xF7;
     temp |= 0x04;
-	Serial.print("___");Serial.println(temp, HEX);
-	WriteCommand(temp);
-	LCD_RegisterWrite(0x20,0);
-	LCD_RegisterWrite(0x21,0);
-	LCD_RegisterWrite(0x22,0);
-	LCD_RegisterWrite(0x23,0);
-	LCD_RegisterWrite(0x24,0x20);//0x320 = 800
-	LCD_RegisterWrite(0x25,3);
-	LCD_RegisterWrite(0x26,0);
-	LCD_RegisterWrite(0x27,0);
-	LCD_RegisterWrite(0x28,0);
-	LCD_RegisterWrite(0x29,0);
-	LCD_RegisterWrite(0x50,0);
-	LCD_RegisterWrite(0x51,0);
-	LCD_RegisterWrite(0x52,0);
-	LCD_RegisterWrite(0x53,0);
-	LCD_RegisterWrite(0x54,0x20);
-	LCD_RegisterWrite(0x55,3);
-	LCD_RegisterWrite(0x56,x);
-	LCD_RegisterWrite(0x57,x>>8);
-	LCD_RegisterWrite(0x58,y);
-	LCD_RegisterWrite(0x59,y>>8);
-	LCD_RegisterWrite(0x5A,w);
-	LCD_RegisterWrite(0x5B,w>>8);
- 	LCD_RegisterWrite(0x5C,y);
-	LCD_RegisterWrite(0x5D,y>>8);
-	
-	WriteData(0x03);
-	temp = LCD_DataRead();
-	Serial.print("temp 0x03= ");Serial.print(temp,HEX);
+    Serial.print("___");Serial.println(temp, HEX);
+    WriteCommand(temp);
+    LCD_RegisterWrite(0x20,0);
+    LCD_RegisterWrite(0x21,0);
+    LCD_RegisterWrite(0x22,0);
+    LCD_RegisterWrite(0x23,0);
+    LCD_RegisterWrite(0x24,0x20);//0x320 = 800
+    LCD_RegisterWrite(0x25,3);
+    LCD_RegisterWrite(0x26,0);
+    LCD_RegisterWrite(0x27,0);
+    LCD_RegisterWrite(0x28,0);
+    LCD_RegisterWrite(0x29,0);
+    LCD_RegisterWrite(0x50,0);
+    LCD_RegisterWrite(0x51,0);
+    LCD_RegisterWrite(0x52,0);
+    LCD_RegisterWrite(0x53,0);
+    LCD_RegisterWrite(0x54,0x20);
+    LCD_RegisterWrite(0x55,3);
+    LCD_RegisterWrite(0x56,x);
+    LCD_RegisterWrite(0x57,x>>8);
+    LCD_RegisterWrite(0x58,y);
+    LCD_RegisterWrite(0x59,y>>8);
+    LCD_RegisterWrite(0x5A,w);
+    LCD_RegisterWrite(0x5B,w>>8);
+    LCD_RegisterWrite(0x5C,y);
+    LCD_RegisterWrite(0x5D,y>>8);
+    
+    WriteData(0x03);
+    temp = LCD_DataRead();
+    Serial.print("temp 0x03= ");Serial.print(temp,HEX);
     temp &= 0xfb;
-	Serial.print("___");Serial.println(temp, HEX);
-	WriteData(temp);
-	
-	WriteData(0x5E);
-	temp = LCD_DataRead();
-	Serial.print("temp 0x5E= ");Serial.print(temp,HEX);
-	temp |= 0x02;
-	temp |= 0x01;
-	Serial.print("___");Serial.println(temp, HEX);
-	WriteData(temp);
-	WriteCommand(0x40);
-	uint8_t n = 0,buf[2] = {color, color >> 8};
-	for(uint16_t i=0;i < h;i++)
+    Serial.print("___");Serial.println(temp, HEX);
+    WriteData(temp);
+    
+    WriteData(0x5E);
+    temp = LCD_DataRead();
+    Serial.print("temp 0x5E= ");Serial.print(temp,HEX);
+    temp |= 0x02;
+    temp |= 0x01;
+    Serial.print("___");Serial.println(temp, HEX);
+    WriteData(temp);
+    WriteCommand(0x40);
+    uint8_t n = 0,buf[2] = {color, color >> 8};
+    for(uint16_t i=0;i < h;i++)
   { 
       for(uint16_t j=0;j < w;j++)
       {
         do{
         }while( LCD_StatusRead()&0x80 );
         WriteData(buf[n++]);
-		if(n == 2){
-			n = 0;
-		}
+        if(n == 2){
+            n = 0;
+        }
       }
    }
     do{
-	}while( (LCD_StatusRead()&0x40) == 0x00 );*/
+    }while( (LCD_StatusRead()&0x40) == 0x00 );*/
  // uint32_t color = 0x00ff0000;
   WriteCommand(0xD2);
   WriteData(color>>8);
@@ -469,19 +459,19 @@ void DFRobot_LT768_320x480_3W_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16
   uint8_t n = 0;
   for(uint16_t i=0;i< 480;i++)
   { 
-	  //Serial.print("i = ");Serial.println(i);
-	  for(uint16_t j=0;j< 800;j++)
+      //Serial.print("i = ");Serial.println(i);
+      for(uint16_t j=0;j< 800;j++)
       {
         do{
         }while( LCD_StatusRead()&0x80 );
         WriteData(buf[0]);
-		do{
+        do{
         }while( LCD_StatusRead()&0x80 );
         WriteData(buf[1]);
       }
    }
     do{
-	}while( (LCD_StatusRead()&0x40) == 0x00 );
+    }while( (LCD_StatusRead()&0x40) == 0x00 );
   
 /*
   WriteCommand(0x01);

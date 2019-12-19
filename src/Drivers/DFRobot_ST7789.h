@@ -1,7 +1,6 @@
 #ifndef __DFROBOT_ST7789_H
 #define __DFROBOT_ST7789_H
 
-/*static const uint8_t PROGMEM DFRobot_ILI9488_initCmd[] */
 static const uint8_t PROGMEM DFRobot_ST7789_initCmd[]= {
 0x01, 0x01, 0x80, 0, 150,
 0x01, 0x11, 0x80, 0, 120,
@@ -10,5 +9,6 @@ static const uint8_t PROGMEM DFRobot_ST7789_initCmd[]= {
 0x01, 0x21, 0,
 0x01, 0x13, 0,
 0x01, 0x29, 0,
+0x00
 };
 #endif
