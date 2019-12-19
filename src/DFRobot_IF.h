@@ -11,9 +11,12 @@
 #define I2C_BUFFER_LENGTH  32
 #elif defined(ESP32)
 #define I2C_BUFFER_LENGTH  128
+#elif defined(ARDUINO_SAM_ZERO)
+#define I2C_BUFFER_LENGTH  256
+#else
+#define I2C_BUFFER_LENGTH  32
 #endif
 #endif
-
 class DFRobot_IF{
 public:
   sGdlIF_t _if;/*interface*/

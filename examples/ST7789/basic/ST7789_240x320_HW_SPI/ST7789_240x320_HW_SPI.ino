@@ -1,7 +1,13 @@
 #include "DFRobot_GDL.h"
+#if defined(ESP32)||defined(ESP8266)
 #define DC  D4
 #define CS  D5
 #define RST D6
+#else
+#define DC  4
+#define CS  5
+#define RST 6
+#endif
 
 DFRobot_ST7789_240x320_HW_SPI screen(DC,CS,RST);
 void setup() {

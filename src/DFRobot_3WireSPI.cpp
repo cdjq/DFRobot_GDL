@@ -32,8 +32,12 @@ SPI_SDA_IN;
   for(uint8_t count = 0; count < 8; count++){
       val <<= 1;
       CLR_SPI_SCK;
+#if defined(__AVR__)
       _NOP();
       _NOP();
+#else
+      delayMicroseconds(10);
+#endif
       bool(READ_SPI_SDA) ? val |= 1 : val &= 0xFE;
       SET_SPI_SCK;
   }

@@ -96,7 +96,7 @@ void DFRobot_SSD1306_128x32::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, 
           eBit = (i*4 + 3)%4;
       }
       n = eBit - sBit;
-	  offset = sBit*2;
+      offset = sBit*2;
       switch(n){
           case 0:
                data = 0x03 << offset;
@@ -111,14 +111,14 @@ void DFRobot_SSD1306_128x32::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, 
                data = 0xff << offset;
                break;
       }
-	  //Serial.print("i = ");Serial.println(i);
-	  //Serial.print("sbit = ");Serial.println(sBit);
-	  //Serial.print("ebit = ");Serial.println(eBit);
-	  //Serial.print("offset = ");Serial.println(offset);
-	  //
-	  //Serial.print("data = ");Serial.println(data);
-	  //Serial.print("color = ");Serial.println(color);
-	  sBit = (eBit + 1)%4;
+      //Serial.print("i = ");Serial.println(i);
+      //Serial.print("sbit = ");Serial.println(sBit);
+      //Serial.print("ebit = ");Serial.println(eBit);
+      //Serial.print("offset = ");Serial.println(offset);
+      //
+      //Serial.print("data = ");Serial.println(data);
+      //Serial.print("color = ");Serial.println(color);
+      sBit = (eBit + 1)%4;
       for(uint16_t j = 0; j < w; j++){//每页传输w个字节，给buf[w]赋值一次性
           uint16_t index = i*128 + j;//计算该数据在buffer中的下标
           if(color){
@@ -127,13 +127,13 @@ void DFRobot_SSD1306_128x32::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, 
               _gdl.buffer[index] &= ~data;
           }
           buf[j] = _gdl.buffer[index];
-		  //Serial.print("j = ");Serial.println(j);
-		  //Serial.print("buf = ");Serial.println(buf[j], HEX);
+          //Serial.print("j = ");Serial.println(j);
+          //Serial.print("buf = ");Serial.println(buf[j], HEX);
       }
       sendCommand(0xB0 + i);
       sendCommand(/*0x00);*/lsbCol);
       sendCommand(/*0x10);*/msbCol);
-	  sendData(buf, w);
+      sendData(buf, w);
   }
 }
 
@@ -173,34 +173,28 @@ void DFRobot_ILI9488_480x320::setDisplayArea(uint16_t x, uint16_t y, uint16_t w,
   sendArgument(y);
   sendArgument(y1);
   sendCommand(0x2C);
-
-  for(uint16_t i = 0; i < w; i++){
-      for(uint16_t j = 0; j < h; j++){
-          sendData(buf, len);
-      }
-  }
-  delay(5);
+  writeColor(buf, len, (uint32_t)w*h);
 }
 
 void DFRobot_ILI9488_480x320::setColorMode(uint8_t mode){
   sendCommand(0x3A);
   switch(mode){
-	  case COLOR_MODE_RGB111://暂不支持，找不到规律，调不通
-	       sendArgument8(0x11);
-		   _gdl.cMode = COLOR_MODE_RGB111;
-		   break;
-	  case COLOR_MODE_RGB565:
-	       sendArgument8(0x55);
-		   _gdl.cMode = COLOR_MODE_RGB565;
-		   break;
-	  case COLOR_MODE_RGB666:
-	       sendArgument8(0x66);
-		   _gdl.cMode = COLOR_MODE_RGB666;
-		   break;
-	  case COLOR_MODE_RGB888:
-	       sendArgument8(0x77);
-		   _gdl.cMode = COLOR_MODE_RGB888;
-		   break;
+      case COLOR_MODE_RGB111://暂不支持，找不到规律，调不通
+           sendArgument8(0x11);
+           _gdl.cMode = COLOR_MODE_RGB111;
+           break;
+      case COLOR_MODE_RGB565:
+           sendArgument8(0x55);
+           _gdl.cMode = COLOR_MODE_RGB565;
+           break;
+      case COLOR_MODE_RGB666:
+           sendArgument8(0x66);
+           _gdl.cMode = COLOR_MODE_RGB666;
+           break;
+      case COLOR_MODE_RGB888:
+           sendArgument8(0x77);
+           _gdl.cMode = COLOR_MODE_RGB888;
+           break;
   }
 }
 
@@ -239,12 +233,8 @@ void DFRobot_ST7789_240x240_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint1
   sendArgument(y);
   sendArgument(y1);
   sendCommand(0x2C);
+  writeColor(color, w*h);
 
-  for(uint16_t i = 0; i < w; i++){
-      for(uint16_t j = 0; j < h; j++){
-          sendData16(color);
-      }
-  }
 }
 
 DFRobot_ST7789_240x320_HW_SPI::DFRobot_ST7789_240x320_HW_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
@@ -263,5 +253,5 @@ void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint1
   sendArgument(y);
   sendArgument(y + h -1);
   sendCommand(0x2C);
-  writeColor(color, uint32_t(w*h));
+  writeColor(color, w*h);
 }
