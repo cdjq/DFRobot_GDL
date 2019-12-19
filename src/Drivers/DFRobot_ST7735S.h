@@ -1,9 +1,5 @@
 #ifndef __DFROBOT_ST7735S_H
 #define __DFROBOT_ST7735S_H
-#include "DFRobot_Display_Series.h"
-#include "Interface/DFRobot_Interface.h"
-#include "Arduino.h"
- 
 
 static const uint8_t PROGMEM DFRobot_ST7735S_initCmd[] = {
   //cmd delayFlag/argsNum argsValue 延时（超过255）延时/255
@@ -32,8 +28,5 @@ static const uint8_t PROGMEM DFRobot_ST7735S_initCmd[] = {
 //第一列 0x01和0x00用来区分数组是否结束
 //格式:flag-cmd-argNs-args-(time)
 };
-
-
-
 
 #endif
