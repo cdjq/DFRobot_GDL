@@ -1,4 +1,5 @@
 #include "DFRobot_GDL.h"
+#include "DFRobot_Interface.h"
 
 DFRobot_GDL::DFRobot_GDL(sGdl_dev_t *dev, int16_t w, int16_t h, uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
   :Adafruit_GFX(w, h){
