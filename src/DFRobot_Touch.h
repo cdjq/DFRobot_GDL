@@ -5,7 +5,7 @@
 #include "TouchDrivers/DFRobot_GT911.h"
 #include "TouchDrivers/DFRobot_GT5688.h"
 #include <DFRobot_Type.h>
-#include "Interface/DFRobot_IF.h"
+#include "DFRobot_IF.h"
 #define XFAC      920 //663
 #define XOFFSET   (-20) //(-13)
 #define YFAC      1300 //894
