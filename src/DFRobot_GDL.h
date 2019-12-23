@@ -185,4 +185,12 @@ public:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 
+class DFRobot_HX8347D_240x320_HW_SPI: public DFRobot_GDL{
+public:
+  DFRobot_HX8347D_240x320_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NONE, uint8_t rst = GDL_PIN_NONE, uint8_t bl = GDL_PIN_NONE);
+  ~DFRobot_HX8347D_240x320_HW_SPI();
+  void begin();
+  void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+};
+
 #endif

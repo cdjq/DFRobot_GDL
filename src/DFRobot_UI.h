@@ -112,7 +112,7 @@ public:
     uint8_t fontSize;
     sTextState_t state;
     char cache ;
-    char  text[50] ;
+    char  text[40] ;
     uint16_t cursorx;
     uint16_t cursory;
   } sTextBox_t;
@@ -179,10 +179,13 @@ public:
   void refreshSwitch(sSwitch_t *sw);
   void creatText(sTextBox_t *tb);
   void refreshTextBox(sTextBox_t *te);
+  void setText(sTextBox_t *te,char * text);
+  void textAddChar(sTextBox_t *te,char txt);
   uint8_t pointNum(String str);
   uint8_t stringToPoint(String str, sPoint_t *point);
   void updateCoordinate();
   sGestures_t getGestures();
+  uint16_t bgColor;
 private:
   void drawClickButton(sButton_t *bu);
   void drawButtonString(sButton_t *bu , sLocation x, sLocation y, char * c);
@@ -201,7 +204,7 @@ private:
   long long timer1;
   sTheme_t theme;
   bool cursorState;
-  uint16_t bgColor;
+
   uint16_t lcdWidth;
   uint16_t lcdHeight;
   uint8_t pressed;

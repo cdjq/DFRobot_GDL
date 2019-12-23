@@ -43,6 +43,15 @@ void DFRobot_UI::creatText(sTextBox_t *tb)
   }
 
 }
+void DFRobot_UI::setText(sTextBox_t *te,char * text){
+  memcpy(te->text, text, strlen(text));
+  memcpy(te->text + strlen(text), "\0", 1);
+  te->state = DRAWTEXT;
+}
+void DFRobot_UI::textAddChar(sTextBox_t *te,char txt){
+  te->cache = txt;
+  te->state = ADDCHAR;
+}
 void DFRobot_UI::refreshTextBox(sTextBox_t *tb) 
 {
   uint8_t column = 0;
@@ -241,10 +250,7 @@ void DFRobot_UI::refreshTableview(sTableview_t *tv)
       if (buttonRelease(&tv->text[i], position[0].x, position[0].y) == 1) {
         drawButton(&tv->text[i]);
         if (tv->callback != NULL && tv->highLightPage != (i + 1)) {
-          _gdl->fillRect(0, 0, 320, 480, bgColor);
-          for (uint8_t i = 0 ; i < tv->numPage; i++) {
-            drawButton(&tv->text[i]);
-          }
+          _gdl->fillRect(0, tv->text[i].posy + tv->text[i].height +1 , 320, 400, bgColor);
           _gdl->fillRect(tv->text[i].posx, tv->text[i].posy + tv->text[i].height + 10, tv->text[i].width , 10, MAROON_RGB565);
           tv->highLightPage = i + 1;
           tv->callback(tv->highLightPage);
@@ -622,10 +628,10 @@ DFRobot_UI::sGestures_t DFRobot_UI::getGestures()
         x = bx2;
         y = by2;
         //timer = millis();
-        if (x >= 50 +bx1) return DOWNGLIDE;
-        else if (bx1  >= 50 +x) return UPGLIDE;
-        else if(y  >= 50 + by1)  return RIGHTGLIDE;
-        else if(by1 >= 50 + y) return LEFTGLIDE;
+        if (x >= 50 +bx1) return RIGHTGLIDE;
+        else if (bx1  >= 50 +x) return LEFTGLIDE;
+        else if(y  >= 50 + by1)  return DOWNGLIDE;
+        else if(by1 >= 50 + y) return UPGLIDE;
         else if((x < 50 +bx1 && y < 50 + by1 && x > bx1 -50 && y > by1 -50 )&&(click == 0)) {
                    click = 1;
         if(lastGestute == LONGPRESSDE) {
@@ -643,9 +649,6 @@ DFRobot_UI::sGestures_t DFRobot_UI::getGestures()
 
  
 }
-
-
-     //Serial.println(click);
  
  
     if((millis() - timer >=2000) && screenPressed == 1){

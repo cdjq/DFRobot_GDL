@@ -4,8 +4,9 @@
 #include "DFRobot_SSD1306.h"
 #include "DFRobot_ILI9488.h"
 #include "DFRobot_ST7789.h"
+#include "DFRobot_HX8347D.h"
 
-
+GDL_PB_DEV(gdl_dev_HX8347D_240x320_hw_spi, (uint8_t *)DFRobot_HX8347D_initCmd, GDL_COM_HW_SPI);
 GDL_PB_DEV(gdl_dev_st7789_240x320_hw_spi, (uint8_t *)DFRobot_ST7789_initCmd, GDL_COM_HW_SPI);
 GDL_PB_DEV(gdl_dev_st7789_240x240_hw_spi, (uint8_t *)DFRobot_ST7789_initCmd, GDL_COM_HW_SPI);
 GDL_PB_DEV(gdl_dev_st7735s_80x160_hw_spi, (uint8_t *)DFRobot_ST7735S_initCmd, GDL_COM_HW_SPI);
@@ -233,7 +234,7 @@ void DFRobot_ST7789_240x240_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint1
   sendArgument(y);
   sendArgument(y1);
   sendCommand(0x2C);
-  writeColor(color, w*h);
+  writeColor(color, (uint32_t)w*h);
 
 }
 
@@ -253,5 +254,49 @@ void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint1
   sendArgument(y);
   sendArgument(y + h -1);
   sendCommand(0x2C);
-  writeColor(color, w*h);
+  writeColor(color, (uint32_t)w*h);
+}
+DFRobot_HX8347D_240x320_HW_SPI::DFRobot_HX8347D_240x320_HW_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
+  :DFRobot_GDL(&gdl_dev_HX8347D_240x320_hw_spi, 240, 320, dc, cs, rst, bl){}
+DFRobot_HX8347D_240x320_HW_SPI::~DFRobot_HX8347D_240x320_HW_SPI(){}
+void DFRobot_HX8347D_240x320_HW_SPI::begin(){
+  init_interface();//接口初始化
+  /*复位，先接口初始化再复位*/
+  CLR_PIN_LOW(_gdl.pinList[GDL_PIN_RST]);
+  delay(5);
+  SET_PIN_HIGH(_gdl.pinList[GDL_PIN_RST]);
+  delay(5);
+  initDisplay();//显示屏初始化
+}
+void DFRobot_HX8347D_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
+{
+  uint16_t x1 = x + w - 1;
+  uint16_t y1 = y + h - 1;
+  sendCommand(0x02);
+  sendArgument8(x >> 8);
+  sendCommand(0x03);
+  sendArgument8(x & 0xFF);
+  // sendCommand(0x04);
+  // sendArgument8(x1 >> 8);
+  // sendCommand(0x05);
+  // sendArgument8(x1 & 0xFF);
+  
+  sendCommand(0x06);
+  sendArgument8(y >> 8);
+  sendCommand(0x07);
+  sendArgument8(y & 0xFF);
+  // sendCommand(0x08);
+  // sendArgument8(y1 >> 8);
+  // sendCommand(0x09);
+  // sendArgument8(y1 & 0xFF);
+  
+  sendCommand(0x22);
+  //sendArgument(y + h -1);
+  //sendCommand(0x2C);
+  for(uint16_t i = 0; i < w; i ++){
+	  for(uint16_t j = 0; j < h; j++){
+		  sendData16(color);
+	  }
+  }
+  //writeColor(color, w*h);
 }

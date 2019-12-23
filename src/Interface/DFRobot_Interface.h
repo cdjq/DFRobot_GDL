@@ -9,7 +9,7 @@
 #include "DFRobot_DMA.h"
 #endif
 
-
+#define IF_PIN_NC     255
 
 #define GDL_PIN_OUT(pin) if(pin != GDL_PIN_NONE){pinMode(pin, OUTPUT);}
 #define GDL_PIN_IN(pin) if(pin != GDL_PIN_NONE){pinMode(pin, INPUT);}
@@ -28,6 +28,11 @@
 
 #define GDL_INT_LOW(pin) if(pin != GDL_PIN_NONE){digitalWrite(pin, LOW);}
 #define GDL_INT_HIGH(pin) if(pin != GDL_PIN_NONE){digitalWrite(pin, HIGH);}
+
+#define SET_PIN_IN(pin)   if(pin != IF_PIN_NC) pinMode(pin, INPUT)
+#define SET_PIN_OUT(pin)  if(pin != IF_PIN_NC) pinMode(pin, OUTPUT)
+#define SET_PIN_HIGH(pin)  if(pin != IF_PIN_NC) digitalWrite(pin, HIGH)
+#define CLR_PIN_LOW(pin)  if(pin != IF_PIN_NC) digitalWrite(pin, LOW)
 
 #ifndef pgm_read_byte
  #define pgm_read_byte(addr)  (*(const unsigned char *)(addr))

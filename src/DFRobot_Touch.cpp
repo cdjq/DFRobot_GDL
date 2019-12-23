@@ -118,4 +118,85 @@ String DFRobot_Touch_GTxxx::scan(){
   return s;
 }
 
+DFRobot_Touch_XPTxxx::DFRobot_Touch_XPTxxx(uint8_t cs, uint8_t dc, uint8_t rst , uint8_t irq )
+:DFRobot_Touch(&gt9xxx_dev, dc, cs, rst){
+   _cs = cs;
+}
+DFRobot_Touch_XPTxxx::~DFRobot_Touch_XPTxxx(){
 
+}
+
+void DFRobot_Touch_XPTxxx::begin(){
+      pinMode(_cs,OUTPUT);
+      digitalWrite(_cs,1);
+      SPI.begin();
+}
+String DFRobot_Touch_XPTxxx::scan(){
+      uint16_t x,y,x1,y1,x2,y2;
+      String s = "";
+      x1 = readxy(0xD0);
+      y1 = readxy(0x90);
+      x2 = readxy(0xD0);
+      y2 = readxy(0x90);
+    if(((x2<=x1&&x1<x2+50)||(x1<=x2&&x2<x1+50))//Before and after the two samples are within +- ERR_RANGE.
+    &&((y2<=y1&&y1<y2+50)||(y1<=y2&&y2<y1+50)))
+    {
+        x=(x1+x2)/2;
+        y=(y1+y2)/2;
+    }
+    else
+    {
+      return "255,0,0,0,0 ";          
+    }        
+    x=((long)XFAC*x)/10000+XOFFSET;
+    y=((long)YFAC*y)/10000+YOFFSET;
+             
+    if(x > 320 || x <1 || y >480 || y < 1){
+      x = 0;
+      y = 0;
+    }
+    else {
+     x = 320 - x;
+     y = y;
+    }
+    delay(50);
+    s += String(1) + "," + String(x) + "," + String(y) + "," + String(10) + ","+ String(10) + " ";
+    return s;
+}
+uint16_t DFRobot_Touch_XPTxxx::readxy(uint8_t cmd){
+    uint16_t i, j;
+    uint16_t buf[5];
+    uint16_t sum=0;
+    uint16_t temp;    
+
+    for(i=0;i<5;i++)
+    {
+        uint16_t num=0; 
+        digitalWrite(_cs,LOW);
+        SPI.transfer(cmd);
+        num = SPI.transfer(0x00);
+        num = (num <<8 ) | SPI.transfer(0x00);
+        digitalWrite(_cs,HIGH);
+        num >>= 3;
+        buf[i]=num;
+    }           
+    for(i=0;i<5-1; i++)//Sort in ascending order
+    {
+        for(j=i+1;j<5;j++)
+        {
+            if(buf[i]>buf[j])
+            {
+                temp=buf[i];
+                buf[i]=buf[j];
+                buf[j]=temp;
+            }
+        }
+    }
+
+    for(i=1;i<5-1;i++) //Remove maximum and minimum values
+    {
+        sum+=buf[i];
+    }
+    temp=sum/(5-2*1);
+    return temp;   
+}
