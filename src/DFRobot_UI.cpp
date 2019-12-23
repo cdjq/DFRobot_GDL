@@ -260,10 +260,52 @@ void DFRobot_UI::refreshTableview(sTableview_t *tv)
   }
 }
 
+void DFRobot_UI::creatBar(sBar_t *bar){
+  uint8_t edgeWidth = lcdWidth / 160;
+  bar->width = lcdWidth-50;
+  bar->height = lcdHeight/40;
+  bar->fgColor = DARKGREY_RGB565;
+  bar->bgColor = 0xffff;
+  bar->lastValue = 0;
+  bar->value = 0;
+  bar->sliderPos = (bar->width * bar->value) / 100 + bar->posx ;
+  _gdl->fillRoundRect(bar->posx - edgeWidth, bar->posy - edgeWidth, bar->width + 2 * edgeWidth, bar->height + 2 * edgeWidth, bar->height / 2, DARKGREY_RGB565);
+  _gdl->fillRoundRect(bar->posx, bar->posy, bar->width , bar->height, bar->height / 2, bar->bgColor);
+  _gdl->setCursor((bar->posx+bar->width)/2,bar->posy+bar->height+5);
+  _gdl->setTextColor(bar->fgColor, bgColor);
+  _gdl->setTextSize(2);
+  _gdl->print(bar->value);
+  _gdl->print("%");
+}
+void DFRobot_UI::refreshBar(sBar_t *bar){
+  bar->sliderPos = (bar->width * bar->value) / 100 + bar->posx ;
+  if(bar->callBack) bar->callBack();
+  if(bar->value >= 100)  bar->value = 100 ;
+
+  for(uint8_t i = bar->lastValue; i < bar->value+1;i++){
+  _gdl->fillRoundRect(bar->posx, bar->posy, i*(bar->width)/100, bar->height, bar->height / 2, bar->fgColor);
+   bar->lastValue = bar->value;
+  _gdl->setCursor((bar->posx+bar->width)/2,bar->posy+bar->height+5);
+  _gdl->setTextColor(bar->fgColor, bgColor);
+  _gdl->setTextSize(2);
+  _gdl->print(bar->value);
+  _gdl->print("%");
+  }
+
+}
 void  DFRobot_UI::creatSlider(sSlider_t *slider) 
 {
 
   uint8_t edgeWidth = lcdWidth / 160;
+  slider->height = lcdHeight/100;
+  slider->width = lcdWidth-20;
+  slider->sliderWidth = lcdWidth / 16;
+  slider->sliderHeight = lcdHeight / 24;
+  slider->bgColor = 0x00;
+  slider->fgColor = 0xff0;
+  slider->value = 10 ;
+  slider->range = 100 ;
+  slider->change = false;
   slider->sliderPos = (slider->width * slider->value) / slider->range + slider->posx ;
   //fillRect(0,0,lcdWidth,lcdHeight,bgColor);
   slider->sliderPos = (slider->width * slider->value) / slider->range + slider->posx ;
@@ -302,18 +344,21 @@ void DFRobot_UI::refreshSliser(sSlider_t *slider)
   slider->sliderPos = position[0].x - slider->posx;
   if (slider->change == 1) {
     slider->value = ((position[0].x - slider->posx) * (slider->range)) / slider->width ;
-
+    _gdl->fillRoundRect(slider->posx + slider->lastsliderPos - slider->sliderWidth / 2 - edgeWidth, slider->posy - (slider->sliderHeight - slider->height) / 2 - edgeWidth, slider->sliderWidth + 2 * edgeWidth, slider->sliderHeight + 2 * edgeWidth, slider->sliderWidth / 10, GREEN_RGB565);
     _gdl->fillRect(slider->posx - slider->height / 2, slider->posy - (slider->sliderHeight - slider->height) / 2 - 2 * edgeWidth, slider->width + slider->height + 4 * edgeWidth, slider->sliderHeight + 4 * edgeWidth, bgColor);
     _gdl->fillRoundRect(slider->posx - edgeWidth, slider->posy - edgeWidth, slider->width + 2 * edgeWidth, slider->height + 2 * edgeWidth, slider->height / 2, DARKGREY_RGB565);
     _gdl->fillRoundRect(slider->posx, slider->posy, slider->width , slider->height, slider->height / 2, slider->bgColor);
     _gdl->fillRoundRect(slider->posx, slider->posy, slider->sliderPos, slider->height, slider->height / 2, slider->fgColor);
     _gdl->fillRoundRect(slider->posx + slider->sliderPos - slider->sliderWidth / 2 - edgeWidth, slider->posy - (slider->sliderHeight - slider->height) / 2 - edgeWidth, slider->sliderWidth + 2 * edgeWidth, slider->sliderHeight + 2 * edgeWidth, slider->sliderWidth / 10, DARKGREY_RGB565);
     _gdl->fillRoundRect(slider->posx + slider->sliderPos  - slider->sliderWidth / 2, slider->posy - (slider->sliderHeight - slider->height) / 2, slider->sliderWidth, slider->sliderHeight, slider->sliderWidth / 10, LIGHTGREY_RGB565);
-    _gdl->fillRect(slider->posx + slider->width / 2, slider->posy + 40 , 40, 40, bgColor);
+    //_gdl->fillRect(slider->posx + slider->width / 2, slider->posy + 40 , 20, 20, bgColor);
     itoa(slider->value, str, 10);
-    drawString(slider->posx + slider->width / 2, slider->posy + 40, str, DARKCYAN_RGB565, bgColor, 2, 1);
+    _gdl->setTextColor(DARKCYAN_RGB565, bgColor);
+    _gdl->setTextSize(2);
+    _gdl->setCursor(slider->posx + slider->width / 2,slider->posy + 40);
+    _gdl->print(slider->value);
   }
-
+     slider->lastsliderPos = slider->sliderPos;
   //scan(&touch_x, &touch_y);
   /*if (touch_x > slider->posx && (touch_x < slider->posx + slider->width) && ((touch_y > slider->posy) && (touch_y < slider->posy +slider->height))){
        slider->value = ((touch_x - slider->posx)*(slider->range))/slider->width ;
@@ -516,12 +561,14 @@ void DFRobot_UI::drawButtonString(sButton_t *bu , sLocation x, sLocation y, char
 void DFRobot_UI::drawString(int16_t x, int16_t y, char * c, uint16_t color, uint16_t bg, uint8_t size, boolean mode) 
 {
   char b ;
-  //Serial.print("c :");
-  //Serial.println(sizeof(c));
+   _gdl->setTextColor(color, bg);
+   _gdl->setTextSize(size);
   for (uint16_t i = 0 ; i < strlen(c); i++) {
     b = c[i];
-    _gdl->drawChar(x + i * 6 * size, y, b, color, bg, size);
+    _gdl->setCursor(x + i * 6 * size,y);
+    _gdl->print(b);
   }
+
 }
 
 uint8_t DFRobot_UI::pointNum(String str)
@@ -610,7 +657,6 @@ DFRobot_UI::sGestures_t DFRobot_UI::getGestures()
              return SINGLECLICK;
           }
             else if(click == 2){
-             
              click = 0;
             lastGestute = DOUBLECLICK;
             return  DOUBLECLICK;

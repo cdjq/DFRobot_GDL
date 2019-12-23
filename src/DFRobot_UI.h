@@ -38,6 +38,7 @@ public:
   typedef void tableViewCallback(uint8_t highLightPage);
   typedef void switchCallback(uint8_t state);
   typedef void buttonCallback(char* text);
+  typedef void barCallback();
   typedef enum {
     DRAWBOX,
     DRAWTEXT,
@@ -78,13 +79,25 @@ public:
     uint16_t  width;
     uint16_t  height ;
     uint16_t range;
+    uint16_t  lastsliderPos;
     uint16_t  sliderPos;
-    int16_t value;
+    uint16_t value;
     bool change;
     sliderCallback *callBack;
   
   } sSlider_t;
-  
+  typedef struct{
+    uint16_t posx;
+    uint16_t posy;
+    uint16_t width;
+    uint16_t height;
+    uint16_t fgColor;
+    uint16_t bgColor;
+    uint16_t sliderPos;
+    barCallback *callBack;
+    uint8_t lastValue;
+    uint8_t value;
+  } sBar_t ;
   typedef struct {
     uint16_t posx;
     uint16_t posy;
@@ -168,12 +181,51 @@ public:
    * @n 用户需要自定义这些数据
    */
   void refreshButton(sButton_t *bu);
+  /**
+   * @brief 设置UI的主题
+   * @param the sTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
+   * @n   the 的参数 ：THEME1,
+                     ：THEME2,
+   */
   void setTheme(sTheme_t the);
+  
+  /**
+   * @brief 注册一个触摸函数
+   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
+   */
   void setTouchFunction(scanF* fuc);
+  /**
+   * @brief 绘制字符串
+   * @param x 所需绘制字符串在屏幕上的x坐标
+   * @param y 所需绘制字符串在屏幕上的x坐标
+   * @param c 字符数组的指针
+   * @param color 字体的颜色
+   * @param bg 字体背景的颜色
+   * @param size 字体的大小
+   * @param mode 字体显示模式
+   * @n mode  0 ： 正常显示
+   *          1 ： 颜色反转
+   */
   void drawString(int16_t x, int16_t y, char  *c, uint16_t color, uint16_t bg, uint8_t size, boolean mode);
+  /**
+   * @brief 刷新滑条
+   * @param slider sSlider_t，里面包含了滑条的位置，长度和宽度等参数
+   */
   void refreshSliser(sSlider_t *slider);
+
   void creatSlider(sSlider_t *slider);
+  void creatBar(sBar_t *bar);
+  void refreshBar(sBar_t *bar);
+  /**
+   * @brief 在屏幕上创建一个tableview控件
+   * @param tv sTableview_t，里面包含了tableview的页数，内容等参数
+   * @n 用户需要自定义这些数据
+   */
   void creatTableview(sTableview_t *tv);
+  /**
+   * @brief 刷新tableview
+   * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
+   */
   void refreshTableview(sTableview_t *tv);
   void creatSwitch(sSwitch_t *sw);
   void refreshSwitch(sSwitch_t *sw);
@@ -183,6 +235,9 @@ public:
   void textAddChar(sTextBox_t *te,char txt);
   uint8_t pointNum(String str);
   uint8_t stringToPoint(String str, sPoint_t *point);
+  /**
+   * @brief 更新触摸点的数据
+   */
   void updateCoordinate();
   sGestures_t getGestures();
   uint16_t bgColor;

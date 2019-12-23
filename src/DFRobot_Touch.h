@@ -6,10 +6,15 @@
 #include "TouchDrivers/DFRobot_GT5688.h"
 #include <DFRobot_Type.h>
 #include "DFRobot_IF.h"
-#define XFAC      920 //663
-#define XOFFSET   (-20) //(-13)
-#define YFAC      1300 //894
-#define YOFFSET   (-30) 
+ // #define XFAC      920 //663
+ // #define XOFFSET   (-20) //(-13)
+ // #define YFAC      1300 //894
+ // #define YOFFSET   (-30) 
+ #define XFAC      663 //663
+ #define XOFFSET   (-13) //(-13)
+ #define YFAC      894 //894
+ #define YOFFSET   (-30) 
+
 class DFRobot_Touch: public DFRobot_IF{
 public:
   typedef struct{

@@ -134,10 +134,10 @@ void DFRobot_Touch_XPTxxx::begin(){
 String DFRobot_Touch_XPTxxx::scan(){
       uint16_t x,y,x1,y1,x2,y2;
       String s = "";
-      x1 = readxy(0xD0);
-      y1 = readxy(0x90);
-      x2 = readxy(0xD0);
-      y2 = readxy(0x90);
+      x1 = readxy(0x90);
+      y1 = readxy(0xD0);
+      x2 = readxy(0x90);
+      y2 = readxy(0xD0);
     if(((x2<=x1&&x1<x2+50)||(x1<=x2&&x2<x1+50))//Before and after the two samples are within +- ERR_RANGE.
     &&((y2<=y1&&y1<y2+50)||(y1<=y2&&y2<y1+50)))
     {
@@ -151,15 +151,15 @@ String DFRobot_Touch_XPTxxx::scan(){
     x=((long)XFAC*x)/10000+XOFFSET;
     y=((long)YFAC*y)/10000+YOFFSET;
              
-    if(x > 320 || x <1 || y >480 || y < 1){
+    if(x > 240 || x <1 || y >320 || y < 1){
       x = 0;
       y = 0;
     }
     else {
-     x = 320 - x;
-     y = y;
+     x = x;
+     y = 320 - y;
     }
-    delay(50);
+    delay(10);
     s += String(1) + "," + String(x) + "," + String(y) + "," + String(10) + ","+ String(10) + " ";
     return s;
 }
@@ -178,7 +178,7 @@ uint16_t DFRobot_Touch_XPTxxx::readxy(uint8_t cmd){
         num = (num <<8 ) | SPI.transfer(0x00);
         digitalWrite(_cs,HIGH);
         num >>= 3;
-        buf[i]=num;
+        buf[i]=num;            
     }           
     for(i=0;i<5-1; i++)//Sort in ascending order
     {
@@ -191,7 +191,7 @@ uint16_t DFRobot_Touch_XPTxxx::readxy(uint8_t cmd){
                 buf[j]=temp;
             }
         }
-    }
+    }         
 
     for(i=1;i<5-1;i++) //Remove maximum and minimum values
     {
