@@ -45,13 +45,14 @@ void setup()
   ui.setTouchFunction(scan);
   ui.setTheme(DFRobot_UI::THEME1);
   ui.begin();
+  ui.initSlider(&slider);
   slider.posx = 10;
   slider.posy = 200;
 
   slider.callBack = changeColor;
 
   ui.creatSlider(&slider);
-
+  ui.initSwitch(&sw);
   sw.posx = 45;
   sw.posy = 160;
   sw.callBack = swCallBack;

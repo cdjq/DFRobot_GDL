@@ -29,7 +29,8 @@ void setup()
   ui.setTheme(DFRobot_UI::THEME1);
   ui.begin();
   ui.creatText(&tb);
-   ui.drawString(10, 240,"Gesture recognition area",0xffff, ui.bgColor, 2, 0);
+  ui.setGestureArea(40,100,150,150);
+   //ui.drawString(10, 240,"Gesture recognition areasadasdasdasdasdasd",0xffff, ui.bgColor, 2, 0);
 }
 
 

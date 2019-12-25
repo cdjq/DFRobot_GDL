@@ -29,11 +29,12 @@ void setup()
   gt911.begin();
   screen.begin();
   ui.setTouchFunction(scan);
-  ui.setTheme(DFRobot_UI::THEME1);
+  ui.setTheme(DFRobot_UI::THEME2);
   ui.begin();
 
-  ui.drawString(10,100,"Page of loading",0,GREEN_RGB565,2,0);
-  bar.posx = 10;
+  ui.drawString(10,100,"Page of loading",0xffff,DARKGREY_RGB565,2,0);
+  ui.initBar(&bar);
+  bar.posx = 50;
   bar.posy = 160;
   bar.callBack = barCallback;
   ui.creatBar(&bar);

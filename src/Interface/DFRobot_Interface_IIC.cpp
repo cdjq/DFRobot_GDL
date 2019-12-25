@@ -142,10 +142,10 @@ uint8_t gdl_com_hw_iic(sGdlIF_t *pGdl, uint8_t function, uint8_t *pBuf, uint32_t
           if(len > I2C_BUFFER_LENGTH)
               return 0;
           pGdl->pro.iic->write(&pBuf[(1+pBuf[0])],len);
-		  // Serial.println(pBuf[0],HEX);
-		  // Serial.println(pBuf[1],HEX);
-		  // Serial.println(pBuf[2],HEX);
-		  // Serial.println(pBuf[(1+pBuf[0])],HEX);
+          // Serial.println(pBuf[0],HEX);
+          // Serial.println(pBuf[1],HEX);
+          // Serial.println(pBuf[2],HEX);
+          // Serial.println(pBuf[(1+pBuf[0])],HEX);
           if( pGdl->pro.iic->endTransmission() != 0){
                 return 0;
           }
@@ -156,10 +156,10 @@ uint8_t gdl_com_hw_iic(sGdlIF_t *pGdl, uint8_t function, uint8_t *pBuf, uint32_t
           if( pGdl->pro.iic->endTransmission() != 0){
                 return 0;
           }
-		  pGdl->pro.iic->requestFrom(pGdl->pinList[GDL_PIN_ADDR], len);
+          pGdl->pro.iic->requestFrom(pGdl->pinList[GDL_PIN_ADDR], len);
           for(uint16_t i = 0; i < len; i++){
               pBuf[i] = pGdl->pro.iic->read();
-			  //Serial.print("pbuf[i] = ");Serial.println(pBuf[i],HEX);
+              //Serial.print("pbuf[i] = ");Serial.println(pBuf[i],HEX);
           }
           break;
     default:
