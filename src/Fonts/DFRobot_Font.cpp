@@ -16,60 +16,6 @@ void DFRobot_GDL::setFonts(const gdl_Font_t *font){
   }
 }
 
-/*
-size_t DFRobot_GDL::write(const uint8_t *buffer, size_t size){
-  size_t = n;
-  uint8_t c = 0;
-  uint8_t num = 0;
-  bool flag = true;//false:代表gbk编码，true，代表utf8编码
-  while(size--){
-      c = *buffer++;
-      if(c < 128)//说明是字符{
-          
-      }else{//此时需判断是GB2312编码还是UTF8编码 (GB2312: 0xA1A1~0xFEFE)(主要区分2个字节的)
-          num = getUtf_8Bytes(c)
-          uint8_t Byte[num]={0};
-          uint8_t ByteN[num]={0};
-          if(num > 1 && num < 7){//大概率为uft-8编码
-              for(uint8_t i = 0; i < num; i++){
-                  Byte[0] |= 1 <<(7-i);
-                  ByteN[0] |= 1 <<(7-i);
-                  if (i > 0){
-                      Byte[i] = 0x80;
-                      ByteN[i] = 0xC0;
-                  }
-              }
-              ByteN[0] |= 1<<(7 - num);
-              for(uint8_t i = 0; i < num; i++){
-                  if(*(buffer-1+i) & ByteN[i] != Byte[i]){//不是utft-8编码
-                      flag = false;
-                      break;
-                  }
-              }
-              if(flag && num == 2){//如果符合utf-8编码，并且字节为2，需判断是否符合GBK,若符合则按GBK处理
-                  if(buffer-1 > 0xA0 && buffer > 0xA0){
-                      
-                  }
-              }
-          }
-          if(flag){//表示utf8编码
-              
-          }else{//表示gbk编码
-              
-          }
-              while(num--){
-                  if
-              }
-          for(uint8_t i = 0; i < num; i++){
-              Byte[0] |= 1 <<(7-i);
-          }
-        
-      }
-      //先判断它是不是UTF8编码
-      
-  }
-}
-*/
 size_t DFRobot_GDL::write(const uint8_t *buffer, size_t size){//默认为uft8，这里不处理gbk
   size_t n = 0;
   uint8_t c = 0;

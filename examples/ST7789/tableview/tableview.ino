@@ -1,13 +1,25 @@
+/*!
+ * @file tableview.ino
+ * @brief 在屏幕上创建一个table控件，用户可以自定义进度条的参数
+ * @n 用户可以选择不同的页来显示不同的内容
+ * 
+ * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-12-6
+ * @get from https://www.dfrobot.com
+ * @url https://github.com/DFRobot/DFRobot_GDL/src/DFRpbot_UI
+*/
+
 #include "DFRobot_UI.h"
 #include "Arduino.h"
 #include "DFRobot_GDL.h"
 #include "DFRobot_Touch.h"
-
-
-
+//自定义通信引脚CS,DC
 #define SPI_CS 3
 #define SPI_DC 4
-DFRobot_Touch_XPTxxx gt911(2); //tcs
+DFRobot_Touch_XPT2046 touch(/*cs=*/2); 
 DFRobot_ST7789_240x320_HW_SPI screen(SPI_DC,SPI_CS);
 
 /**
@@ -16,8 +28,15 @@ DFRobot_ST7789_240x320_HW_SPI screen(SPI_DC,SPI_CS);
  * @param width 屏幕的宽度.
  * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, 240, 320);
-//定义 sTableview_t类型的结构体变量，用来定义tableview的参数.
+DFRobot_UI ui(&screen, /*width=*/240,/*height=*/320);
+/*!
+  offset : table间的间距
+  text[4] ：每个table相当与一个按钮
+  numPage ：table的个数
+  highLightPage ：高亮的table
+  callback ：tableview的回调函数
+*/
+//创建 sTableview_t类型的结构体变量，用来定义tableview的参数.
 DFRobot_UI::sTableview_t tv;
 
 /**
@@ -31,7 +50,7 @@ DFRobot_UI::sTableview_t tv;
  * @n height ：触摸的范围的高度
  */
 String scan() {
-  return gt911.scan();
+  return touch.scan();
 }
 /**
  * @brief tableview的回调函数
@@ -40,6 +59,18 @@ String scan() {
 void tvCallback(uint8_t highLightPage) {
 
   if (highLightPage == 1) {
+  /**
+   * drawString：绘制字符串
+   * @param x 所需绘制字符串在屏幕上的x坐标
+   * @param y 所需绘制字符串在屏幕上的x坐标
+   * @param c 字符数组的指针
+   * @param color 字体的颜色
+   * @param bg 字体背景的颜色
+   * @param size 字体的大小
+   * @param mode 字体显示模式
+   * @n mode  0 ： 正常显示
+   *          1 ： 颜色反转
+   */
     ui.drawString(10, 200, "this is tab1", 0x0, ui.bgColor, 4, 0);
   }
   if (highLightPage == 2) {
@@ -53,7 +84,7 @@ void tvCallback(uint8_t highLightPage) {
 void setup()
 {
   Serial.begin(9600);
-  gt911.begin();
+  touch.begin();
   screen.begin();
   /**
    * @brief 注册一个触摸函数

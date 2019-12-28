@@ -1,3 +1,15 @@
+/*!
+ * @file DFRobot_UI.h
+ * @brief DFRobot_UI 类的基础结构,可以在屏幕上创建一系列的控件，如按钮,文本框,进度条等
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-12-6
+ * @get from https://www.dfrobot.com
+ * @url https://github.com/DFRobot/DFRobot_GDL/src/DFRpbot_UI
+ */
+ 
 #ifndef __DFROBOT_UI_H
 #define __DFROBOT_UI_H
 
@@ -79,6 +91,7 @@ public:
     NOCHANGE,/**<无改变.>**/
     CLEARACHAR,/**<删除文本框内容的最后一个字符.>**/
   } sTextState_t;
+  
   /*!
     触摸点的数据
   */
@@ -92,113 +105,74 @@ public:
   
   /*!
     开关控件的参数 sSwitch_t类型
-    posx ：开关在x轴的坐标
-    posy ：开关在y轴的坐标
-    width ：开关的宽度
-    height ：开关的高度
-    fgColor ：开关的前景色
-    bgColor ： 开关的背景色
-    change ：开关是否改变的标准
-    laststate：开关的上一次的状态
-    state ：开关的状态(on / off)
-    callBack : 回调函数的指针
   */
   typedef struct {
-    uint16_t posx;
-    uint16_t posy;
-    uint16_t  width ;
-    uint16_t  height ;
-    uint16_t fgColor;
-    uint16_t bgColor;
-    bool change;
-    uint8_t  laststate;
-    uint8_t  state;
-    switchCallback *callBack;
+    uint16_t posx; /**<开关在x轴的坐标>**/
+    uint16_t posy;/**<开关在y轴的坐标>**/
+    uint16_t  width ;/**<开关的宽度>**/
+    uint16_t  height ;/**<开关的高度>**/
+    uint16_t fgColor;/**<开关的前景色>**/
+    uint16_t bgColor;/**<开关的背景色>**/
+    bool change;/**<开关是否改变的标志>**/
+    uint8_t  laststate;/**<开关的上一次的状态>**/
+    uint8_t  state;/**<开关的状态(on / off)>**/
+    switchCallback *callBack;/**<回调函数的指针>**/
   } sSwitch_t;
+  
   /*!
-    posx:滑条在x轴的坐标
-    posy：滑条在y轴的坐标
-    sliderHeight:滑块的高度
-    sliderWidth：滑块的宽度
-    fgColor：前景颜色
-    bgColor：背景颜色
-    width：宽度
-    height ：高度
-    range：范围
-    lastsliderPos ：滑块上一次的位置(y坐标)
-    sliderPos：滑块的位置
-    value：滑块的值
-    change：滑块值是否发生改变的标志
-    callBack:滑块回调函数的指针
+    sSlider_t类型的结构体 ,用来存储开关控件的参数
   */
   typedef struct {
-    uint16_t posx;
-    uint16_t posy;
-    uint16_t sliderHeight;
-    uint16_t sliderWidth;
-    uint16_t fgColor;
-    uint16_t bgColor;
-    uint16_t  width;
-    uint16_t  height ;
-    uint16_t range;
-    uint16_t  lastsliderPos;
-    uint16_t  sliderPos;
-    int8_t value;
-    bool change;
-    sliderCallback *callBack;
+    uint16_t posx;/**<滑条在x轴的坐标>**/
+    uint16_t posy;/**<滑条在y轴的坐标>**/
+    uint16_t sliderHeight;/**<滑块的高度>**/
+    uint16_t sliderWidth;/**<滑块的宽度>**/
+    uint16_t fgColor;/**<前景颜色>**/
+    uint16_t bgColor;/**<背景颜色>**/
+    uint16_t  width;/**<宽度>**/
+    uint16_t  height ;/**<高度>**/
+    uint16_t range;/**<范围>**/
+    uint16_t  lastsliderPos;/**<滑块上一次的位置(y坐标)>**/
+    uint16_t  sliderPos;/**<滑块的位置>**/
+    int8_t value;/**<滑块的值>**/
+    bool change;/**<滑块值是否发生改变的标志>**/
+    sliderCallback *callBack;/**<滑块回调函数的指针>**/
   } sSlider_t;
   
   /*!
-    posx:进度条在x轴的坐标
-    posy：进度条在y轴的坐标
-    width：进度条的宽度
-    height：进度条的高度
-    fgColor ：进度条前景颜色
-    bgColor：进度条背景颜色
-    sliderPos：进度条的进度的x坐标
-    callBack ：进度条回调函数的函数指针
-    lastValue ：进度条上一次的进度
-    value ：进度条的进度(0~99)
+    结构体，用来存储进度条控件的参数
   */
   typedef struct{
-    uint16_t posx;
-    uint16_t posy;
-    uint16_t width;
-    uint16_t height;
-    uint16_t fgColor;
-    uint16_t bgColor;
-    uint16_t sliderPos;
-    barCallback *callBack;
-    uint8_t lastValue;
-    uint8_t value;
+    uint16_t posx;/**<进度条在x轴的坐标>**/
+    uint16_t posy;/**<进度条在y轴的坐标>**/
+    uint16_t width;/**<进度条的宽度>**/
+    uint16_t height;/**<进度条的高度>**/
+    uint16_t fgColor;/**<进度条前景颜色>**/
+    uint16_t bgColor;/**<进度条背景颜色>**/
+    uint16_t sliderPos;/**<进度条的进度的x坐标>**/
+    barCallback *callBack;/**<进度条回调函数的函数指针>**/
+    uint8_t lastValue;/**<进度条上一次的进度>**/
+    uint8_t value;/**<进度条的进度(0~99)>**/
   } sBar_t ;
   
   /*!
-    posx:按钮在x轴的坐标
-    posy：按钮在y轴的坐标
-    width ：按钮的宽度
-    height ：按钮的高度
-    fgColor：按钮的前景色
-    bgColor：按钮的背景色
-    fontSize：按钮字体的大小
-    text[10] ：按钮的名字
-    click ：按钮是否被点击的标志
-    callBack ：按钮的回电函数的函数指针
+    结构体类型，用来存储按钮控件的参数
   */
   typedef struct {
-    uint16_t posx;
-    uint16_t posy;
-    uint16_t  width ;
-    uint16_t  height ;
-    uint16_t fgColor;
-    uint16_t bgColor;
-    uint8_t fontSize;
-    char  text[10] ;
-    bool click;
-    buttonCallback  *callBack ;
+    uint16_t posx;/**<按钮在x轴的坐标>**/
+    uint16_t posy;/**<按钮在y轴的坐标>**/
+    uint16_t  width ;/**<按钮的宽度>**/
+    uint16_t  height ;/**<按钮的高度>**/
+    uint16_t fgColor;/**<按钮的前景色>**/
+    uint16_t bgColor;/**<按钮的背景色>**/
+    uint8_t fontSize;/**<按钮字体的大小>**/
+    char  text[10] ;/**<按钮的名字>**/
+    bool click;/**<按钮是否被点击的标志>**/
+    buttonCallback  *callBack ;/**<按钮的回调函数的函数指针>**/
   } sButton_t ;
+  
   /*!
-    ui的主题
+    枚举类型，用来定义不同的主题效果
   */
   typedef enum {
     THEME1,/**<主题1>**/
@@ -206,53 +180,40 @@ public:
   } sTheme_t;
 
   /*!
-    posx :文本框在x轴的坐标
-    posy ：文本框在y轴的坐标
-    width ：文本框的宽度
-    height：文本框的高度
-    fgColor ：文本框内字体的前景的颜色
-    bgColor：文本框内字体的背景颜色
-    fontSize:文本框内字体的大小
-    state：文本框的状态
-    cache ：文本框添加一个字符的缓存
-    text[40] ：文本框内容
-    cursorx ：文本框光标在x轴的坐标
-    cursory ：文本框光标在y轴的坐标
+    结构体类型，用来存储文本框控件的参数
   */
   typedef struct {
-    uint16_t posx;
-    uint16_t posy;
-    uint16_t  width;
-    uint16_t  height;
-    uint16_t fgColor;
-    uint16_t bgColor;
-    uint8_t fontSize;
-    sTextState_t state;
-    char cache ;
-    char  text[40] ;
-    uint16_t cursorx;
-    uint16_t cursory;
+    uint16_t posx;/**<文本框在x轴的坐标>**/
+    uint16_t posy;/**<文本框在y轴的坐标>**/
+    uint16_t  width;/**<文本框的宽度>**/
+    uint16_t  height;/**<文本框的高度>**/
+    uint16_t fgColor;/**<文本框内字体的前景的颜色>**/
+    uint16_t bgColor;/**<文本框内字体的背景颜色>**/
+    uint8_t fontSize;/**<文本框内字体的大小>**/
+    sTextState_t state;/**<文本框的状态>**/
+    char cache ;/**<文本框添加一个字符的缓存>**/
+    char  text[100] ;/**<文本框内容>**/
+    uint16_t cursorx;/**<文本框光标在x轴的坐标>**/
+    uint16_t cursory;/**<文本框光标在y轴的坐标>**/
   } sTextBox_t;
+  
   /*!
-    offset : table间的间距
-    text[4] ：每个table相当与一个按钮
-    numPage ：table的个数
-    highLightPage ：高亮的table
-    callback ：tableview的回调函数
+    结构体类型，用来存储tableview控件的参数
   */
   typedef struct {
-    uint16_t offset;
-    //uint16_t
-    sButton_t text[4];
-    uint8_t  numPage;
-    uint8_t highLightPage;
-    tableViewCallback *callback;
+    uint16_t offset;/**<table间的间距>**/
+    sButton_t text[4];/**<每个table相当与一个按钮>**/
+    uint8_t  numPage;/**<table的个数>**/
+    uint8_t highLightPage;/**<高亮的table>**/
+    tableViewCallback *callback;/**<tableview的回调函数>**/
   } sTableview_t;
+  
   typedef enum {
     CENTER,
     RIGHT,
     LEFT,
   } sLocation;
+  
   /*!
     该枚举定义了不同的手势
   */
@@ -266,9 +227,11 @@ public:
     DOUBLECLICK,/**<双击屏幕>**/
     NONE,/**<没有识别到有效手势>**/
   } sGestures_t;
+  
 protected:
   scanF * scan;
 public:
+
   /**
    * @brief 构造函数
    * @param gdl 
@@ -276,6 +239,7 @@ public:
    * @param height 屏幕的高度.
    */
   DFRobot_UI(DFRobot_GDL *gdl, uint16_t width, uint16_t height);
+  
   /**
    * @brief 初始化函数,初始化UI使用到的一些参数
    */
@@ -329,29 +293,34 @@ public:
    *          1 ： 颜色反转
    */
   void drawString(int16_t x, int16_t y, char  *c, uint16_t color, uint16_t bg, uint8_t size, boolean mode);
+  
   /**
    * @brief 刷新滑条
    * @param slider sSlider_t，里面包含了滑条的位置，长度和宽度等参数
    */
   void refreshSliser(sSlider_t *slider);
+  
   /**
    * @brief 初始化滑条控件
    * @param slider 用户创建的存储滑条参数的结构体变量
    * @n 用户如果需要可以自定义这些参数
    */
   void initSlider(sSlider_t *slider);
+  
   /**
    * @brief 在屏幕上创建一个滑条
    * @param slider sSlider_t类型的数据
    * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
    */
   void creatSlider(sSlider_t *slider);
+  
   /**
    * @brief 初始化进度条控件
    * @param bar sSlider_t类型的变量，用户创建的存储进度条参数的结构体变量
    * @n 用户如果需要可以自定义这些参数
    */
   void initBar(sBar_t *bar);
+  
   /**
    * @brief 在屏幕上创建一个进度条
    * @param bar sBar_t类型的数据
@@ -392,7 +361,7 @@ public:
   void creatSwitch(sSwitch_t *sw);
   
   /**
-   * @brief 刷新开关
+   * @brief 刷新开关控件
    * @param sw sSwitch_t，里面包含了开关的位置，长度和宽度等参数
    * @n 当某事件产生，会进入开关的回调函数
    */

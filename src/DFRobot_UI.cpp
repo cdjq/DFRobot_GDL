@@ -1,30 +1,45 @@
+/*!
+ * @file DFRobot_UI.h
+ * @brief DFRobot_UI 基础方法的实现
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-12-6
+ * @get from https://www.dfrobot.com
+ * @url https://github.com/DFRobot/DFRobot_GDL/src/DFRpbot_UI
+ */
 #include "DFRobot_UI.h"
 #include "math.h"
 #include <stdlib.h>
 #include <stdio.h>
-DFRobot_UI::DFRobot_UI(DFRobot_GDL *gdl, uint16_t width, uint16_t height) {
+DFRobot_UI::DFRobot_UI(DFRobot_GDL *gdl, uint16_t width, uint16_t height) 
+{
   lcdWidth = width;
   lcdHeight = height;
   cursorState = true;
   theme = THEME2;
   _gdl = gdl;
 }
-void DFRobot_UI:: begin() 
+
+void DFRobot_UI:: begin()
 {
   bgColor = DARKGREY_RGB565;
   pressed = 0 ;
   timer = 0 ;
   timer1 = 0 ;
   click = 0 ;
-  color = YELLOW_RGB565;
+  color = WHITE_RGB565;
   screenPressed = 0;
   _gdl->fillRect(0, 0, lcdWidth, lcdHeight, bgColor);
 }
-void DFRobot_UI::setTheme(sTheme_t the) 
+
+void DFRobot_UI::setTheme(sTheme_t the)
 {
   theme = the;
 }
-void DFRobot_UI::creatText(sTextBox_t *tb) 
+
+void DFRobot_UI::creatText(sTextBox_t *tb)
 {
   tb->posx = 5;
   tb->posy = 10;
@@ -45,27 +60,30 @@ void DFRobot_UI::creatText(sTextBox_t *tb)
 
 }
 
-void DFRobot_UI::setText(sTextBox_t *te,char * text){
+void DFRobot_UI::setText(sTextBox_t *te, char * text) {
   memcpy(te->text, text, strlen(text));
   memcpy(te->text + strlen(text), "\0", 1);
   te->state = DRAWTEXT;
 }
 
-void DFRobot_UI::textAddChar(sTextBox_t *te,char txt){
+void DFRobot_UI::textAddChar(sTextBox_t *te, char txt) {
   te->cache = txt;
   te->state = ADDCHAR;
 }
 
-void DFRobot_UI::textDeleteChar(sTextBox_t *te){
+void DFRobot_UI::textDeleteChar(sTextBox_t *te) {
   te->state = CLEARACHAR;
 }
 
-void DFRobot_UI::refreshTextBox(sTextBox_t *tb) 
+void DFRobot_UI::refreshTextBox(sTextBox_t *tb)
 {
   uint8_t column = 0;
   uint8_t line = 0 ;
   uint8_t offset_x, offset_y;
-  uint8_t singleWord = tb->width / (8 * tb->fontSize) - 1;
+  uint8_t totalWord;
+  uint8_t singleWord = tb->width / (8 * tb->fontSize)-1 ;
+  totalWord = singleWord *(tb->height/(8* tb->fontSize)-1)-1;
+  //Serial.println(totalWord);
   offset_x = 5;
   offset_y = 5 ;
   if (tb->state == DRAWTEXT) {
@@ -78,14 +96,17 @@ void DFRobot_UI::refreshTextBox(sTextBox_t *tb)
     //tb->state = NOCHANGE;
   }
   if (tb->state == DRAWTEXT) {
-    for (uint8_t i = 0 ; i < strlen(tb->text); i++) {
+    tb->state = NOCHANGE;
+    if (strlen(tb->text) < totalWord){
+       totalWord = strlen(tb->text);
+    }
+    for (uint8_t i = 0 ; i < totalWord; i++) {
       _gdl->drawChar(offset_x + tb->posx + 8 * tb->fontSize * column, offset_y + tb->posy + 8 * tb->fontSize * line, tb->text[i] , tb->fgColor, tb->bgColor, tb->fontSize);
       column++;
       if (column >= tb->width / (8 * tb->fontSize) - 1) {
         column = 0 ;
         line++;
       }
-      tb->state = NOCHANGE;
       if (line > tb->height / (8 * tb->fontSize) - 1) return;
       tb->cursorx = column;
       tb->cursory = line;
@@ -102,15 +123,15 @@ void DFRobot_UI::refreshTextBox(sTextBox_t *tb)
 
   }
   else if (tb->state == ADDCHAR) {
+    tb->state = NOCHANGE;
+    if (strlen(tb->text) == totalWord) return ;
     tb->text[strlen(tb->text) + 1] = '\0';
     tb->text[strlen(tb->text)] =  tb->cache;
     _gdl->drawChar(tb->cursorx * (8 * tb->fontSize) + offset_x + tb->posx, tb->cursory * (8 * tb->fontSize) + offset_y + tb->posy, tb->cache , tb->fgColor, tb->bgColor, tb->fontSize);
     tb->cursorx = strlen(tb->text) % singleWord;
     tb->cursory = strlen(tb->text) / singleWord;
-    tb->state = NOCHANGE;
+
     if (line > tb->height / (8 * tb->fontSize) - 1) return;
-
-
   }
   drawCursor(tb, offset_x, offset_y, 0);
   delay(50);
@@ -118,12 +139,12 @@ void DFRobot_UI::refreshTextBox(sTextBox_t *tb)
 
 }
 
-void DFRobot_UI::setTouchFunction(scanF* fuc) 
+void DFRobot_UI::setTouchFunction(scanF* fuc)
 {
   scan = fuc;
 }
 
-void DFRobot_UI::initButton(sButton_t *bu){
+void DFRobot_UI::initButton(sButton_t *bu) {
 
   bu->posx = 0;
   bu->posy = 0;
@@ -132,10 +153,11 @@ void DFRobot_UI::initButton(sButton_t *bu){
   bu->fgColor = BLACK_RGB565;
   bu->bgColor = LIGHTGREY_RGB565;
   bu->fontSize = (lcdHeight * 3) / 480 ;
-  memset(bu->text,'\0',sizeof(bu->text));
+  memset(bu->text, '\0', sizeof(bu->text));
   bu->click  = 0 ;
   bu->callBack = NULL ;
 }
+
 void DFRobot_UI::drawButton(sButton_t *bu) {
   if (theme == THEME1) {
     _gdl->fillRoundRect(bu->posx - 1, bu->posy - 1, bu->width + 2, bu->height + 2, 11, DCYAN_RGB565);
@@ -148,7 +170,8 @@ void DFRobot_UI::drawButton(sButton_t *bu) {
   // Serial.println(bu->text[0]);
   drawButtonString(bu, CENTER, CENTER, bu->text  );
 }
-void DFRobot_UI::creatButton(sButton_t *bu) 
+
+void DFRobot_UI::creatButton(sButton_t *bu)
 {
   if (theme == THEME1) {
     _gdl->fillRoundRect(bu->posx - 1, bu->posy - 1, bu->width + 2, bu->height + 2, 11, DARKGREY_RGB565);
@@ -161,20 +184,22 @@ void DFRobot_UI::creatButton(sButton_t *bu)
   // Serial.println(bu->text[0]);
   drawButtonString(bu, CENTER, CENTER, bu->text);
 }
+
 void DFRobot_UI::updateCoordinate()
-{ 
+{
   if (position) free(position);
   String str = scan();
   number  = pointNum(str);
- //Serial.println(number);
+  //Serial.println(number);
   position = (sPoint_t*)malloc(number * sizeof(sPoint_t));
 
-  
+
   if (position == NULL) {
     while (1);
   }
   stringToPoint(str, position);
 }
+
 void DFRobot_UI::refreshButton(sButton_t *bu) {
   if (number == 0) return;
 #if defined (__AVR__)
@@ -192,7 +217,7 @@ void DFRobot_UI::refreshButton(sButton_t *bu) {
 
   uint8_t n = 0;
   for (uint8_t i = 0; i < number; i++) {
-    if (judgePress(bu, position[i].x, position[i].y) == true && bu->click == 0){
+    if (judgePress(bu, position[i].x, position[i].y) == true && bu->click == 0) {
       bu->click = 1;
       drawClickButton(bu);
       break;
@@ -212,7 +237,7 @@ void DFRobot_UI::refreshButton(sButton_t *bu) {
 #endif
 }
 
-void DFRobot_UI::drawClickButton(sButton_t *bu) 
+void DFRobot_UI::drawClickButton(sButton_t *bu)
 {
 
   if (theme == THEME1) {
@@ -226,7 +251,7 @@ void DFRobot_UI::drawClickButton(sButton_t *bu)
   drawButtonString(bu, CENTER, CENTER, bu->text );
 }
 
-void  DFRobot_UI::creatTableview(sTableview_t *tv) 
+void  DFRobot_UI::creatTableview(sTableview_t *tv)
 {
   tv->offset = 10 ;
   for (uint8_t i = 0 ; i < tv->numPage; i++) {
@@ -249,7 +274,7 @@ void  DFRobot_UI::creatTableview(sTableview_t *tv)
 
 }
 
-void DFRobot_UI::refreshTableview(sTableview_t *tv) 
+void DFRobot_UI::refreshTableview(sTableview_t *tv)
 {
   if (number == 0) return;
   if (pressed == 0) {
@@ -266,7 +291,7 @@ void DFRobot_UI::refreshTableview(sTableview_t *tv)
       if (buttonRelease(&tv->text[i], position[0].x, position[0].y) == 1) {
         drawButton(&tv->text[i]);
         if (tv->callback != NULL && tv->highLightPage != (i + 1)) {
-          _gdl->fillRect(0, tv->text[i].posy + tv->text[i].height +1 , 320, 400, bgColor);
+          _gdl->fillRect(0, tv->text[i].posy + tv->text[i].height + 1 , 320, 400, bgColor);
           _gdl->fillRect(tv->text[i].posx, tv->text[i].posy + tv->text[i].height + 10, tv->text[i].width , 10, MAROON_RGB565);
           tv->highLightPage = i + 1;
           tv->callback(tv->highLightPage);
@@ -275,102 +300,99 @@ void DFRobot_UI::refreshTableview(sTableview_t *tv)
     }
   }
 }
-void DFRobot_UI::initBar(sBar_t *bar){
+
+void DFRobot_UI::initBar(sBar_t *bar) {
   bar->posx = 40;
-  bar->posy = lcdHeight-60;
+  bar->posy = lcdHeight - 60;
   bar->callBack = NULL;
-  bar->width = lcdWidth-50;
-  bar->height = lcdHeight/40;
+  bar->width = lcdWidth - 50;
+  bar->height = lcdHeight / 40;
   bar->fgColor = LIGHTGREY_RGB565;
   bar->bgColor = 0xffff;
   bar->lastValue = 0;
   bar->value = 0;
   bar->sliderPos = (bar->width * bar->value) / 100 + bar->posx ;
 }
-void DFRobot_UI::creatBar(sBar_t *bar){
+
+void DFRobot_UI::creatBar(sBar_t *bar) {
   uint8_t edgeWidth = lcdWidth / 160;
-  if(theme == THEME1){
-  _gdl->fillRoundRect(bar->posx - edgeWidth, bar->posy - edgeWidth, bar->width + 2 * edgeWidth, bar->height + 2 * edgeWidth, bar->height / 2, DARKGREY_RGB565);
-  _gdl->fillRoundRect(bar->posx, bar->posy, bar->width , bar->height, bar->height / 2, bar->bgColor);
-  _gdl->setCursor((bar->posx+bar->width)/2,bar->posy+bar->height+5);
-  _gdl->setTextColor(bar->fgColor, bgColor);
-  _gdl->setTextSize(2);
-  _gdl->print(bar->value);
-  _gdl->print("%");
-  }
-  else{
-   _gdl->fillCircle(bar->posx,bar->posy,32,LIGHTGREY_RGB565);
-   _gdl->fillCircle(bar->posx,bar->posy,30,0xffff);
-   _gdl->fillCircle(bar->posx,bar->posy,26,LIGHTGREY_RGB565);
-   _gdl->fillCircle(bar->posx,bar->posy,24,bgColor);
-  _gdl->fillCircle(bar->posx+(0),bar->posy-(28),3,YELLOW_RGB565);
-  _gdl->setCursor(bar->posx - 16,bar->posy-8);
-  _gdl->setTextColor(bar->fgColor, bgColor);
-  _gdl->setTextSize(2);
-  _gdl->print(bar->value);
-  }
-}
-//fillCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color),
-//(xcosa-ysina,ycosa+xsina)
-void DFRobot_UI::refreshBar(sBar_t *bar){
-
-  double pi = 3.1415926;
-  double rad1,rad2, cosa, sina, x, y;
-  bar->sliderPos = (bar->width * bar->value) / 100 + bar->posx ;
-  if(bar->callBack) bar->callBack();
-  if(bar->value >= 101)  {bar->value = 101;
-  return;
-  }
-  if(theme == THEME1){
-  for(uint8_t i = bar->lastValue; i < bar->value+1;i++){
-    
-    _gdl->fillRoundRect(bar->posx, bar->posy, i*(bar->width)/100, bar->height, bar->height / 2, bar->fgColor);
-     bar->lastValue = bar->value;
-
-  }
-     _gdl->setCursor((bar->posx+bar->width)/2,bar->posy+bar->height+5);
+  if (theme == THEME1) {
+    _gdl->fillRoundRect(bar->posx - edgeWidth, bar->posy - edgeWidth, bar->width + 2 * edgeWidth, bar->height + 2 * edgeWidth, bar->height / 2, DARKGREY_RGB565);
+    _gdl->fillRoundRect(bar->posx, bar->posy, bar->width , bar->height, bar->height / 2, bar->bgColor);
+    _gdl->setCursor((bar->posx + bar->width) / 2, bar->posy + bar->height + 5);
     _gdl->setTextColor(bar->fgColor, bgColor);
     _gdl->setTextSize(2);
     _gdl->print(bar->value);
     _gdl->print("%");
   }
-  else{
-    
-    for(double i = (bar->lastValue); i < bar->value+1;){
-       rad1 = (bar->value) * (3.6) * pi / 180;
-       rad2 = (bar->lastValue) * (3.6) * pi / 180;
-       cosa = cos(rad1);
-       sina = sin(rad1);
-       x = 0-sina*28-0.5;
-       y = 28*cosa;
-       _gdl->fillCircle(bar->posx-(x),bar->posy-(y),3,color);
-       i +=3;
-      
+  else {
+    _gdl->fillCircle(bar->posx, bar->posy, 32, LIGHTGREY_RGB565);
+    _gdl->fillCircle(bar->posx, bar->posy, 30, 0xffff);
+    _gdl->fillCircle(bar->posx, bar->posy, 26, LIGHTGREY_RGB565);
+    _gdl->fillCircle(bar->posx, bar->posy, 24, bgColor);
+    _gdl->fillCircle(bar->posx + (0), bar->posy - (28), 3, WHITE_RGB565);
+    _gdl->setCursor(bar->posx - 16, bar->posy - 8);
+    _gdl->setTextColor(bar->fgColor, bgColor);
+    _gdl->setTextSize(2);
+    _gdl->print(bar->value);
+  }
+}
+
+void DFRobot_UI::refreshBar(sBar_t *bar) {
+
+  double pi = 3.1415926;
+  double rad1, rad2, cosa, sina, x, y;
+  bar->sliderPos = (bar->width * bar->value) / 100 + bar->posx ;
+  if (bar->callBack) bar->callBack();
+  if (bar->value >= 101)  {
+    bar->value = 101;
+    return;
+  }
+  if (theme == THEME1) {
+    for (uint8_t i = bar->lastValue; i < bar->value + 1; i++) {
+
+      _gdl->fillRoundRect(bar->posx, bar->posy, i * (bar->width) / 100, bar->height, bar->height / 2, bar->fgColor);
+      bar->lastValue = bar->value;
+
     }
-    if((color & 0x01f) < 0x01b){
-        color += 1;
+    _gdl->setCursor((bar->posx + bar->width) / 2, bar->posy + bar->height + 5);
+    _gdl->setTextColor(bar->fgColor, bgColor);
+    _gdl->setTextSize(2);
+    _gdl->print(bar->value);
+    _gdl->print("%");
+  }
+  else {
+
+    for (double i = (bar->lastValue); i < bar->value + 1;) {
+      rad1 = (bar->value) * (3.6) * pi / 180;
+      rad2 = (bar->lastValue) * (3.6) * pi / 180;
+      cosa = cos(rad1);
+      sina = sin(rad1);
+      x = 0 - sina * 28 - 0.5;
+      y = 28 * cosa;
+      _gdl->fillCircle(bar->posx - (x), bar->posy - (y), 3, color);
+      i += 3;
+
     }
-	else if((color>>5)|0x3f != 0){
+    if ((color & 0x1f) > 1) {
+      color -= 1;
+    }
+    else if (((color >> 5) & 0x3f) != 0) {
       color >>= 5;
       color -= 1;
       color <<= 5;
-      color |= 0x1a;
-     }
-     
-    
-      _gdl->setCursor(bar->posx - 16,bar->posy-8);
-      _gdl->setTextSize(2);
-      _gdl->print(bar->value);
+    }
+    _gdl->setCursor(bar->posx - 16, bar->posy - 8);
+    _gdl->setTextSize(2);
+    _gdl->print(bar->value);
   }
-
 }
-void DFRobot_UI::initSlider(sSlider_t *slider){
 
-
+void DFRobot_UI::initSlider(sSlider_t *slider) {
   slider->posx = 10;
-  slider->posy = lcdHeight-100;
-  slider->height = lcdHeight/100;
-  slider->width = lcdWidth-100;
+  slider->posy = lcdHeight - 100;
+  slider->height = lcdHeight / 100;
+  slider->width = lcdWidth - 100;
   slider->sliderWidth = lcdWidth / 16;
   slider->sliderHeight = lcdHeight / 24;
   slider->bgColor = 0x00;
@@ -381,7 +403,8 @@ void DFRobot_UI::initSlider(sSlider_t *slider){
   slider->sliderPos = (slider->width * slider->value) / slider->range + slider->posx ;
   slider->callBack = NULL;
 }
-void  DFRobot_UI::creatSlider(sSlider_t *slider) 
+
+void DFRobot_UI::creatSlider(sSlider_t *slider)
 {
 
   uint8_t edgeWidth = lcdWidth / 160;
@@ -392,7 +415,8 @@ void  DFRobot_UI::creatSlider(sSlider_t *slider)
   _gdl->fillRoundRect(slider->posx + slider->sliderPos - slider->sliderWidth / 2 - edgeWidth, slider->posy - (slider->sliderHeight - slider->height) / 2 - edgeWidth, slider->sliderWidth + 2 * edgeWidth, slider->sliderHeight + 2 * edgeWidth, slider->sliderWidth / 10, DARKGREY_RGB565);
   _gdl->fillRoundRect(slider->posx + slider->sliderPos - slider->sliderWidth / 2, slider->posy - (slider->sliderHeight - slider->height) / 2, slider->sliderWidth, slider->sliderHeight, slider->sliderWidth / 10, LIGHTGREY_RGB565);
 }
-void DFRobot_UI::refreshSliser(sSlider_t *slider) 
+
+void DFRobot_UI::refreshSliser(sSlider_t *slider)
 {
   if (number == 0) return;
   uint8_t edgeWidth = lcdWidth / 160;
@@ -404,41 +428,41 @@ void DFRobot_UI::refreshSliser(sSlider_t *slider)
 
     }
   }
-   
+
   if (slider->change == 1) {
 
     if (position[0].x < slider->posx || (position[0].x > slider->posx + slider->width) || ((position[0].y < slider_y) || (position[0].y > slider_y + slider->sliderHeight))) {
       slider->change = 0;
-	  if (slider->value >= 100) return;
+      if (slider->value >= 100) return;
       if (slider->callBack )  {
         slider->callBack(slider->value);
-    _gdl->setTextColor(DARKCYAN_RGB565, bgColor);
-    _gdl->setTextSize(2);
-    _gdl->setCursor(slider->posx + slider->width / 2,slider->posy + 40);
-    _gdl->print(slider->value);
+        _gdl->setTextColor(DARKCYAN_RGB565, bgColor);
+        _gdl->setTextSize(2);
+        _gdl->setCursor(slider->posx + slider->width / 2, slider->posy + 40);
+        _gdl->print(slider->value);
       }
 
     }
-	}
-  
+  }
+
   slider->sliderPos = position[0].x - slider->posx;
   if (slider->change == 1) {
     slider->value = ((position[0].x - slider->posx) * (slider->range)) / slider->width ;
-    if (slider->value >= 100) slider->value =99;
-    if(slider->value<98 && slider->value>3){
-    _gdl->fillRoundRect(slider->posx + slider->lastsliderPos - slider->sliderWidth / 2 - edgeWidth, slider->posy - (slider->sliderHeight - slider->height) / 2 - edgeWidth, slider->sliderWidth + 2 * edgeWidth, slider->sliderHeight + 2 * edgeWidth, slider->sliderWidth / 10, bgColor);
-    _gdl->fillRect(slider->posx - slider->height / 2, slider->posy - (slider->sliderHeight - slider->height) / 2 - 2 * edgeWidth, slider->width + slider->height + 4 * edgeWidth, slider->sliderHeight + 4 * edgeWidth, bgColor);
-    _gdl->fillRoundRect(slider->posx - edgeWidth, slider->posy - edgeWidth, slider->width + 2 * edgeWidth, slider->height + 2 * edgeWidth, slider->height / 2, DARKGREY_RGB565);
-    _gdl->fillRoundRect(slider->posx, slider->posy, slider->width , slider->height, slider->height / 2, slider->bgColor);
-    _gdl->fillRoundRect(slider->posx, slider->posy, slider->sliderPos, slider->height, slider->height / 2, slider->fgColor);
-    _gdl->fillRoundRect(slider->posx + slider->sliderPos - slider->sliderWidth / 2 - edgeWidth, slider->posy - (slider->sliderHeight - slider->height) / 2 - edgeWidth, slider->sliderWidth + 2 * edgeWidth, slider->sliderHeight + 2 * edgeWidth, slider->sliderWidth / 10, DARKGREY_RGB565);
-    _gdl->fillRoundRect(slider->posx + slider->sliderPos  - slider->sliderWidth / 2, slider->posy - (slider->sliderHeight - slider->height) / 2, slider->sliderWidth, slider->sliderHeight, slider->sliderWidth / 10, LIGHTGREY_RGB565);
-    _gdl->fillRect(slider->posx + slider->width / 2, slider->posy + 40 , 2*8*3, 2*8, bgColor);
-    
-	}
+    if (slider->value >= 100) slider->value = 99;
+    if (slider->value < 98 && slider->value > 3) {
+      _gdl->fillRoundRect(slider->posx + slider->lastsliderPos - slider->sliderWidth / 2 - edgeWidth, slider->posy - (slider->sliderHeight - slider->height) / 2 - edgeWidth, slider->sliderWidth + 2 * edgeWidth, slider->sliderHeight + 2 * edgeWidth, slider->sliderWidth / 10, bgColor);
+      _gdl->fillRect(slider->posx - slider->height / 2, slider->posy - (slider->sliderHeight - slider->height) / 2 - 2 * edgeWidth, slider->width + slider->height + 4 * edgeWidth, slider->sliderHeight + 4 * edgeWidth, bgColor);
+      _gdl->fillRoundRect(slider->posx - edgeWidth, slider->posy - edgeWidth, slider->width + 2 * edgeWidth, slider->height + 2 * edgeWidth, slider->height / 2, DARKGREY_RGB565);
+      _gdl->fillRoundRect(slider->posx, slider->posy, slider->width , slider->height, slider->height / 2, slider->bgColor);
+      _gdl->fillRoundRect(slider->posx, slider->posy, slider->sliderPos, slider->height, slider->height / 2, slider->fgColor);
+      _gdl->fillRoundRect(slider->posx + slider->sliderPos - slider->sliderWidth / 2 - edgeWidth, slider->posy - (slider->sliderHeight - slider->height) / 2 - edgeWidth, slider->sliderWidth + 2 * edgeWidth, slider->sliderHeight + 2 * edgeWidth, slider->sliderWidth / 10, DARKGREY_RGB565);
+      _gdl->fillRoundRect(slider->posx + slider->sliderPos  - slider->sliderWidth / 2, slider->posy - (slider->sliderHeight - slider->height) / 2, slider->sliderWidth, slider->sliderHeight, slider->sliderWidth / 10, LIGHTGREY_RGB565);
+      _gdl->fillRect(slider->posx + slider->width / 2, slider->posy + 40 , 2 * 8 * 3, 2 * 8, bgColor);
+
+    }
 
   }
-     slider->lastsliderPos = slider->sliderPos;
+  slider->lastsliderPos = slider->sliderPos;
   //scan(&touch_x, &touch_y);
   /*if (touch_x > slider->posx && (touch_x < slider->posx + slider->width) && ((touch_y > slider->posy) && (touch_y < slider->posy +slider->height))){
        slider->value = ((touch_x - slider->posx)*(slider->range))/slider->width ;
@@ -460,9 +484,9 @@ void DFRobot_UI::refreshSliser(sSlider_t *slider)
     if(slider->callBack)  {slider->callBack(slider->value);}
     }
   */
-
 }
-void DFRobot_UI::initSwitch(sSwitch_t *sw){
+
+void DFRobot_UI::initSwitch(sSwitch_t *sw) {
   sw->posx = 10;
   sw->posy = lcdHeight / 2;
   sw->callBack = NULL;
@@ -474,14 +498,15 @@ void DFRobot_UI::initSwitch(sSwitch_t *sw){
   sw->laststate = 0; //fillRoundRect(100,100,100,100,20,10);
 }
 
-void DFRobot_UI::creatSwitch(sSwitch_t *sw) 
+void DFRobot_UI::creatSwitch(sSwitch_t *sw)
 {
 
   _gdl->fillRoundRect(sw->posx - 1, sw->posy - 1, sw->width + 2, sw->height + 2, sw->height / 2, DARKGREY_RGB565);
   _gdl->fillRoundRect(sw->posx, sw->posy, sw->width, sw->height, sw->height / 2, sw->fgColor);
-  _gdl->fillCircle(sw->posx+sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2) + 1,  DARKGREY_RGB565);
-  _gdl->fillCircle(sw->posx+sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2),  sw->fgColor);
+  _gdl->fillCircle(sw->posx + sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2) + 1,  DARKGREY_RGB565);
+  _gdl->fillCircle(sw->posx + sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2),  sw->fgColor);
 }
+
 void DFRobot_UI::refreshSwitch(sSwitch_t *sw) {
   if (number == 0) return;
 #if defined (__AVR__)
@@ -497,15 +522,15 @@ void DFRobot_UI::refreshSwitch(sSwitch_t *sw) {
     if (sw->state == 1 ) {
       _gdl->fillRoundRect(sw->posx - 1, sw->posy - 1, sw->width + 2, sw->height + 2, sw->height / 2, DARKGREY_RGB565);
       _gdl->fillRoundRect(sw->posx, sw->posy, sw->width, sw->height, sw->height / 2, BLUE_RGB565);
-      _gdl->fillCircle(sw->posx + sw->width -sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2) + 1,  DARKGREY_RGB565);
-      _gdl->fillCircle(sw->posx + sw->width-sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2),  NAVY_RGB565);
+      _gdl->fillCircle(sw->posx + sw->width - sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2) + 1,  DARKGREY_RGB565);
+      _gdl->fillCircle(sw->posx + sw->width - sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2),  NAVY_RGB565);
 
     }
     if (sw->state == 0) {
       _gdl->fillRoundRect(sw->posx - 1, sw->posy - 1, sw->width + 2, sw->height + 2, sw->height / 2, DARKGREY_RGB565);
       _gdl->fillRoundRect(sw->posx, sw->posy, sw->width, sw->height, sw->height / 2, sw->fgColor);
-      _gdl->fillCircle(sw->posx+sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2) + 1,  DARKGREY_RGB565);
-      _gdl->fillCircle(sw->posx+sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2),  sw->fgColor);
+      _gdl->fillCircle(sw->posx + sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2) + 1,  DARKGREY_RGB565);
+      _gdl->fillCircle(sw->posx + sw->height / (1.2), sw->posy + sw->height / 2, sw->height / (1.2),  sw->fgColor);
     }
     if (sw ->callBack) sw ->callBack(sw->state);
   }
@@ -546,10 +571,9 @@ void DFRobot_UI::refreshSwitch(sSwitch_t *sw) {
     }
   }
 #endif
-
-
 }
-void DFRobot_UI::drawCursor(sTextBox_t *text, uint8_t offset_x, uint8_t offset_y, bool state) 
+
+void DFRobot_UI::drawCursor(sTextBox_t *text, uint8_t offset_x, uint8_t offset_y, bool state)
 {
   uint16_t  x = text->posx + offset_x + ((text->fontSize) * 8) * (text->cursorx) + 2;
 
@@ -584,7 +608,7 @@ bool DFRobot_UI::buttonPressed(sButton_t *bu , uint16_t touch_x, uint16_t touch_
   return 0;
 }
 
-bool DFRobot_UI::buttonRelease(sButton_t *bu , uint16_t touch_x, uint16_t touch_y) 
+bool DFRobot_UI::buttonRelease(sButton_t *bu , uint16_t touch_x, uint16_t touch_y)
 {
 
   if (judgePress(bu, touch_x, touch_y) == false) {
@@ -612,13 +636,13 @@ bool DFRobot_UI::judgePress(sButton_t *bu, uint16_t x, uint16_t y) {
 
 }
 
-void DFRobot_UI::drawButtonString(sButton_t *bu , sLocation x, sLocation y, char * c) 
+void DFRobot_UI::drawButtonString(sButton_t *bu , sLocation x, sLocation y, char * c)
 {
 
   int16_t po_x, po_y;
 
   char b ;
-  
+
   if (x == CENTER && y == CENTER) {
     po_x =  bu->posx + bu->width / 2 - (4 * bu->fontSize) / 2 ;
     po_y =  bu->posy + bu->height / 2 - (8 * bu->fontSize) / 2;
@@ -628,8 +652,8 @@ void DFRobot_UI::drawButtonString(sButton_t *bu , sLocation x, sLocation y, char
     po_x =  bu->posx ;
     po_y =  bu->posy + bu->height / 2 - (8 * bu->fontSize) / 2 ;
   }
-  uint8_t length = (bu->width)/(8 * bu->fontSize);
-  if(length >= strlen(c)) length = strlen(c);
+  uint8_t length = (bu->width) / (8 * bu->fontSize);
+  if (length >= strlen(c)) length = strlen(c);
   for (uint16_t i = 0 ; i < length ; i++) {
     b = c[i];
     if (bu->click == 0) {
@@ -641,15 +665,14 @@ void DFRobot_UI::drawButtonString(sButton_t *bu , sLocation x, sLocation y, char
   }
 }
 
-//draw a char
-void DFRobot_UI::drawString(int16_t x, int16_t y, char * c, uint16_t color, uint16_t bg, uint8_t size, boolean mode) 
+void DFRobot_UI::drawString(int16_t x, int16_t y, char * c, uint16_t color, uint16_t bg, uint8_t size, boolean mode)
 {
   char b ;
-   _gdl->setTextColor(color, bg);
-   _gdl->setTextSize(size);
+  _gdl->setTextColor(color, bg);
+  _gdl->setTextSize(size);
   for (uint16_t i = 0 ; i < strlen(c); i++) {
     b = c[i];
-    _gdl->setCursor(x + i * 6 * size,y);
+    _gdl->setCursor(x + i * 6 * size, y);
     _gdl->print(b);
   }
 
@@ -665,7 +688,8 @@ uint8_t DFRobot_UI::pointNum(String str)
   return num;
 
 }
-uint8_t DFRobot_UI::stringToPoint(String str, sPoint_t *point) 
+
+uint8_t DFRobot_UI::stringToPoint(String str, sPoint_t *point)
 {
   char pin[4];
   uint8_t nowi = 0;
@@ -695,118 +719,106 @@ uint8_t DFRobot_UI::stringToPoint(String str, sPoint_t *point)
   }
 
 }
-bool DFRobot_UI::focus(uint16_t x,uint16_t y){
-  if((x > gesturex) && x < (gesturex+gestureWidth) && (y > gesturey) && y < (gesturey + gestureHeight) ){
-     return true;
+
+bool DFRobot_UI::focus(uint16_t x, uint16_t y) {
+  if ((x > gesturex) && x < (gesturex + gestureWidth) && (y > gesturey) && y < (gesturey + gestureHeight) ) {
+    return true;
   }
-  else{
-     return false;
+  else {
+    return false;
   }
 }
-bool DFRobot_UI::press(uint16_t x,uint16_t y)
+
+bool DFRobot_UI::press(uint16_t x, uint16_t y)
 {
 
-   if(focus(x,y) == true){
+  if (focus(x, y) == true) {
 
-        if(screenPressed == 0 ){
-           screenPressed = 1;
-            return true;
-        }
-   }
-  return false;
-}
-
-bool DFRobot_UI::release(uint16_t x,uint16_t y){
-   if(focus(x,y) != true){
-        if(screenPressed == 1){
-           screenPressed = 0;
-
-           return true;
-        }
-
+    if (screenPressed == 0 ) {
+      screenPressed = 1;
+      return true;
+    }
   }
   return false;
 }
-void DFRobot_UI::setGestureArea(uint16_t x,uint16_t y,uint16_t width,uint16_t height)
-{
 
+bool DFRobot_UI::release(uint16_t x, uint16_t y) {
+  if (focus(x, y) != true) {
+    if (screenPressed == 1) {
+      screenPressed = 0;
 
-   gesturex = x;
-   gesturey = y;
-   gestureWidth = width;
-   gestureHeight = height;
-   
-   _gdl->fillRoundRect(x,y,width,height,height/4,LIGHTGREY_RGB565);
-   drawString(x+5, y+height/2,"Gesture area",DARKGREY_RGB565, LIGHTGREY_RGB565, 2, 0);
-   
-
-
-
-}
-DFRobot_UI::sGestures_t DFRobot_UI::getGestures()
-{
-
-    uint16_t x,y;
-    int interval = 0;
-
-     if(lastGestute != LONGPRESSDE || millis() - timer1 > 2000){
-     if(millis() - timer1 >=500){
-            if(interval >=500 || click == 1){
-             click = 0;
-             lastGestute = SINGLECLICK;
-             return SINGLECLICK;
-          }
-            else if(click == 2){
-             click = 0;
-            lastGestute = DOUBLECLICK;
-            return  DOUBLECLICK;
-            }
-         }
-     }
-    if (press(position[0].x,position[0].y) == true){
-        
-        bx1 = position[0].x;
-        by1 = position[0].y;
-        timer = millis();
+      return true;
     }
 
-    if(release(position[0].x,position[0].y) == true){
-        x = bx2;
-        y = by2;
-        //timer = millis();
-        if (x >= 30 +bx1) return RIGHTGLIDE;
-        else if (bx1  >= 30 +x) return LEFTGLIDE;
-        else if(y  >= 30 + by1)  return DOWNGLIDE;
-        else if(by1 >= 30 + y) return UPGLIDE;
-        else if((x < 30 +bx1 && y < 30 + by1 && x > bx1 -30 && y > by1 -30 )&&(click == 0)) {
-                   click = 1;
-        if(lastGestute == LONGPRESSDE) {
-                click = 0;   
-           lastGestute = NONE;
-               }
-                   timer1 = millis();
-                   return NONE;
-         }
-        else if((x < 30 +bx1 && y < 30 + by1 && x > bx1 -30 && y > by1 -30 )&&(click == 1)){
-                  click = 2 ;
-                  interval = millis() - timer1 ;
-                   return NONE;
-          }
-
- 
+  }
+  return false;
 }
- 
- 
-    if((millis() - timer >=2000) && screenPressed == 1){
-        if(position[0].x < bx1 + 20 && position[0].x > bx1 - 20 && position[0].y < by1 + 20 && position[0].y > by1 - 20){
-            screenPressed = 0;
-            lastGestute = LONGPRESSDE;
-            return LONGPRESSDE;
-     }
+void DFRobot_UI::setGestureArea(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+{
+  gesturex = x;
+  gesturey = y;
+  gestureWidth = width;
+  gestureHeight = height;
+  _gdl->fillRoundRect(x, y, width, height, height / 4, LIGHTGREY_RGB565);
+  drawString(x + 5, y + height / 2, "Gesture area", DARKGREY_RGB565, LIGHTGREY_RGB565, 2, 0);
+}
+
+DFRobot_UI::sGestures_t DFRobot_UI::getGestures()
+{
+  uint16_t x, y;
+  int interval = 0;
+
+  if (lastGestute != LONGPRESSDE || millis() - timer1 > 2000) {
+    if (millis() - timer1 >= 500) {
+      if (interval >= 500 || click == 1) {
+        click = 0;
+        lastGestute = SINGLECLICK;
+        return SINGLECLICK;
       }
-    bx2 = position[0].x;
-    by2 = position[0].y;
-    return NONE;
+      else if (click == 2) {
+        click = 0;
+        lastGestute = DOUBLECLICK;
+        return  DOUBLECLICK;
+      }
+    }
+  }
+  if (press(position[0].x, position[0].y) == true) {
 
+    bx1 = position[0].x;
+    by1 = position[0].y;
+    timer = millis();
+  }
+  if (release(position[0].x, position[0].y) == true) {
+    x = bx2;
+    y = by2;
+    //timer = millis();
+    if (x >= 30 + bx1) return RIGHTGLIDE;
+    else if (bx1  >= 30 + x) return LEFTGLIDE;
+    else if (y  >= 30 + by1)  return DOWNGLIDE;
+    else if (by1 >= 30 + y) return UPGLIDE;
+    else if ((x < 30 + bx1 && y < 30 + by1 && x > bx1 - 30 && y > by1 - 30 ) && (click == 0)) {
+      click = 1;
+      if (lastGestute == LONGPRESSDE) {
+        click = 0;
+        lastGestute = NONE;
+      }
+      timer1 = millis();
+      return NONE;
+    }
+    else if ((x < 30 + bx1 && y < 30 + by1 && x > bx1 - 30 && y > by1 - 30 ) && (click == 1)) {
+      click = 2 ;
+      interval = millis() - timer1 ;
+      return NONE;
+    }
+  }
+  if ((millis() - timer >= 2000) && screenPressed == 1) {
+    if (position[0].x < bx1 + 20 && position[0].x > bx1 - 20 && position[0].y < by1 + 20 && position[0].y > by1 - 20) {
+      screenPressed = 0;
+      lastGestute = LONGPRESSDE;
+      return LONGPRESSDE;
+    }
+  }
+  bx2 = position[0].x;
+  by2 = position[0].y;
+  return NONE;
 }
-
