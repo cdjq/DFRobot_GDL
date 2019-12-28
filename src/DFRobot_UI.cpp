@@ -445,8 +445,9 @@ void DFRobot_UI::refreshSliser(sSlider_t *slider)
     }
   }
 
-  slider->sliderPos = position[0].x - slider->posx;
+  
   if (slider->change == 1) {
+    slider->sliderPos = position[0].x - slider->posx;
     slider->value = ((position[0].x - slider->posx) * (slider->range)) / slider->width ;
     if (slider->value >= 100) slider->value = 99;
     if (slider->value < 98 && slider->value > 3) {
