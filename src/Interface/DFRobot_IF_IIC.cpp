@@ -17,11 +17,10 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
           /*当频率为0时，默认使用板载频率，并将频率赋值给p->freq*/
           if(p->freq != 0) {
               p->pro.iic->setClock(p->freq);
-           }else{
-               p->freq = DEFAULT_IIC_FREQ;
-           }
-           p->isBegin = true;
-           //Serial.print("addr = ");Serial.println(p->pinList[IF_PIN_ADDR]);
+          }else{
+              p->freq = DEFAULT_IIC_FREQ;
+          }
+          p->isBegin = true;
       }
            break;
       case IF_COM_SET_FREQUENCY:
@@ -32,19 +31,17 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
            break;
       case IF_COM_WRITE_CMD:
       {
-          //Serial.println("IF_COM_WRITE_CMD");
           if(!p->isBegin) return 0;
           while(len){
               p->pro.iic->beginTransmission(p->pinList[IF_PIN_ADDR]);
               uint32_t n = 0;
-              if(p->dev->devType == DEV_TYPE_SCREEN)
+              if(p->dev->devName == DEV_TYPE_SCREEN)
               {
                   (len > I2C_BUFFER_LENGTH/2) ? n = I2C_BUFFER_LENGTH/2 : n = len;
                   p->pro.iic->write(0x00);
               }else{
                   (len > I2C_BUFFER_LENGTH) ? n = len : n = I2C_BUFFER_LENGTH;
               }
-              //Serial.print("len = ");Serial.println(n);
               p->pro.iic->write(pBuf, n);
               p->pro.iic->endTransmission();
               pBuf += n;
@@ -54,7 +51,6 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
       }
       case IF_COM_READ_DATA:
       {
-          //Serial.println("IF_COM_READ_DATA");
           if(!p->isBegin) return 0;
           if((pBuf[0] > 4) || (len > I2C_BUFFER_LENGTH)) return 0;
           p->pro.iic->beginTransmission(p->pinList[IF_PIN_ADDR]);
@@ -75,7 +71,7 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
           while(len){
               p->pro.iic->beginTransmission(p->pinList[IF_PIN_ADDR]);
               uint32_t n = 0;
-              if(p->dev->devType == DEV_TYPE_SCREEN)
+              if(p->dev->devName == DEV_TYPE_SCREEN)
               {
                   (len > (I2C_BUFFER_LENGTH - 1)/pgm_read_byte(&pBuf[0])) ? n = (I2C_BUFFER_LENGTH - 1)/pgm_read_byte(&pBuf[0]) : n = len;
                   p->pro.iic->write(0x40);
@@ -91,8 +87,8 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                   else if(pBuf[0] > 3)
                       p->pro.iic->write(pgm_read_byte(&pBuf[4]));
                   #if defined(ESP32)
-                   p->pro.iic->flush();
-                   #endif
+                  p->pro.iic->flush();
+                  #endif
               }
               len -= n;
               p->pro.iic->endTransmission();
@@ -106,7 +102,7 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
           while(len){
               p->pro.iic->beginTransmission(p->pinList[IF_PIN_ADDR]);
               uint32_t n = 0;
-              if(p->dev->devType == DEV_TYPE_SCREEN)
+              if(p->dev->devName == DEV_TYPE_SCREEN)
               {
                   (len > (I2C_BUFFER_LENGTH - 1)) ? n = I2C_BUFFER_LENGTH - 1 : n = len;
                   p->pro.iic->write(0x40);
@@ -129,7 +125,7 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
           while(len){
               p->pro.iic->beginTransmission(p->pinList[IF_PIN_ADDR]);
               uint32_t n = 0;
-              if(p->dev->devType == DEV_TYPE_SCREEN)
+              if(p->dev->devName == DEV_TYPE_SCREEN)
               {
                   (len > ((I2C_BUFFER_LENGTH-1)/pBuf[0])) ? n = ((I2C_BUFFER_LENGTH-1)/pBuf[0]) : n = len;
                   p->pro.iic->write(0x40);
@@ -163,7 +159,7 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
           while(len){
               p->pro.iic->beginTransmission(p->pinList[IF_PIN_ADDR]);
               uint32_t n = 0;
-              if(p->dev->devType == DEV_TYPE_SCREEN)
+              if(p->dev->devName == DEV_TYPE_SCREEN)
               {
                   (len > I2C_BUFFER_LENGTH - 1) ? n = I2C_BUFFER_LENGTH - 1 : n = len;
                   p->pro.iic->write(0x40);

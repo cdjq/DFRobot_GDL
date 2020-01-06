@@ -23,14 +23,14 @@
 #include "TouchDrivers/DFRobot_GT5688.h"
 #include <DFRobot_Type.h>
 #include "Interface/DFRobot_IF.h"
- // #define XFAC      920 //663
- // #define XOFFSET   (-20) //(-13)
- // #define YFAC      1300 //894
- // #define YOFFSET   (-30) 
-#define XFAC      663 //663
-#define XOFFSET   (-13) //(-13)
-#define YFAC      894 //894
-#define YOFFSET   (-30) 
+#define XPT2046_XFAC_320x480      920 //663
+#define XPT2046_XOFFSET_320x480   (-20) //(-13)
+#define XPT2046_YFAC_320x480      1300 //894
+#define XPT2046_YOFFSET_320x480   (-30) 
+#define XPT2046_XFAC_240x320      663 //663
+#define XPT2046_XOFFSET_240x320   (-13) //(-13)
+#define XPT2046_YFAC_240x320      894 //894
+#define XPT2046_YOFFSET_240x320   (-30) 
 
 /*不同触摸IC，触摸设备*/
 extern sGdlIFDev_t gdl_Dev_GTXXX_TOUCH_HW_IIC;
@@ -39,7 +39,7 @@ extern sGdlIFDev_t gdl_Dev_XPT2046_TOUCH_HW_SPI;
 class DFRobot_Touch: public DFRobot_IF{
 public:
   typedef struct{
-      uint8_t id; /**<触摸点的id，及第几个触摸点*/
+      uint8_t id; /**<触摸点的id，即第几个触摸点*/
       uint16_t x; /**<触摸点的x坐标*/
       uint16_t y; /**<触摸点的y坐标*/
       uint8_t wSize;/**<触摸点尺寸：宽度*/

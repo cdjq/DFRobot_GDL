@@ -69,6 +69,7 @@
 ********************************************************/
 #define DEV_TYPE_TOUCH  0
 #define DEV_TYPE_SCREEN 1
+#define DEV_TYPE_NONE 255
 
 /**
  * @brief Communication interface function command.
@@ -83,6 +84,14 @@
 #define IF_COM_WRITE_FLASH_INC   5
 #define IF_COM_WRITE_RAM_FIXED   6
 #define IF_COM_WRITE_RAM_INC     7
+
+/*无用引脚，空引脚*/
+#define GDL_PIN_NC     255 
+/*IO口操纵方式*/
+#define PIN_IN(pin)   if(pin != GDL_PIN_NC) pinMode(pin, INPUT)
+#define PIN_OUT(pin)  if(pin != GDL_PIN_NC) pinMode(pin, OUTPUT)
+#define PIN_HIGH(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, HIGH)
+#define PIN_LOW(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, LOW)
 
 
 #define IF_HW_IIC 3  //3代表硬件IIC的最大参数个数，即(rst pin)，(bl pin),addr
@@ -102,7 +111,7 @@ typedef struct sGdlIF sGdlIF_t;
 typedef uint8_t(*devInterfaceFunctionPtr)(sGdlIF_t *gdl, uint8_t step, uint8_t *addr, uint32_t len);//FP->function pointer函数指针
 
 typedef struct{
-  uint8_t devType;
+  uint8_t devName;
   uint8_t *addr;  /**<记录设备的初始化数组*/
   devInterfaceFunctionPtr talk;/**<注册屏的通信接口函数，指向函数的指针*/
 }sGdlIFDev_t;

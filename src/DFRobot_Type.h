@@ -32,13 +32,22 @@
  #define pgm_read_dword(addr) (*(const unsigned long *)(addr))
 #endif
 
-/*无用引脚，空引脚*/
-#define GDL_PIN_NC     255 
-/*IO口操纵方式*/
-#define SET_PIN_IN(pin)   if(pin != GDL_PIN_NC) pinMode(pin, INPUT)
-#define SET_PIN_OUT(pin)  if(pin != GDL_PIN_NC) pinMode(pin, OUTPUT)
-#define SET_PIN_HIGH(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, HIGH)
-#define CLR_PIN_LOW(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, LOW)
-
+#define COLOR_RGB565_BLACK     0x0000   //  黑色    
+#define COLOR_RGB565_NAVY      0x000F   //  深蓝色  
+#define COLOR_RGB565_DGREEN    0x03E0   //  深绿色  
+#define COLOR_RGB565_DCYAN     0x03EF   //  深青色  
+#define COLOR_RGB565_MAROON    0x7800   //  深红色      
+#define COLOR_RGB565_PURPLE    0x780F   //  紫色  
+#define COLOR_RGB565_OLIVE     0x7BE0   //  橄榄绿      
+#define COLOR_RGB565_LGRAY     0xC618   //  灰白色
+#define COLOR_RGB565_DGRAY     0x7BEF   //  深灰色      
+#define COLOR_RGB565_BLUE      0x001F   //  蓝色    
+#define COLOR_RGB565_GREEN     0x07E0   //  绿色          
+#define COLOR_RGB565_CYAN      0x07FF   //  青色  
+#define COLOR_RGB565_RED       0xF800   //  红色       
+#define COLOR_RGB565_MAGENTA    0xF81F   //  品红    
+#define COLOR_RGB565_YELLOW    0xFFE0   //  黄色
+#define COLOR_RGB565_ORANGE    0xFD20   //  橙色        
+#define COLOR_RGB565_WHITE     0xFFFF   //  白色  
 
 #endif

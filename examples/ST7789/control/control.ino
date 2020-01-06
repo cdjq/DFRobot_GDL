@@ -147,11 +147,11 @@ void setup()
 
   /**
    * @brief 设置UI的主题
-   * @param the sTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：THEME1,
-                     ：THEME2,
+   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
+   * @n   the 的参数 ：CLASSIC,
+                     ：MODERN,
    */
-  ui.setTheme(DFRobot_UI::THEME2);
+  ui.setTheme(DFRobot_UI::MODERN);
   ui.begin();
 
   /**

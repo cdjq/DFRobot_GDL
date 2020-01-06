@@ -10,17 +10,20 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
       return 0;
   if(p->isBegin){
       #if defined(SPI_HAS_TRANSACTION)
-      p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
       #if defined(ARDUINO_SAM_ZERO)
-       if(p->freq > 12000000)
+      if(p->freq > 12000000)
       {
           sercom4.disableSPI();
           while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
           SERCOM4->SPI.BAUD.reg = 0; 
           sercom4.enableSPI();
+      }else{
+          p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
       }
+      #else
+           p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
       #endif
-      #else // No transactions, configure SPI manually...
+      #else
       #if defined(__AVR__)
              p->pro.spi->setClockDivider(SPI_CLOCK_DIV2);
       #elif defined(ESP8266) || defined(ESP32)
@@ -28,13 +31,11 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
       #endif
              p->pro.spi->setBitOrder(MSBFIRST);
              p->pro.spi->setDataMode(SPI_MODE0);
-      #endif 
+      #endif
   }
   switch(cmd){
       case IF_COM_PROTOCOL_INIT:
       {
-           //Serial.println("IF_COM_PROTOCOL_INIT");
-           //Serial.println(p->isBegin);
            p->pro.spi = &SPI;
            p->pro.spi->begin();
            if(p->freq == 0) {
@@ -65,7 +66,6 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                #endif 
            }
            p->isBegin = true;
-           //SerialUSB.println(p->freq);
       }
            break;
       case IF_COM_SET_FREQUENCY:
@@ -100,25 +100,25 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
       case IF_COM_WRITE_CMD:
       {
            if(!(p->isBegin)) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               CLR_PIN_LOW(p->pinList[IF_PIN_DC]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_LOW(p->pinList[IF_PIN_DC]);
            for(uint32_t i = 0; i < len; i++){
                #if defined(ESP8266)
                if(i%100000 == 0) yield();
                #endif
                p->pro.spi->transfer(pBuf[i]);
            }
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break;
       case IF_COM_READ_DATA:
       {
            //Serial.println("IF_COM_READ_DATA");
            if(!(p->isBegin)) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
            for(uint8_t i = 0; i < pBuf[0]; i++){
                p->pro.spi->transfer(pBuf[i+1]);
            }
@@ -128,9 +128,9 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                #endif
                pBuf[i] = p->pro.spi->transfer(0x00);
            }
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break;
       case IF_COM_WRITE_FLASH_FIXED:   //只能一次处理4个字节
@@ -138,7 +138,7 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
            //Serial.println("IF_COM_WRITE_FLASH_FIXED");
            uint8_t num = pgm_read_byte(&pBuf[0]);
            if(!(p->isBegin) || num > 4) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
            uint8_t *addr = pBuf + 1;
            uint8_t buf[num];
            do{
@@ -196,9 +196,9 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                    }
                }
            }while(len);
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break;
       case IF_COM_WRITE_FLASH_INC:
@@ -206,7 +206,7 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
            if(!(p->isBegin)) return 0;
            
            //Serial.println("IF_COM_WRITE_FLASH_INC");
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
            do{
                uint32_t datBytes = len;
                #if defined(ESP8266)
@@ -223,21 +223,34 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                    pBuf++;
                }
            }while(len);
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break;
       case IF_COM_WRITE_RAM_FIXED:
       {
-           //Serial.println("IF_COM_WRITE_RAM_FIXED");
            if(!(p->isBegin)) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
-           #if defined(ESP32) // ESP32 has a special SPI pixel-writing function
-           while(len--){
-               p->pro.spi->writePixels(pBuf+1, pBuf[0]);
-           }
-           #else  // !ESP32
+           PIN_LOW(p->pinList[IF_PIN_CS]);
+           #if defined(ESP32)
+           uint8_t bytesLen = pBuf[0]/4;
+           uint8_t bytesMod = pBuf[0]%4;
+           uint8_t index = bytesLen*4;
+           uint8_t buf[4];
+           memset(buf, 0 , 4);
+           for(uint8_t i = 0; i < bytesLen; i++){
+               memcpy(buf, pBuf+1+i*4, 4);
+               pBuf[1+i*4] = buf[3];
+               pBuf[1+i*4 + 1] = buf[2];
+               pBuf[1+i*4 + 2] = buf[1];
+               pBuf[1+i*4 + 3] = buf[0];
+            }
+            if(bytesMod)
+                memcpy(buf, &pBuf[1+index], 2);
+            for(uint8_t i = 0; i < bytesMod; i++){
+               pBuf[index+i+1] = buf[bytesMod - 1 - i];
+            }
+           #endif
            do{
                uint32_t datBytes = len;
                uint32_t args = 100000/pBuf[0];
@@ -246,71 +259,52 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                yield();
                #endif
                len -= datBytes;
+               #if defined(ESP32)
                while(datBytes--){
-                   switch(pBuf[0]){
-                       case 1:
-                               #if defined(__AVR__)
-                               AVR_SPI_WRITE(pBuf[1]);
-                               #else
-                                p->pro.spi->transfer(pBuf[1]);
-                               #endif
-                               break;
-                       case 2: 
-                               #if defined(__AVR__)
-                               AVR_SPI_WRITE(pBuf[1]);
-                               AVR_SPI_WRITE(pBuf[2]);
-                               #else
-                               p->pro.spi->transfer(pBuf[1]);
-                               p->pro.spi->transfer(pBuf[2]);
-                               #endif
-                               break;
-                       case 3: 
-                               #if defined(__AVR__)
-                               AVR_SPI_WRITE(pBuf[1]);
-                               AVR_SPI_WRITE(pBuf[2]);
-                               AVR_SPI_WRITE(pBuf[3]);
-                               #else
-                               p->pro.spi->transfer(pBuf[1]);
-                               p->pro.spi->transfer(pBuf[2]);
-                               p->pro.spi->transfer(pBuf[3]);
-                               #endif
-                               break;
-                       case 4: 
-                               #if defined(__AVR__)
-                               AVR_SPI_WRITE(pBuf[1]);
-                               AVR_SPI_WRITE(pBuf[2]);
-                               AVR_SPI_WRITE(pBuf[3]);
-                               AVR_SPI_WRITE(pBuf[4]);
-                               #else
-                               p->pro.spi->transfer(pBuf[1]);
-                               p->pro.spi->transfer(pBuf[2]);
-                               p->pro.spi->transfer(pBuf[3]);
-                               p->pro.spi->transfer(pBuf[4]);
-                               #endif
-                               break;
-                       default:
-                              for(uint8_t i = 0; i < pBuf[0];i++){
-                                  #if defined(__AVR__)
-                                  AVR_SPI_WRITE(pBuf[1+i]);
-                                  #else
-                                  p->pro.spi->transfer(pBuf[1]);
-                                  #endif
-                              }
-                              break;
+                   p->pro.spi->writePixels(pBuf+1, pBuf[0]);
+               }
+               #else
+               while(datBytes--){
+                   if(pBuf[0] < 5){
+                       #if defined(__AVR__)
+                       AVR_SPI_WRITE(pBuf[1]);
+                       if(pBuf[0] > 1)
+                           AVR_SPI_WRITE(pBuf[2]);
+                       else if(pBuf[0] > 2)
+                           AVR_SPI_WRITE(pBuf[3]);
+                       else if(pBuf[0] > 3)
+                           AVR_SPI_WRITE(pBuf[4]);
+                       #else
+                       p->pro.spi->transfer(pBuf[1]);
+                       if(pBuf[0] > 1)
+                           p->pro.spi->transfer(pBuf[2]);
+                       else if(pBuf[0] > 2)
+                           p->pro.spi->transfer(pBuf[3]);
+                       else if(pBuf[0] > 3)
+                           p->pro.spi->transfer(pBuf[4]);
+                       #endif
+                   }else{
+                       for(uint8_t i = 0; i < pBuf[0];i++){
+                           #if defined(__AVR__)
+                           AVR_SPI_WRITE(pBuf[1+i]);
+                           #else
+                           p->pro.spi->transfer(pBuf[1]);
+                           #endif
+                       }
                    }
                }
+               #endif
            }while(len);
-#endif
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break;
       case IF_COM_WRITE_RAM_INC:
       {
            //Serial.println("IF_COM_WRITE_RAM_INC");
            if(!(p->isBegin)) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
            do{
                uint32_t datBytes = len;
                #if defined(ESP8266)
@@ -327,9 +321,9 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                    pBuf++;
                }
            }while(len);
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break;
       default:
@@ -338,6 +332,6 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
 #if defined(ESP8266)
   yield();
 #endif
-  
+  p->pro.spi->endTransaction();
   return 1;
 }

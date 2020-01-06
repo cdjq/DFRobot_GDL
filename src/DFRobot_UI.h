@@ -150,6 +150,7 @@ public:
     uint16_t fgColor;/**<进度条前景颜色>**/
     uint16_t bgColor;/**<进度条背景颜色>**/
     uint16_t sliderPos;/**<进度条的进度的x坐标>**/
+    uint16_t color;
     barCallback *callBack;/**<进度条回调函数的函数指针>**/
     uint8_t lastValue;/**<进度条上一次的进度>**/
     uint8_t value;/**<进度条的进度(0~99)>**/
@@ -175,9 +176,9 @@ public:
     枚举类型，用来定义不同的主题效果
   */
   typedef enum {
-    THEME1,/**<主题1>**/
-    THEME2,/**<主题2>**/
-  } sTheme_t;
+    CLASSIC,/**<经典主题>**/
+    MODERN,/**<流行主题>**/
+  } eTheme_t;
 
   /*!
     结构体类型，用来存储文本框控件的参数
@@ -212,7 +213,7 @@ public:
     CENTER,
     RIGHT,
     LEFT,
-  } sLocation;
+  } eLocation_t;
   
   /*!
     该枚举定义了不同的手势
@@ -226,7 +227,7 @@ public:
     SINGLECLICK,/**<单击屏幕>**/
     DOUBLECLICK,/**<双击屏幕>**/
     NONE,/**<没有识别到有效手势>**/
-  } sGestures_t;
+  } eGestures_t;
   
 protected:
   scanF * scan;
@@ -272,7 +273,7 @@ public:
    * @n   the 的参数 ：THEME1,
                      ：THEME2,
    */
-  void setTheme(sTheme_t the);
+  void setTheme(eTheme_t the);
   
   /**
    * @brief 注册一个触摸函数
@@ -429,13 +430,13 @@ public:
    * @n      DOUBLECLICK ：双击屏幕
    * @n      NONE ：没有手势
     */
-  sGestures_t getGestures();
+  eGestures_t getGestures();
   uint16_t bgColor;
 private:
   uint8_t pointNum(String str);
   uint8_t stringToPoint(String str, sPoint_t *point);
   void drawClickButton(sButton_t *bu);
-  void drawButtonString(sButton_t *bu , sLocation x, sLocation y, char * c);
+  void drawButtonString(sButton_t *bu , eLocation_t x, eLocation_t y, char * c);
   void drawButton(sButton_t *bu);
   void drawCursor(sTextBox_t *text, uint8_t offset_x, uint8_t offset_y, bool state);
   bool judgePress(sButton_t *bu, uint16_t x, uint16_t y);
@@ -449,14 +450,14 @@ private:
   uint8_t number;
   long long timer;
   long long timer1;
-  sTheme_t theme;
+  eTheme_t theme;
   bool cursorState;
-  uint16_t color;
+  //uint16_t color;
   uint16_t lcdWidth;
   uint16_t lcdHeight;
   uint8_t pressed;
   uint8_t screenPressed; 
-  sGestures_t lastGestute;
+  eGestures_t lastGestute;
   uint16_t bx1,by1,bx2,by2;
   uint16_t gesturex,gesturey,gestureWidth,gestureHeight;
   uint8_t click;

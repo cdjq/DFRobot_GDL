@@ -43,9 +43,9 @@ DFRobot_UI ui(&screen, /*width=*/240,/*height=*/320);
   click ：按钮是否被点击的标志
   callBack ：按钮的回电函数的函数指针
 */
-DFRobot_UI::sButton_t bu1 ;
-DFRobot_UI::sButton_t bu2 ;
-DFRobot_UI::sButton_t bu3 ;
+DFRobot_UI::sButton_t btn1 ;
+DFRobot_UI::sButton_t btn2 ;
+DFRobot_UI::sButton_t btn3 ;
 
   /*!
     文本款的参数如下：
@@ -124,43 +124,43 @@ void setup()
 
   /**
    * @brief 设置UI的主题
-   * @param the sTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：THEME1,
-                     ：THEME2,
+   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
+   * @n   the 的参数 ：CLASSIC,
+                     ：MODERN,
    */
-  ui.setTheme(DFRobot_UI::THEME2);
+  ui.setTheme(DFRobot_UI::CLASSIC);
   ui.begin();
   /**
    * @brief 初始化按钮控件的参数
    * @param bu sButton_t类型的结构体数据，存储按钮参数的结构体
    * @n 若用户徐自定义按钮的参数，如长度和宽度等可在此函数后自定义这些数据
    */
-  ui.initButton(&bu1);
+  ui.initButton(&btn1);
   /**用户自定义按钮参数*/
-  bu1.posx = 100;
-  bu1.posy = 220;
-  bu1.callBack = buCallback;
-  memcpy(bu1.text, "B", 1);
+  btn1.posx = 100;
+  btn1.posy = 220;
+  btn1.callBack = buCallback;
+  memcpy(btn1.text, "B", 1);
   /**
    * @brief 在屏幕上创建一个按钮控件
    * @param bu sButton_t类型的结构体数据，里面包含了按钮的位置，长度和宽度等参数
    * @n 用户可以自定义这些数据
    */
-  ui.creatButton(&bu1);
+  ui.creatButton(&btn1);
   
-  ui.initButton(&bu2);
-  bu2.posx = 30;
-  bu2.posy = 220;
-  bu2.callBack = buCallback;
-  memcpy(bu2.text, "A", 1);
-  ui.creatButton(&bu2);
+  ui.initButton(&btn2);
+  btn2.posx = 30;
+  btn2.posy = 220;
+  btn2.callBack = buCallback;
+  memcpy(btn2.text, "A", 1);
+  ui.creatButton(&btn2);
 
-  ui.initButton(&bu3);
-  bu3.posx = 170;
-  bu3.posy = 220;
-  bu3.callBack = buCallback;
-  memcpy(bu3.text, "C", 1);
-  ui.creatButton(&bu3);
+  ui.initButton(&btn3);
+  btn3.posx = 170;
+  btn3.posy = 220;
+  btn3.callBack = buCallback;
+  memcpy(btn3.text, "C", 1);
+  ui.creatButton(&btn3);
 
   /**
    * @brief 创建一个文本框，
@@ -182,11 +182,11 @@ void loop()
    * @param bu sButton_t类型的结构体数据，里面包含了按钮的位置，长度和宽度等参数
    * @n 用户需要自定义这些数据
    */
-  ui.refreshButton(&bu1);
+  ui.refreshButton(&btn1);
   ui.refreshTextBox(&tb);
-  ui.refreshButton(&bu2);
+  ui.refreshButton(&btn2);
   ui.refreshTextBox(&tb);
-  ui.refreshButton(&bu3);
+  ui.refreshButton(&btn3);
   /**
    * @brief 刷新文本框
    * @param te sTextBox_t，里面包含了开关的位置，长度和宽度等参数

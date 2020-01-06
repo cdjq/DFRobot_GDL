@@ -45,9 +45,9 @@ uint8_t interfaceComDmaSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_t len
       }
     case IF_COM_WRITE_CMD:
     {     if(!p->isBegin) return 0;
-          CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
-          if(p->dev->devType == DEV_TYPE_SCREEN)
-               CLR_PIN_LOW(p->pinList[IF_PIN_DC]);
+          PIN_LOW(p->pinList[IF_PIN_CS]);
+          if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_LOW(p->pinList[IF_PIN_DC]);
           do{
               uint32_t n = 0;
               (len > DMA_BUFFER_SIZE) ? n = DMA_BUFFER_SIZE : n = len;
@@ -55,16 +55,16 @@ uint8_t interfaceComDmaSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_t len
               p->pro.dma->transfer(pBuf, n);
               pBuf += n;
           }while(len);
-          SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-          if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+          PIN_HIGH(p->pinList[IF_PIN_CS]); 
+          if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
     }
           break;
     case IF_COM_READ_DATA:
           break;
     case IF_COM_WRITE_FLASH_INC:
           if(!(p->isBegin)) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
            do{
                uint32_t n = 0;
                (len > DMA_BUFFER_SIZE) ? n = DMA_BUFFER_SIZE : n = len;
@@ -75,27 +75,27 @@ uint8_t interfaceComDmaSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_t len
                 }
                 pBuf += n;
            }while(len);
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
           break;
     case IF_COM_WRITE_RAM_FIXED:
       {
            if(!(p->isBegin)) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
            do{
                p->pro.dma->transfer(pBuf+1, pBuf[0]);
                len--;
            }while(len);
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break; 
     case IF_COM_WRITE_RAM_INC:
       {
            if(!(p->isBegin)) return 0;
-           CLR_PIN_LOW(p->pinList[IF_PIN_CS]);
+           PIN_LOW(p->pinList[IF_PIN_CS]);
            do{
                uint32_t n = 0;
                (len > DMA_BUFFER_SIZE) ? n = DMA_BUFFER_SIZE : n = len;
@@ -103,9 +103,9 @@ uint8_t interfaceComDmaSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_t len
                 p->pro.dma->transfer(pBuf, n);
                 pBuf += n;
            }while(len);
-           SET_PIN_HIGH(p->pinList[IF_PIN_CS]); 
-           if(p->dev->devType == DEV_TYPE_SCREEN)
-               SET_PIN_HIGH(p->pinList[IF_PIN_DC]);
+           PIN_HIGH(p->pinList[IF_PIN_CS]); 
+           if(p->dev->devName == DEV_TYPE_SCREEN)
+               PIN_HIGH(p->pinList[IF_PIN_DC]);
       }
            break; 
     default:

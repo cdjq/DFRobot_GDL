@@ -146,8 +146,8 @@ String DFRobot_Touch_XPT2046::scan(){
     {
       return "255,0,0,0,0 ";
     }        
-    x=((long)XFAC*x)/10000+XOFFSET;
-    y=((long)YFAC*y)/10000+YOFFSET;
+    x=((long)XPT2046_XFAC_240x320*x)/10000+XPT2046_XOFFSET_240x320;
+    y=((long)XPT2046_YFAC_240x320*y)/10000+XPT2046_YOFFSET_240x320;
              
     if(x > 240 || x <1 || y >320 || y < 1){
       x = 0;

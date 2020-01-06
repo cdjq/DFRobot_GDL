@@ -78,11 +78,11 @@ void setup()
 
   /**
    * @brief 设置UI的主题
-   * @param the sTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：THEME1,
-                     ：THEME2,
+   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
+   * @n   the 的参数 ：CLASSIC,
+                     ：MODERN,
    */
-  ui.setTheme(DFRobot_UI::THEME2);
+  ui.setTheme(DFRobot_UI::MODERN);
   ui.begin();
   /**
    * @brief 在屏幕上创建一个进度条
@@ -118,7 +118,7 @@ void loop()
      * @n      LONGPRESSDE ：长按屏幕
      * @n      SINGLECLICK ：单击屏幕
      * @n      DOUBLECLICK ：双击屏幕
-     * @n      NONE ：没有手势
+     * @n      NONE ：没有手势或无法识别
       */
     switch(ui.getGestures()){
         /**

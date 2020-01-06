@@ -18,9 +18,9 @@
 #ifndef __DFROBOT_GDL_H
 #define __DFROBOT_GDL_H
 
+#include "DFRobot_Type.h"
 #include <Arduino.h>
 #include "Print.h"
-#include "DFRobot_Type.h"
 #include "Frame/Adafruit_GFX.h"
 #include "Interface/DFRobot_IF.h"
 #include "Drivers/DFRobot_LCDType.h"
@@ -32,23 +32,12 @@
 #define COLOR_MODE_RGB666  3
 #define COLOR_MODE_RGB888  4
 
-#define GDL_PIN_NC     255 
-/*IO口操纵方式*/
-#define SET_PIN_IN(pin)   if(pin != GDL_PIN_NC) pinMode(pin, INPUT)
-#define SET_PIN_OUT(pin)  if(pin != GDL_PIN_NC) pinMode(pin, OUTPUT)
-#define SET_PIN_HIGH(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, HIGH)
-#define CLR_PIN_LOW(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, LOW)
-
-/*color*/
-#define DF_GDL_RED         0xF800
-#define DF_GDL_ORANGE      0xFD20
-#define DF_GDL_YELLOW      0xFFE0
-#define DF_GDL_GREEN       0x07E0
-#define DF_GDL_CYAN        0x07FF
-#define DF_GDL_BLUE        0x001F
-#define DF_GDL_PURPLE      0x780F
-#define DF_GDL_BLACK       0x0000
-#define DF_GDL_WHITE       0xFFFF
+// #define GDL_PIN_NC     255 
+// /*IO口操纵方式*/
+// #define PIN_IN(pin)   if(pin != GDL_PIN_NC) pinMode(pin, INPUT)
+// #define PIN_OUT(pin)  if(pin != GDL_PIN_NC) pinMode(pin, OUTPUT)
+// #define PIN_HIGH(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, HIGH)
+// #define PIN_LOW(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, LOW)
 
 #if 1
 #ifdef ARDUINO_SAM_ZERO//M0板子的串口与其他串口使用方式有区别

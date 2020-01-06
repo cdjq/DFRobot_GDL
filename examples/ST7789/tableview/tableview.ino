@@ -71,13 +71,13 @@ void tvCallback(uint8_t highLightPage) {
    * @n mode  0 ： 正常显示
    *          1 ： 颜色反转
    */
-    ui.drawString(10, 200, "this is tab1", 0x0, ui.bgColor, 4, 0);
+    ui.drawString(10, 200, "this is tab1", 0x0, ui.bgColor, 3, 0);
   }
   if (highLightPage == 2) {
-    ui.drawString(10, 200, "this is tab2", 0x00, ui.bgColor, 4, 0);
+    ui.drawString(10, 200, "this is tab2", 0x00, ui.bgColor, 3, 0);
   }
   if (highLightPage == 3) {
-    ui.drawString(10, 200, "this is tab3", 0x00, ui.bgColor, 4, 0);
+    ui.drawString(10, 200, "this is tab3", 0x00, ui.bgColor, 3, 0);
   }
 }
 
@@ -91,13 +91,14 @@ void setup()
    * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
    */
   ui.setTouchFunction(scan);
+  
   /**
    * @brief 设置UI的主题
-   * @param the sTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：THEME1,
-                     ：THEME2,
+   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
+   * @n   the 的参数 ：CLASSIC,
+                     ：MODERN,
    */
-  ui.setTheme(DFRobot_UI::THEME1);
+  ui.setTheme(DFRobot_UI::MODERN);
   /**
    * @brief 初始化函数,初始化UI使用到的一些参数
    */
