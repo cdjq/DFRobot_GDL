@@ -12,7 +12,6 @@
 #define BL  7
 #endif
 
-DFRobot_ST7789_240x240_DMA_SPI screen(DC,CS,RST,BL);
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
