@@ -47,6 +47,9 @@
  * @param rst  屏的复位引脚
  */
 DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+/*M0主板下DMA传输*/
+//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+
 /**
  * @brief 构造函数
  * @param gdl 屏幕对象

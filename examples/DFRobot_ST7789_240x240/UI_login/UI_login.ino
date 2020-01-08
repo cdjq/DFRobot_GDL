@@ -46,6 +46,9 @@
  * @param irq  中断信号
  */
 DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+/*M0主板下DMA传输*/
+//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+
 /**
    @brief 构造函数
    @param gdl 屏幕对象
@@ -97,7 +100,7 @@ DFRobot_UI::sButton_t btn1, btn2 ;
 */
 DFRobot_UI::sKeyPad_t kb;
 
-void keyboard(char *txt) {
+void keyboard() {
   
   //判断是哪一个文本框被选中
   if (tb1.selected == true) {
