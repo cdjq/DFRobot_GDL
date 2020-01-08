@@ -80,7 +80,7 @@ public:
    * @n 引发进度条发生改变的事件应该写在里面
    */
   typedef void barCallback();
-  typedef void keyPadCallback();
+
   /*!
     文本框的状态
   */
@@ -151,7 +151,6 @@ public:
     uint16_t bgColor;/**<进度条背景颜色>**/
     uint16_t sliderPos;/**<进度条的进度的x坐标>**/
     uint16_t color;
-    uint8_t mode;  /**<可以选择不同类型的进度条>**/
     barCallback *callBack;/**<进度条回调函数的函数指针>**/
     uint8_t lastValue;/**<进度条上一次的进度>**/
     uint8_t value;/**<进度条的进度(0~99)>**/
@@ -197,7 +196,6 @@ public:
     char  text[100] ;/**<文本框内容>**/
     uint16_t cursorx;/**<文本框光标在x轴的坐标>**/
     uint16_t cursory;/**<文本框光标在y轴的坐标>**/
-    bool selected;
   } sTextBox_t;
   
   /*!
@@ -210,18 +208,7 @@ public:
     uint8_t highLightPage;/**<高亮的table>**/
     tableViewCallback *callback;/**<tableview的回调函数>**/
   } sTableview_t;
-
-  typedef struct {
-    uint16_t posx; /**<数字键盘在x轴的坐标>**/
-    uint16_t posy;/**<数字键盘在y轴的坐标>**/
-    uint16_t width;/**<数字键盘的宽度>**/
-    uint16_t height;/**<数字键盘的高度>**/
-    uint8_t mode;/**<文数字键盘的模式0.带有文本框,1.不带文本框，数字输出的位置由自己指定>**/
-                 
-    sButton_t btn[12];/**<数字键盘里面的按钮数据>**/
-    keyPadCallback *callBack;/**<数字键盘的回调函数>**/
-    sTextBox_t *textBox;/**<数字键盘的文本框数据>**/
-  } sKeyPad_t;
+  
   typedef enum {
     CENTER,
     RIGHT,
@@ -362,13 +349,6 @@ public:
   void refreshTableview(sTableview_t *tv);
   
   /**
-   * @brief 改变tableview的高亮页
-   * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
-   * @param page 需要高亮的页数
-   */
-  void changeTableview(sTableview_t *tv,uint8_t page);
-  
-  /**
    * @brief 初始化开关控件,对开关的某些参数进行初始化
    * @param sw sSwitch_t 类型的结构体
    * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
@@ -387,13 +367,7 @@ public:
    * @n 当某事件产生，会进入开关的回调函数
    */
   void refreshSwitch(sSwitch_t *sw);
-
-  /**
-   * @brief 初始化文本框控件,对文本框的某些参数进行初始化
-   * @param tb sTextBox_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
-  void initText(sTextBox_t *tb);
+  
   /**
    * @brief 创建一个文本框，
    * @param tb sTextBox_t 类型的结构体，
@@ -429,11 +403,7 @@ public:
    * @param txt 需要添加的字符
    */
   void textAddChar(sTextBox_t *te,char txt);
-  
-  /**
-   * @brief 使文本框停止输入
-   */
-  void endInput();
+
   /**
    * @brief 更新触摸点的数据
    */
@@ -461,18 +431,6 @@ public:
    * @n      NONE ：没有手势
     */
   eGestures_t getGestures();
-  
-  /**
-   * @brief 创建一个数字键盘控件
-   * @param te sKeyPad_t 类型的结构体
-   */
-  void creatKeyBoard(sKeyPad_t *kb);
-  
-  /**
-   * @brief 刷新数字键盘
-   * @param te sKeyPad_t，里面包含了数字键盘的位置，长度和宽度等参数
-   */
-  void refreshKeyBoard(sKeyPad_t *kb);
   uint16_t bgColor;
 private:
   uint8_t pointNum(String str);
@@ -493,11 +451,8 @@ private:
   long long timer;
   long long timer1;
   eTheme_t theme;
-  sTextBox_t te1;
   bool cursorState;
-  uint16_t cursorx;
-  uint16_t cursory;
-  uint16_t  cursorPosx ,cursorPosy;
+  //uint16_t color;
   uint16_t lcdWidth;
   uint16_t lcdHeight;
   uint8_t pressed;

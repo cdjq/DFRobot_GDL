@@ -27,7 +27,7 @@ size_t DFRobot_GDL::write(const uint8_t *buffer, size_t size){//默认为uft8，
   // for(uint8_t i =0; i<size; i++){
       // Serial.println(buffer[i],HEX);
   // }
-  Serial.print("size = ");Serial.println(size);
+  //Serial.print("size = ");Serial.println(size);
   if(!_gdlFont){
       while(size--) {
           n += Adafruit_GFX::write(*buffer++);
@@ -37,7 +37,7 @@ size_t DFRobot_GDL::write(const uint8_t *buffer, size_t size){//默认为uft8，
           c = *buffer++;
           gdl_Font_t gdlFont;
           gdlFont.bitmap = (uint8_t *)pgm_read_dword(&_gdlFont->bitmap);
-          Serial.println(pgm_read_byte(&gdlFont.bitmap[0]),HEX);
+          //Serial.println(pgm_read_byte(&gdlFont.bitmap[0]),HEX);
           gdlFont.glyph = (gdl_Glyph_t *)pgm_read_dword(&_gdlFont->glyph);//取出glyph的地址
           gdlFont.yAdvance = pgm_read_byte(&_gdlFont->yAdvance);
           gdlFont.length = (uint32_t)pgm_read_dword(&_gdlFont->length);
@@ -52,9 +52,9 @@ size_t DFRobot_GDL::write(const uint8_t *buffer, size_t size){//默认为uft8，
               length = 0;
               num = getUtf_8Bytes(c);
               unicode = utf8ToUnicode(num, (uint8_t *)(buffer-1));
-              Serial.print("unicode1 = ");Serial.println(unicode,HEX);
+              //Serial.print("unicode1 = ");Serial.println(unicode,HEX);
               for(uint32_t i = 0; i < gdlFont.length; i++){
-                  Serial.print("unicode = "); Serial.println(pgm_read_word(&(gdlFont.glyph->unicode)),HEX);
+                  //Serial.print("unicode = "); Serial.println(pgm_read_word(&(gdlFont.glyph->unicode)),HEX);
                   if(unicode == (uint32_t)pgm_read_word(&(gdlFont.glyph->unicode))){
                       gdlFont.bitmap += length;
                       //Serial.println(pgm_read_byte(&gdlFont.bitmap[0]),HEX);
@@ -67,9 +67,9 @@ size_t DFRobot_GDL::write(const uint8_t *buffer, size_t size){//默认为uft8，
                     	  cursor_y += gdlFont.yAdvance;
                       }
                       drawCharBitmaps(cursor_x, cursor_y, &gdlFont, textcolor, textbgcolor);
-                      Serial.print("cursor_x = ");Serial.println(cursor_x);
+                      //Serial.print("cursor_x = ");Serial.println(cursor_x);
                       cursor_x += pgm_read_byte(&(gdlFont.glyph->xAdvance));
-                      Serial.println(pgm_read_byte(&(gdlFont.glyph->xAdvance)));
+                      //Serial.println(pgm_read_byte(&(gdlFont.glyph->xAdvance)));
                       break;
                   }
                   length += (uint32_t)pgm_read_word(&(gdlFont.glyph->length));
@@ -80,8 +80,8 @@ size_t DFRobot_GDL::write(const uint8_t *buffer, size_t size){//默认为uft8，
                  size -= num;
               else
                   size = 0;
-              Serial.print("num = ");Serial.println(num);
-              Serial.print("size1 = ");Serial.println(size);
+              //Serial.print("num = ");Serial.println(num);
+              //Serial.print("size1 = ");Serial.println(size);
               n += num;
           }
       }

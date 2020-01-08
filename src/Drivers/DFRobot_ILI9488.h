@@ -1,6 +1,10 @@
 #ifndef __DFROBOT_ILI9488_H
 #define __DFROBOT_ILI9488_H
 
+#define ILI9488_COLSET  0x2A
+#define ILI9488_RAWSET  0x2B
+#define ILI9488_RAMWR   0x2C
+
 /*static const uint8_t PROGMEM DFRobot_ILI9488_initCmd[] */
 static const uint8_t PROGMEM DFRobot_ILI9488_initCmd[]= {
 //flag cmd 最高位为1表示后2位是延时，低7位表示参数的个数

@@ -1,5 +1,5 @@
 /*!
- * @file UI_contal.ino
+ * @file contal.ino
  * @brief 在屏幕上创建一个开关，文本框和滑条控件，用户可以这些控件的参数，也可以使用默认的参数
  * @n 当用户使用控件时，会在文本框显示你当前的操作
  * 
@@ -17,47 +17,11 @@
 #include "Arduino.h"
 #include "DFRobot_GDL.h"
 #include "DFRobot_Touch.h"
-/*M0*/
-#if defined ARDUINO_SAM_ZERO
-#define TFT_DC  7
-#define TFT_CS  5
-#define TFT_RST 6
-#define TFT_BL  9
-#define TOUCH_CS 2
-/*ESP32 and ESP8266*/
-#elif defined(ESP32) || defined(ESP8266)
-#define TFT_DC  D2
-#define TFT_CS  D3
-#define TFT_RST D4
-#define TFT_BL  D5
-#define TOUCH_CS D6
-/*AVR系列主板*/
-#else
-#define TFT_DC  2
-#define TFT_CS  3
-#define TFT_RST 4
-#define TFT_BL  5
-#define TOUCH_CS 6
-#endif
-
-/**
- * @brief Constructor  当触摸采用XPT2046芯片时，可以调用此构造函数
- * @param cs  SPI片选信号
- * @param rst  复位信号
- * @param irq  中断信号
- */
-DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS); 
-
-/**
- * @brief Constructor  当屏采用硬件SPI通信，驱动IC是st7789，屏幕分辨率是240x320时，可以调用此构造函数
- * @param dc  SPI通信的命令/数据线引脚
- * @param cs  SPI通信的片选引脚
- * @param rst  屏的复位引脚
- */
-DFRobot_ST7789_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
-/*M0主板下DMA传输*/
-//DFRobot_ST7789_240x320_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
-
+//自定义通信引脚CS,DC
+#define SPI_CS 3
+#define SPI_DC 4
+DFRobot_Touch_XPT2046 touch(/*cs=*/2); 
+DFRobot_ST7789_240x320_HW_SPI screen(SPI_DC,SPI_CS);
 /**
  * @brief 构造函数
  * @param gdl 屏幕对象
@@ -223,13 +187,7 @@ void setup()
    * @param sw sSwitch_t 类型的结构体
    */
   ui.creatSwitch(&sw);
-  /**
-   * @brief 初始化文本框控件,对文本框的某些参数进行初始化
-   * @param tb sTextBox_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
-  ui.initText(&tb);
-  memcpy(tb.text, "please enter text", 17);
+  
   /**
    * @brief 创建一个文本框，
    * @param tb sTextBox_t 类型的结构体，

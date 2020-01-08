@@ -4,4 +4,4 @@
 #include "gdlFontDef.h"
 /// Font data stored PER GLYPH
 
-#endif 
+#endif

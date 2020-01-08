@@ -10,7 +10,6 @@
  */
  
 #include "DFRobot_GDL.h"
-#include "Fonts/Fonts/SIMKAIFont18pt.h"
 
 #define DC  D2
 #define CS  D3

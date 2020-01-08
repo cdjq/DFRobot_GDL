@@ -20,20 +20,20 @@ void DFRobot_ST7789_240x240_HW_SPI::begin(uint32_t freq)
   gdlInit(freq);
   /*复位*/
   PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7789_240x240_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  sendCommand(0x2A);
+  sendCommand(ST7789_COLSET);
   sendData16(x);
   sendData16(x + w -1);
-  sendCommand(0x2B);
+  sendCommand(ST7789_RAWSET);
   sendData16(y);
   sendData16(y + h -1);
-  sendCommand(0x2C);
+  sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
@@ -45,20 +45,20 @@ void DFRobot_ST7789_240x320_HW_SPI::begin(uint32_t freq)
   gdlInit(freq);
   /*复位*/
   PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  sendCommand(0x2A);
+  sendCommand(ST7789_COLSET);
   sendData16(x);
   sendData16(x + w -1);
-  sendCommand(0x2B);
+  sendCommand(ST7789_RAWSET);
   sendData16(y);
   sendData16(y + h -1);
-  sendCommand(0x2C);
+  sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
@@ -70,20 +70,20 @@ void DFRobot_ST7735S_80x160_HW_SPI::begin(uint32_t freq)
   gdlInit(freq);
   /*复位*/
   PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7735S_80x160_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  sendCommand(0x2A);
+  sendCommand(ST7735S_COLSET);
   sendData16(x);
   sendData16(x + w -1);
-  sendCommand(0x2B);
+  sendCommand(ST7735S_RAWSET);
   sendData16(y);
   sendData16(y + h -1);
-  sendCommand(0x2C);
+  sendCommand(ST7735S_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
@@ -95,20 +95,20 @@ void DFRobot_ILI9488_480x320_HW_SPI::begin(uint32_t freq)
   gdlInit(freq);
   /*复位*/
   PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   initDisplay();
 }
 void DFRobot_ILI9488_480x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  sendCommand(0x2A);
+  sendCommand(ILI9488_COLSET);
   sendData16(x);
   sendData16(x + w -1);
-  sendCommand(0x2B);
+  sendCommand(ILI9488_RAWSET);
   sendData16(y);
   sendData16(y + h -1);
-  sendCommand(0x2C);
+  sendCommand(ILI9488_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
@@ -126,9 +126,9 @@ void DFRobot_SSD1306_128x32_HW_IIC::begin(uint32_t freq){
   _lcd.buffer = (uint8_t *)malloc(128*64/8);
   memset(_lcd.buffer,0xff,128*64/8);
   PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   initDisplay();//显示屏初始化
 }
 
@@ -196,20 +196,20 @@ void DFRobot_ST7789_240x240_DMA_SPI::begin(uint32_t freq)
   gdlInit(freq);
   /*复位*/
   PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7789_240x240_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  sendCommand(0x2A);
+  sendCommand(ST7789_COLSET);
   sendData16(x);
   sendData16(x + w -1);
-  sendCommand(0x2B);
+  sendCommand(ST7789_RAWSET);
   sendData16(y);
   sendData16(y + h -1);
-  sendCommand(0x2C);
+  sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
@@ -221,20 +221,20 @@ void DFRobot_ST7735S_80x160_DMA_SPI::begin(uint32_t freq)
   gdlInit(freq);
   /*复位*/
   PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(120);
+  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7735S_80x160_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  sendCommand(0x2A);
+  sendCommand(ST7735S_COLSET);
   sendData16(x);
   sendData16(x + w -1);
-  sendCommand(0x2B);
+  sendCommand(ST7735S_RAWSET);
   sendData16(y);
   sendData16(y + h -1);
-  sendCommand(0x2C);
+  sendCommand(ST7735S_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 

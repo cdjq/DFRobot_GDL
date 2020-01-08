@@ -1,5 +1,10 @@
 #ifndef __DFROBOT_ST7796S_H
 #define __DFROBOT_ST7796S_H
+
+#define ST7796S_COLSET  0x2A
+#define ST7796S_RAWSET  0x2B
+#define ST7796S_RAMWR   0x2C
+
 static const uint8_t PROGMEM DFRobot_ST7796S_initCmd[] = {
 0x01, 0x11, 0x80, 100,
 0x01, 0xf0, 1, 0xc3,
