@@ -1,5 +1,5 @@
 /*!
- * @file tableview.ino
+ * @file UI_tableview.ino
  * @brief 在屏幕上创建一个table控件，用户可以自定义进度条的参数
  * @n 用户可以选择不同的页来显示不同的内容
  * 

@@ -1,5 +1,5 @@
 /*!
- * @file bar.ino
+ * @file UI_gestute.ino
  * @brief 在屏幕指定区域可以识别到用户所使用的手势，手势的名称会显示到文本框内
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
