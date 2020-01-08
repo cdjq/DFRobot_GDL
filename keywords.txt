@@ -21,7 +21,9 @@ DFRobot_Touch_XPT2046	KEYWORD1
 #######################################
 # Methods and Functions 
 #######################################	
-
+endInput	KEYWORD2
+creatKeyBoard	KEYWORD2
+refreshKeyBoard	KEYWORD2
 sTextState_t	KEYWORD2
 sPoint_t	KEYWORD2
 sSwitch_t	KEYWORD2
