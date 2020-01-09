@@ -102,12 +102,8 @@ void setup()
   Serial.begin(9600);
   //初始化显示屏幕
   screen.begin();
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN,
+
   ui.setTheme(DFRobot_UI::MODERN);
   ui.begin();
 
@@ -125,11 +121,7 @@ void setup()
    */
   ui.drawString(10,200,"Page of loading",WHITE_RGB565,DARKGREY_RGB565,2,0);
 
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  //初始化进度条，会对进度条的参数进行初始化
   ui.initBar(&bar1);
   /**用户自定义进度条参数*/
   bar1.posx = 10;
@@ -137,11 +129,8 @@ void setup()
   bar1.mode =0;
   bar1.callBack = barCallback1;
 
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  
+  //在屏幕上创建一个进度条，根据自定义或初始化的参数绘制进度条
   ui.creatBar(&bar1);
 
   ui.initBar(&bar2);
@@ -151,11 +140,7 @@ void setup()
   bar2.mode =1;
   bar2.callBack = barCallback2;
 
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  //在屏幕上创建一个进度条，根据自定义或初始化的参数绘制进度条
   ui.creatBar(&bar2);
 
   ui.initBar(&bar3);
@@ -165,11 +150,7 @@ void setup()
   bar3.mode =2;
   bar3.callBack = barCallback3;
 
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  //在屏幕上创建一个进度条，，根据自定义或初始化的参数绘制进度条
   ui.creatBar(&bar3);
 }
 
@@ -177,7 +158,7 @@ void setup()
 void loop()
 {
   /**
-   * @brief 刷新进度条
+   * @refreshBar： 刷新进度条
    * @param bar sBar_t，里面包含了进度条的位置，长度和宽度等参数
    */
   ui.refreshBar(&bar1);
