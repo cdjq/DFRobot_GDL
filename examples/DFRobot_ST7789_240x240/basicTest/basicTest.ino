@@ -1,6 +1,6 @@
 /*!
  * @file basicTest.ino
- * @brief 演示不同自带英文字库效果 
+ * @brief 演示各种图形绘画效果 
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)
@@ -10,13 +10,47 @@
  */
  
 #include "DFRobot_GDL.h"
-
-#define DC  D2
-#define CS  D3
-#define RST D4
-#define BL  D5
-DFRobot_ST7789_240x240_HW_SPI screen(DC,CS,RST,BL);
-
+/*M0*/
+#if defined ARDUINO_SAM_ZERO
+#define TFT_DC  7
+#define TFT_CS  5
+#define TFT_RST 6
+#define TFT_BL  9
+/*ESP32 and ESP8266*/
+#elif defined(ESP32) || defined(ESP8266)
+#define TFT_DC  D3
+#define TFT_CS  D4
+#define TFT_RST D5
+#define TFT_BL  D6
+/*AVR系列主板*/
+#else
+#define TFT_DC  2
+#define TFT_CS  3
+#define TFT_RST 4
+#define TFT_BL  5
+#endif
+DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+/*M0主板下DMA传输*/
+//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+/*
+ *COLOR_RGB565_BLACK     0x0000   //  黑色    
+ *COLOR_RGB565_NAVY      0x000F   //  深蓝色  
+ *COLOR_RGB565_DGREEN    0x03E0   //  深绿色  
+ *COLOR_RGB565_DCYAN     0x03EF   //  深青色  
+ *COLOR_RGB565_MAROON    0x7800   //  深红色      
+ *COLOR_RGB565_PURPLE    0x780F   //  紫色  
+ *COLOR_RGB565_OLIVE     0x7BE0   //  橄榄绿      
+ *COLOR_RGB565_LGRAY     0xC618   //  灰白色
+ *COLOR_RGB565_DGRAY     0x7BEF   //  深灰色      
+ *COLOR_RGB565_BLUE      0x001F   //  蓝色    
+ *COLOR_RGB565_GREEN     0x07E0   //  绿色          
+ *COLOR_RGB565_CYAN      0x07FF   //  青色  
+ *COLOR_RGB565_RED       0xF800   //  红色       
+ *COLOR_RGB565_MAGENTA   0xF81F   //  品红    
+ *COLOR_RGB565_YELLOW    0xFFE0   //  黄色
+ *COLOR_RGB565_ORANGE    0xFD20   //  橙色        
+ *COLOR_RGB565_WHITE     0xFFFF   //  白色
+ */
 void setup() {
   Serial.begin(115200);
   screen.begin();//生成了screen对象
@@ -24,13 +58,13 @@ void setup() {
 
 void loop(){
     testdrawpixel();
-    //testline();
-    //testfastlines(COLOR_RGB565_PURPLE,COLOR_RGB565_YELLOW);       
-    //testrects(COLOR_RGB565_BLACK,COLOR_RGB565_WHITE);
-    //testroundrects();
-    //testcircles(24,COLOR_RGB565_BLUE);
-    //testtriangles(COLOR_RGB565_YELLOW);
-    //testprint();
+    testline();
+    testfastlines(COLOR_RGB565_PURPLE,COLOR_RGB565_YELLOW);       
+    testrects(COLOR_RGB565_BLACK,COLOR_RGB565_WHITE);
+    testroundrects();
+    testcircles(24,COLOR_RGB565_BLUE);
+    testtriangles(COLOR_RGB565_YELLOW);
+    testprint();
 
 }
 /*测试画像素点*/
@@ -57,11 +91,11 @@ void testdrawpixel() {
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
-    for (x = i; x <= 239 - i; x+=10 ){
+    for (x = i; x <= 239 - i + 1; x+=10 ){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
-    for (y = i; y <= 239 - i; y+=10){
+    for (y = i; y <= 239 - i + 1; y+=10){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }

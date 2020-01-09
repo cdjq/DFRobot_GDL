@@ -1,4 +1,14 @@
-//主控需要40000字节的动态内存，ESP8266和ESP32可运行，项目使用了近38万字节
+/*!
+ * @file bitmap.ino
+ * @brief 根据位图软件生成的图像数组画单色图、彩色图和灰度图，主控需要40000字节的动态内存，ESP8266和ESP32可运行，项目使用了近38万字节
+ * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [YeHangYu](hangyu.ye@dfrobot.com)
+ * @version  V0.1
+ * @date  2020-01-07
+ * @url https://github.com/DFRobot/DFRobot_GDL
+ */
+ 
 #include "DFRobot_GDL.h"
 #include "pgmspace.h"
 #include "Bitmap.h"
@@ -7,21 +17,31 @@
 #include "mask.h"
 #include "RGBBitmap.h"
 //自定义通信引脚
-#if defined(ESP8266)||defined(ESP32)
-#define DC  D4
-#define CS  D5
-#define RST D6
-#define BL  D7
+/*M0*/
+#if defined ARDUINO_SAM_ZERO
+#define TFT_DC  7
+#define TFT_CS  5
+#define TFT_RST 6
+#define TFT_BL  9
+/*ESP32 and ESP8266*/
+#elif defined(ESP32) || defined(ESP8266)
+#define TFT_DC  D3
+#define TFT_CS  D4
+#define TFT_RST D5
+#define TFT_BL  D6
+/*AVR系列主板*/
 #else
-#define DC  4 
-#define CS  5
-#define RST 6
-#define BL  7
+#define TFT_DC  2
+#define TFT_CS  3
+#define TFT_RST 4
+#define TFT_BL  5
 #endif
+DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+/*M0主板下DMA传输*/
+//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 
-DFRobot_ST7789_240x240_HW_SPI screen(DC,CS,RST,BL);
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   screen.begin();
 }
 void loop() {

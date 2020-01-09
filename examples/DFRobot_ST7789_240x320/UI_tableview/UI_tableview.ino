@@ -38,15 +38,23 @@
 #define TFT_BL  5
 #define TOUCH_CS 6
 #endif
+
+/**
+ * @brief Constructor  当触摸采用XPT2046芯片时，可以调用此构造函数
+ * @param cs  SPI片选信号
+ * @param rst  复位信号
+ * @param irq  中断信号
+ */
+DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS); 
 /**
  * @brief Constructor  当屏采用硬件SPI通信，驱动IC是st7789，屏幕分辨率是240x320时，可以调用此构造函数
  * @param dc  SPI通信的命令/数据线引脚
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x320_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 
 /**
  * @brief 构造函数
@@ -54,7 +62,7 @@ DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
  * @param width 屏幕的宽度.
  * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
+DFRobot_UI ui(&screen, /*width=*/240,/*height=*/320);
 /*!
   offset : table间的间距
   text[4] ：每个table相当与一个按钮
@@ -66,11 +74,24 @@ DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
 DFRobot_UI::sTableview_t tv;
 
 /**
+ * @brief 触摸扫描函数，扫描出触摸点的信息
+ * @return 返回包含点坐标信息的字符串
+ * @n 字符串的信息格式"id,x1,y1,width,height "
+ * @n id:点的id
+ * @n x1：第一个点的x坐标
+ * @n y1：第一个点的y坐标
+ * @n width ：触摸到的范围的宽度
+ * @n height ：触摸的范围的高度
+ */
+String scan() {
+  return touch.scan();
+}
+/**
  * @brief tableview的回调函数
  * @param highLightPage 被选中的页
  */
 void tvCallback(uint8_t highLightPage) {
-  
+
   if (highLightPage == 1) {
   /**
    * drawString：绘制字符串
@@ -84,21 +105,26 @@ void tvCallback(uint8_t highLightPage) {
    * @n mode  0 ： 正常显示
    *          1 ： 颜色反转
    */
-    ui.drawString(10, 180, "this is tab1", 0xffff, ui.bgColor, 3, 0);
+    ui.drawString(10, 200, "this is tab1", 0xffff, ui.bgColor, 3, 0);
   }
   if (highLightPage == 2) {
-    ui.drawString(10, 180, "this is tab2", 0xffff, ui.bgColor, 3, 0);
+    ui.drawString(10, 200, "this is tab2", 0xffff, ui.bgColor, 3, 0);
   }
   if (highLightPage == 3) {
-    ui.drawString(10, 180, "this is tab3", 0xffff, ui.bgColor, 3, 0);
+    ui.drawString(10, 200, "this is tab3", 0xffff, ui.bgColor, 3, 0);
   }
 }
 
 void setup()
 {
   Serial.begin(9600);
-
+  touch.begin();
   screen.begin();
+  /**
+   * @brief 注册一个触摸函数
+   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
+   */
+  ui.setTouchFunction(scan);
   
   /**
    * @brief 设置UI的主题
@@ -129,13 +155,13 @@ void setup()
 
 void loop()
 {
-  for(uint8_t i=1 ; i<4 ;i++ ){
+  /**
+   * @brief 更新触摸点的数据
+   */
+  ui.updateCoordinate();
   /**
    * @brief 刷新tableview
    * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
    */
   ui.refreshTableview(&tv);
-  delay(500);
-  ui.changeTableview(&tv,i);
-  }
 }
