@@ -10,16 +10,16 @@ DFRobot_GDL 是一个集显示、触摸、UI于一体的综合显示库。内部
 * [History](#history)
 * [Credits](#credits) 
 
-##summary
+## summary
 
 1.支持多种触摸IC和显示IC以及多种分辨率<br>
 2.支持多种显示功能；支持画点、画线、画圆等等;支持位图的显示;支持多种字库;支持用户自定义字体功能等。<br>
 3.支持多种触摸功能：手势操作、单击、双击、长按等。<br>
 4.支持多种UI功能：滑条,进度条,文本框,按钮,开关，tableView等。<br>
 
-##text
+## text
 
-###显示功能<br>
+### 示功能<br>
 GDL显示框架继承自Adafruit的GFX框架，链接:https://github.com/adafruit/Adafruit-GFX-Library;<br>
 支持非常多的功能，下图可以详细查看<br>
 
@@ -38,7 +38,7 @@ ttf字库      |              |               |               |               | 
 按钮、开关   |      √       |               |               |               |              | 
 tableView    |      √       |               |               |               |              |     
 
-###显示IC<br>
+### 显示IC<br>
 
 GDL目前支持多种的显示驱动IC和分辨率，下图查看目前可用的驱动。<br>
 
@@ -49,7 +49,7 @@ GDL：显示IC        | ST7789       | ILI9341
 
 
 
-###触摸<br>
+### 触摸<br>
 GDL支持多种触摸IC，下图查看目前支持的触摸驱动：<br>
 
 
@@ -57,10 +57,10 @@ GDL：触摸IC      |  XPT2046     |    GT911    |   GT5688
 ---------------- | :----------: | :----------:|------------
 Work Well        |      √       |     √       |     √
 
-##installation
+## installation
 要使用此库，请首先下载该库文件，将其粘贴到\ Arduino \ libraries目录，然后打开examples文件夹并在该文件夹中运行demo。<br>
 
-##compatibility
+## ompatibility
 
 MCU                | Work Well    | Work Wrong   | Untested    | Remarks
 ------------------ | :----------: | :----------: | :---------: | -----
