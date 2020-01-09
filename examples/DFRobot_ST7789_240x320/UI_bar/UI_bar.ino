@@ -115,14 +115,14 @@ void setup()
    * @param x 所需绘制字符串在屏幕上的x坐标
    * @param y 所需绘制字符串在屏幕上的x坐标
    * @param c 字符数组的指针
-   * @param color 字体的颜色
-   * @param bg 字体背景的颜色
+   * @param color 字体的颜色(RGB565)
+   * @param bg 字体背景的颜色(RGB565)
    * @param size 字体的大小
    * @param mode 字体显示模式
    * @n mode  0 ： 正常显示
    *          1 ： 颜色反转
    */
-  ui.drawString(10,200,"Page of loading",0xffff,DARKGREY_RGB565,2,0);
+  ui.drawString(10,200,"Page of loading",WHITE_RGB565,DARKGREY_RGB565,2,0);
 
   /**
    * @brief 在屏幕上创建一个进度条
