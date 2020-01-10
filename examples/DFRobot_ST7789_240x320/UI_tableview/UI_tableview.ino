@@ -2,6 +2,7 @@
  * @file UI_tableview.ino
  * @brief 在屏幕上创建一个table控件，用户可以自定义进度条的参数
  * @n 用户可以选择不同的页来显示不同的内容
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -73,23 +74,11 @@ DFRobot_UI ui(&screen, /*width=*/240,/*height=*/320);
 //创建 sTableview_t类型的结构体变量，用来定义tableview的参数.
 DFRobot_UI::sTableview_t tv;
 
-/**
- * @brief 触摸扫描函数，扫描出触摸点的信息
- * @return 返回包含点坐标信息的字符串
- * @n 字符串的信息格式"id,x1,y1,width,height "
- * @n id:点的id
- * @n x1：第一个点的x坐标
- * @n y1：第一个点的y坐标
- * @n width ：触摸到的范围的宽度
- * @n height ：触摸的范围的高度
- */
+//触摸扫描函数，扫描出触摸点的信息
 String scan() {
   return touch.scan();
 }
-/**
- * @brief tableview的回调函数
- * @param highLightPage 被选中的页
- */
+// tableview的回调函数
 void tvCallback(uint8_t highLightPage) {
 
   if (highLightPage == 1) {
@@ -120,22 +109,11 @@ void setup()
   Serial.begin(9600);
   touch.begin();
   screen.begin();
-  /**
-   * @brief 注册一个触摸函数
-   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
-   */
+  // 注册一个触摸扫描函数
   ui.setTouchFunction(scan);
   
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
-  /**
-   * @brief 初始化函数,初始化UI使用到的一些参数
-   */
   ui.begin();
   //自定义tableview的页数为三，最大为四
   tv.numPage = 3;
@@ -145,11 +123,7 @@ void setup()
   memcpy(tv.text[0].text, "Tab 1", 5);
   memcpy(tv.text[1].text, "Tab 2", 5);
   memcpy(tv.text[2].text, "Tab 3", 5);
-  /**
-   * @brief 在屏幕上创建一个tableview控件
-   * @param tv sTableview_t，里面包含了tableview的页数，内容等参数
-   * @n 用户需要自定义这些数据
-   */
+  //在屏幕上创建一个tableview，根据自定义或初始化的参数绘制tableview
   ui.creatTableview(&tv);
 }
 
@@ -159,9 +133,6 @@ void loop()
    * @brief 更新触摸点的数据
    */
   ui.updateCoordinate();
-  /**
-   * @brief 刷新tableview
-   * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
-   */
+  //刷新tableview
   ui.refreshTableview(&tv);
 }

@@ -1,6 +1,7 @@
 /*!
  * @file ballCollision.ino
  * @brief 演示小球在屏幕中运动碰撞的动画效果 
+ * @      支持Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, M0
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)

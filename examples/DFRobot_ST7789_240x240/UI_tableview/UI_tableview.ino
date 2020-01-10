@@ -2,6 +2,7 @@
  * @file UI_tableview.ino
  * @brief 在屏幕上创建一个table控件，用户可以自定义进度条的参数
  * @n 用户可以选择不同的页来显示不同的内容
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -100,12 +101,7 @@ void setup()
 
   screen.begin();
   
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
   /**
    * @brief 初始化函数,初始化UI使用到的一些参数
@@ -119,21 +115,14 @@ void setup()
   memcpy(tv.text[0].text, "Tab 1", 5);
   memcpy(tv.text[1].text, "Tab 2", 5);
   memcpy(tv.text[2].text, "Tab 3", 5);
-  /**
-   * @brief 在屏幕上创建一个tableview控件
-   * @param tv sTableview_t，里面包含了tableview的页数，内容等参数
-   * @n 用户需要自定义这些数据
-   */
+  //在屏幕上创建一个tableview，根据自定义或初始化的参数绘制tableview
   ui.creatTableview(&tv);
 }
 
 void loop()
 {
   for(uint8_t i=1 ; i<4 ;i++ ){
-  /**
-   * @brief 刷新tableview
-   * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
-   */
+  //刷新tableview
   ui.refreshTableview(&tv);
   delay(500);
   ui.changeTableview(&tv,i);

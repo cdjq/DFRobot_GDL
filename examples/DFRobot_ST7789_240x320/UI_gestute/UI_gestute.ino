@@ -82,16 +82,7 @@ DFRobot_UI ui(&screen, /*width=*/240,/*height=*/320);
 */
 DFRobot_UI::sTextBox_t tb;
 
-/**
- * @brief 触摸扫描函数，扫描出触摸点的信息
- * @return 返回包含点坐标信息的字符串
- * @n 字符串的信息格式"id,x1,y1,width,height "
- * @n id:点的id
- * @n x1：第一个点的x坐标
- * @n y1：第一个点的y坐标
- * @n width ：触摸到的范围的宽度
- * @n height ：触摸的范围的高度
- */
+//触摸扫描函数
 String scan() {
 
   return touch.scan();
@@ -105,31 +96,15 @@ void setup()
   touch.begin();
   //初始化显示屏幕
   screen.begin();
-  /**
-   * @brief 注册一个触摸函数
-   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
-   */
+   // 注册一个触摸扫描函数
   ui.setTouchFunction(scan);
 
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
   ui.begin();
-  /**
-   * @brief 初始化文本框控件,对文本框的某些参数进行初始化
-   * @param tb sTextBox_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
+  //初始化文本框，会对文本框的参数进行初始化
   ui.initText(&tb);
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+ //在屏幕上创建一个文本框，根据自定义或初始化的参数绘制文本框
   ui.creatText(&tb);
   /**
    * @brief 设置触摸的手势识别区域
@@ -162,11 +137,7 @@ void loop()
      * @n      NONE ：没有手势或无法识别
       */
     switch(ui.getGestures()){
-        /**
-         * setText ：让文本框显示字符串，
-         * @param tb sTextBox_t 类型的结构体
-         * @param text 需要让文本框显示的字符
-         */
+      //setText：使文本框显示字符串
       case ui.UPGLIDE : ui.setText(&tb,"upwards slide"); break;
       case ui.DOWNGLIDE : ui.setText(&tb,"down slide"); break;
       case ui.LEFTGLIDE : ui.setText(&tb,"left slide"); break;
@@ -176,10 +147,7 @@ void loop()
       case ui.DOUBLECLICK : ui.setText(&tb,"double click"); break;
       default  :  break;
       }
-  /**
-   * refreshTextBox ： 刷新进度条
-   * @param bar sBar_t，里面包含了进度条的位置，长度和宽度等参数
-   */
+   //刷新文本框
    ui.refreshTextBox(&tb);
 
 

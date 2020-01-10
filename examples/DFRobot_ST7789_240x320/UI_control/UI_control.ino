@@ -2,6 +2,7 @@
  * @file UI_contal.ino
  * @brief 在屏幕上创建一个开关，文本框和滑条控件，用户可以这些控件的参数，也可以使用默认的参数
  * @n 当用户使用控件时，会在文本框显示你当前的操作
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -117,48 +118,26 @@ DFRobot_UI::sSwitch_t sw;
 */
 DFRobot_UI::sTextBox_t tb;
 
-/**
- * @brief 触摸扫描函数，扫描出触摸点的信息
- * @return 返回包含点坐标信息的字符串
- * @n 字符串的信息格式"id,x1,y1,width,height "
- * @n id:点的id
- * @n x1：第一个点的x坐标
- * @n y1：第一个点的y坐标
- * @n width ：触摸到的范围的宽度
- * @n height ：触摸的范围的高度
- */
+//触摸扫描函数
 String scan() {
   return touch.scan();
 }
 
-/**
- * @brief 滑条的回调函数，当进度条的进度值发生改变时，会进入此回调函数
- * @param value 进度条的值
- * @n 回调函数里面发生的事件，用户需自定义
- */
+//滑条控件的回调函数
 void changeColor(uint16_t value) {
   char str[3];
   itoa((int)value, str, 10);
-
   memcpy(tb.text, "slider's value is ", 19);
   memcpy(tb.text + 19, "\0", 1);
   memcpy(tb.text + 18, str, 3);
   ui.setText(&tb,tb.text);
 }
 
-/**
- * @brief 开关的回调函数，当开关的状态发生改变时，会进入此回调函数
- * @param state 进度条的值
- * @n 回调函数里面发生的事件，用户需自定义
- */
+//开关控件的回调函数
 void swCallBack(uint8_t state) {
   if (state == 0) {
     memcpy(tb.text, "you have turn off the Switch!", 29);
-    /**
-     * @brief 让文本框显示字符串，
-     * @param tb sTextBox_t 类型的结构体
-     * @param text 需要让文本框显示的字符
-     */
+    //使文本框显示特定的字符串
     ui.setText(&tb,tb.text);
   }
   else if (state == 1) {
@@ -175,65 +154,35 @@ void setup()
   //初始化显示屏幕
   screen.begin();
 
-  /**
-   * @brief 注册一个触摸函数
-   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
-   */
+  //注册一个触摸扫描函数
   ui.setTouchFunction(scan);
 
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
   ui.begin();
 
-  /**
-   * @brief 初始化滑条控件
-   * @param slider 用户创建的存储滑条参数的结构体变量
-   * @n 用户如果需要可以自定义这些参数
-   */
+  //初始化滑条控件，对滑条的参数进行初始化赋值
   ui.initSlider(&slider);
   //自定义滑条参数
   slider.posx = 10;
   slider.posy = 200;
   slider.callBack = changeColor;
   
-  /**
-   * @brief 在屏幕上创建一个滑条
-   * @param slider sSlider_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  //在屏幕上创建一个滑条控件，根据自定义或初始化的参数绘制滑条
   ui.creatSlider(&slider);
   
-  /**
-   * @brief 初始化开关控件,对开关的某些参数进行初始化
-   * @param sw sSwitch_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
+  //初始化开关控件，对开关的参数进行初始化赋值
   ui.initSwitch(&sw);
   sw.posx = 45;
   sw.posy = 160;
   sw.callBack = swCallBack;
  
-  /**
-   * @brief 创建一个开关控件
-   * @param sw sSwitch_t 类型的结构体
-   */
+  //在屏幕上创建一个开关控件，根据自定义或初始化的参数绘制开关
   ui.creatSwitch(&sw);
-  /**
-   * @brief 初始化文本框控件,对文本框的某些参数进行初始化
-   * @param tb sTextBox_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
+  //初始化文本框控件，对文本框的参数进行初始化赋值
   ui.initText(&tb);
   memcpy(tb.text, "please enter text", 17);
-  /**
-   * @brief 创建一个文本框，
-   * @param tb sTextBox_t 类型的结构体，
-   */
+  //在屏幕上创建一个文本框控件，根据自定义或初始化的参数绘制文本框
   ui.creatText(&tb);
 }
 
@@ -245,25 +194,11 @@ void loop()
    */
   ui.updateCoordinate();
   
-  /**
-   * @brief 刷新滑条
-   * @param slider sSlider_t，里面包含了滑条的位置，长度和宽度等参数
-   */
+  //刷新滑条
   ui.refreshSliser(&slider);
-  /**
-   * @brief 刷新开关控件
-   * @param sw sSwitch_t，里面包含了开关的位置，长度和宽度等参数
-   * @n 当某事件产生，会进入开关的回调函数
-   */
+  //刷新开关
   ui.refreshSwitch(&sw );
 
-  /**
-   * @brief 刷新文本框
-   * @param te sTextBox_t，里面包含了开关的位置，长度和宽度等参数
-   * @n 可以对文本框的操作有：
-     @n                    1.让文本框显示字符串
-     @n                    2.在文本框添加一个字符
-     @n                    2.在文本框删除一个字符
-   */
+  //刷新文本框
   ui.refreshTextBox(&tb);
 }

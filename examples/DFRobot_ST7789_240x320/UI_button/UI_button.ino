@@ -2,6 +2,7 @@
  * @file UI_button.ino
  * @brief 在屏幕上创建一个按钮控件，用户可以自定义按钮的参数
  * @n 示例里面创建了三个按钮A,B,C,按下A,B按钮会在文本框内显示，按下C按钮会删除文本框的一个字符
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -113,19 +114,11 @@ String scan() {
   return touch.scan();
 }
 
-/**
- * @brief 按钮的回调函数，当按钮被按下，会进入此回调函数
- * @param text 按钮的名字
- * @n 回调函数里面发生的事件，用户需自定义
- */
+//三个按钮的回调函数
 void buCallback(char * text) {
   switch (*text) {
     case 'A' : {
-        /**
-         * @brief 在文本框添加一个字符
-         * @param te sTextBox_t 类型的结构体
-         * @param txt 需要添加的字符
-         */
+        //在文本框添加一个字符
         ui.textAddChar(&tb,'A');
         break;
       }
@@ -134,10 +127,7 @@ void buCallback(char * text) {
         break;
       }
     case 'C' : {
-        /**
-         * @brief 在文本框删除一个字符
-         * @param te sTextBox_t 类型的结构体
-         */
+      //在文本框删除一个字符
         ui.textDeleteChar(&tb);; break;
     }
     default  :  break;
@@ -153,36 +143,21 @@ void setup()
   //初始化显示屏幕
   screen.begin();
 
-  /**
-   * @brief 注册一个触摸函数
-   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
-   */
+
+  // 注册一个触摸扫描函数
   ui.setTouchFunction(scan);
 
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::CLASSIC);
   ui.begin();
-  /**
-   * @brief 初始化按钮控件的参数
-   * @param bu sButton_t类型的结构体数据，存储按钮参数的结构体
-   * @n 若用户徐自定义按钮的参数，如长度和宽度等可在此函数后自定义这些数据
-   */
+  //初始化按钮控件，会对按钮的参数进行初始化
   ui.initButton(&btn1);
   /**用户自定义按钮参数*/
   btn1.posx = 80;
   btn1.posy = 150;
   btn1.callBack = buCallback;
   memcpy(btn1.text, "B", 1);
-  /**
-   * @brief 在屏幕上创建一个按钮控件
-   * @param bu sButton_t类型的结构体数据，里面包含了按钮的位置，长度和宽度等参数
-   * @n 用户可以自定义这些数据
-   */
+  //在屏幕上创建一个按钮，根据自定义或初始化的参数绘制按钮
   ui.creatButton(&btn1);
   
   ui.initButton(&btn2);
@@ -199,17 +174,10 @@ void setup()
   memcpy(btn3.text, "C", 1);
 
   ui.creatButton(&btn3);
-  /**
-   * @brief 初始化文本框控件,对文本框的某些参数进行初始化
-   * @param tb sTextBox_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
+  //初始化文本框，会对文本框的参数进行初始化
   ui.initText(&tb);
   memcpy(tb.text, "please enter text", 17);
-  /**
-   * @brief 创建一个文本框，
-   * @param tb sTextBox_t 类型的结构体，
-   */
+  //在屏幕上创建一个文本框，根据自定义或初始化的参数绘制文本框
   ui.creatText(&tb);
 }
 
@@ -220,24 +188,12 @@ void loop()
    * @brief 更新触摸点的数据
    */
   ui.updateCoordinate();
-
-  /**
-   * @brief 刷新按钮，根据所发生的事件来刷新按钮
-   * @param bu sButton_t类型的结构体数据，里面包含了按钮的位置，长度和宽度等参数
-   * @n 用户需要自定义这些数据
-   */
+  //刷新按钮
   ui.refreshButton(&btn1);
   ui.refreshTextBox(&tb);
   ui.refreshButton(&btn2);
   ui.refreshTextBox(&tb);
   ui.refreshButton(&btn3);
-  /**
-   * @brief 刷新文本框
-   * @param te sTextBox_t，里面包含了开关的位置，长度和宽度等参数
-   * @n 可以对文本框的操作有：
-     @n                    1.让文本框显示字符串
-     @n                    2.在文本框添加一个字符
-     @n                    2.在文本框删除一个字符
-   */
+  //刷新文本框
   ui.refreshTextBox(&tb);
 }

@@ -3,7 +3,8 @@
  * @brief 在屏幕上创建一个数字键盘控件
  * @n 用户可以点击键盘上面的数字然后会看到输出的结果显示在上面的文本框里面，在输入时需要点击
  * @n 文本框确保文本框被选中
- * 
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
+ *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -78,16 +79,7 @@ DFRobot_UI ui(&screen, /*width=*/240,/*height=*/320);
 */
 DFRobot_UI::sKeyPad_t kb;
 
-/**
- * @brief 触摸扫描函数，扫描出触摸点的信息
- * @return 返回包含点坐标信息的字符串
- * @n 字符串的信息格式"id,x1,y1,width,height "
- * @n id:点的id
- * @n x1：第一个点的x坐标
- * @n y1：第一个点的y坐标
- * @n width ：触摸到的范围的宽度
- * @n height ：触摸的范围的高度
- */
+//触摸扫描函数
 String scan() {
 
   return touch.scan();
@@ -100,27 +92,17 @@ void setup()
   touch.begin();
   screen.begin();
 
-  /**
-   * @brief 注册一个触摸函数
-   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
-   */
+  // 注册一个触摸扫描函数
   ui.setTouchFunction(scan);
 
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::CLASSIC);
   ui.begin();
   //mode = 0 代表数字键盘自带了文本框
   kb.mode = 0;
   
-  /**
-   * @brief 创建一个数字键盘控件
-   * @param te sKeyPad_t 类型的结构体
-   */
+
+   //创建一个数字键盘
    ui.creatKeyBoard(&kb);
 }
 
@@ -131,10 +113,7 @@ void loop()
    */
   ui.updateCoordinate();
   
-  /**
-   * @brief 刷新数字键盘
-   * @param te sKeyPad_t，里面包含了数字键盘的位置，长度和宽度等参数
-   */
+  // 刷新数字键盘
   ui.refreshKeyBoard(&kb);
 
 }

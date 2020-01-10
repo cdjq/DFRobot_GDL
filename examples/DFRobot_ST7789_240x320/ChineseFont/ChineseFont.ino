@@ -1,6 +1,7 @@
 /*!
  * @file ChineseFont.ino
  * @brief 演示不同自带中文字库效果 
+ * @      支持Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, M0
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)

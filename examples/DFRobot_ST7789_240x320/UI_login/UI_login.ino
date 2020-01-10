@@ -2,6 +2,7 @@
  * @file UI_login.ino
  * @brief 一个登录的界面，里面存在按钮，数字键盘，两个文本框等控件，用户在使用时，如果要向不同的文本框里面
  * @n 需要先点击需要输入信息的文本框，然后才能输入
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -140,25 +141,14 @@ void setup()
   //初始化显示屏幕
   screen.begin();
 
-  /**
-     @brief 设置UI的主题
-     @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-     @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-  */
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::CLASSIC);
   ui.begin();
-  /**
-     @brief 注册一个触摸函数
-     @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
-  */
+  // 注册一个触摸扫描函数
   ui.setTouchFunction(scan);
+  //初始化文本框，会对文本框的参数进行初始化
   ui.initText(&tb1);
-  /**
-     @brief 在屏幕上创建一个进度条
-     @param bar sBar_t类型的数据
-     @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-  */
+  /**自定义文本框参数*/
   tb1.posx = 20;
   tb1.posy = 60;
   tb1.width = 180;
@@ -168,11 +158,6 @@ void setup()
   ui.creatText(&tb1);
 
   ui.initText(&tb2);
-  /**
-     @brief 在屏幕上创建一个进度条
-     @param bar sBar_t类型的数据
-     @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-  */
   tb2.posx = 20;
   tb2.posy = 110;
   tb2.width = 180;
@@ -180,14 +165,9 @@ void setup()
   tb2.selected = 1;
   tb2.fontSize = 3;
   ui.creatText(&tb2);
-
-  /**
-     @brief 初始化按钮控件的参数
-     @param bu sButton_t类型的结构体数据，存储按钮参数的结构体
-     @n 若用户徐自定义按钮的参数，如长度和宽度等可在此函数后自定义这些数据
-  */
+  //初始化按钮控件，会对按钮的参数进行初始化
   ui.initButton(&btn1);
-
+  /**用户自定义按钮参数*/
   btn1.posx = 20;
   btn1.posy = 160;
   btn1.width = 180;
@@ -198,19 +178,12 @@ void setup()
   btn1.callBack = button;
   memcpy(btn1.text, "login", 5);
 
-  /**
-     @brief 在屏幕上创建一个按钮控件
-     @param bu sButton_t类型的结构体数据，里面包含了按钮的位置，长度和宽度等参数
-     @n 用户可以自定义这些数据
-  */
+  //在屏幕上创建一个按钮，根据自定义或初始化的参数绘制按钮
   ui.creatButton(&btn1);
   //mode = 1 代表 用户自己自定键盘输出的位置
   kb.mode = 1;
   kb.callBack = keyboard;
-  /**
-   * @brief 创建一个数字键盘控件
-   * @param te sKeyPad_t 类型的结构体
-   */
+  //在屏幕上创建一个数字键盘，根据自定义或初始化的参数绘制数字键盘
   ui.creatKeyBoard(&kb);
   ui.drawString(20, 30, "login interface", CYAN_RGB565, ui.bgColor, 2, 0);
 }
@@ -222,16 +195,11 @@ void loop()
      @brief 更新触摸点的数据
   */
   ui.updateCoordinate();
-  /**
-     refreshTextBox ： 刷新进度条
-     @param bar sBar_t，里面包含了进度条的位置，长度和宽度等参数
-  */
+ //刷新文本框
   ui.refreshTextBox(&tb1);
   ui.refreshTextBox(&tb2);
+  //刷新按钮
   ui.refreshButton(&btn1);
-  /**
-   * @brief 刷新数字键盘
-   * @param te sKeyPad_t，里面包含了数字键盘的位置，长度和宽度等参数
-   */
+  //刷新数字键盘
   ui.refreshKeyBoard(&kb);
 }

@@ -2,6 +2,7 @@
  * @file UI_bar.ino
  * @brief 在屏幕上创建一个进度条控件，用户可以自定义进度条的参数，也可以使用默认的参数
  * @n 用户可以通过进度条的回调函数控制进度条的值
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -102,8 +103,7 @@ void setup()
   Serial.begin(9600);
   //初始化显示屏幕
   screen.begin();
-   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN,
-
+   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
   ui.begin();
 
@@ -157,10 +157,7 @@ void setup()
 
 void loop()
 {
-  /**
-   * @refreshBar： 刷新进度条
-   * @param bar sBar_t，里面包含了进度条的位置，长度和宽度等参数
-   */
+  //刷新进度条
   ui.refreshBar(&bar1);
   ui.refreshBar(&bar2);
   ui.refreshBar(&bar3);

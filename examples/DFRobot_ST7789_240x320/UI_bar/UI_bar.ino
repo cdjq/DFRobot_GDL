@@ -2,6 +2,7 @@
  * @file UI_bar.ino
  * @brief 在屏幕上创建一个进度条控件，用户可以自定义进度条的参数，也可以使用默认的参数
  * @n 用户可以通过进度条的回调函数控制进度条的值
+ * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -72,27 +73,23 @@ DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
   */
 DFRobot_UI::sBar_t bar1,bar2,bar3;
 
-/**
- * @brief 进度条的回调函数
- * @n 引发进度条发生改变的事件应该写在里面
- */
+//进度条bar1的回调函数
 void barCallback1(){
     //自动让进度条值每次+1;
     delay(50);
     bar1.value += 1;
-
 }
+//进度条bar2的回调函数
 void barCallback2(){
     //自动让进度条值每次+1;
     delay(50);
     bar2.value += 1;
-
 }
+//进度条bar3的回调函数
 void barCallback3(){
     //自动让进度条值每次+1;
     delay(50);
     bar3.value += 1;
-
 }
 
 void setup()
@@ -101,12 +98,7 @@ void setup()
   Serial.begin(9600);
   //初始化显示屏幕
   screen.begin();
-  /**
-   * @brief 设置UI的主题
-   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
-   * @n   the 的参数 ：CLASSIC,
-                     ：MODERN,
-   */
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
   ui.begin();
 
@@ -124,11 +116,7 @@ void setup()
    */
   ui.drawString(10,200,"Page of loading",WHITE_RGB565,DARKGREY_RGB565,2,0);
 
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  //初始化进度条1，会对进度条的参数进行初始化
   ui.initBar(&bar1);
   /**用户自定义进度条参数*/
   bar1.posx = 10;
@@ -136,13 +124,9 @@ void setup()
   bar1.mode =0;
   bar1.callBack = barCallback1;
 
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  //在屏幕上创建一个进度条，根据自定义或初始化的参数绘制进度条
   ui.creatBar(&bar1);
-
+  //初始化进度条2，会对进度条的参数进行初始化
   ui.initBar(&bar2);
   /**用户自定义进度条参数*/
   bar2.posx = 50;
@@ -150,11 +134,7 @@ void setup()
   bar2.mode =1;
   bar2.callBack = barCallback2;
 
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
+  //在屏幕上创建一个进度条，根据自定义或初始化的参数绘制进度条
   ui.creatBar(&bar2);
 
   ui.initBar(&bar3);
@@ -163,22 +143,14 @@ void setup()
   bar3.posy = 160;
   bar3.mode =2;
   bar3.callBack = barCallback3;
-
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
   ui.creatBar(&bar3);
 }
 
 
 void loop()
 {
-  /**
-   * @brief 刷新进度条
-   * @param bar sBar_t，里面包含了进度条的位置，长度和宽度等参数
-   */
+
+ // @brief 刷新进度条
   ui.refreshBar(&bar1);
   ui.refreshBar(&bar2);
   ui.refreshBar(&bar3);
