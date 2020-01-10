@@ -30,9 +30,9 @@
 #define TFT_RST 4
 #define TFT_BL  5
 #endif
-DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x320_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*
  *COLOR_RGB565_BLACK     0x0000   //  黑色    
  *COLOR_RGB565_NAVY      0x000F   //  深蓝色  
@@ -58,25 +58,25 @@ void setup() {
 }
 
 void loop(){
-    testdrawpixel();
-    testline();
-    testfastlines(COLOR_RGB565_PURPLE,COLOR_RGB565_YELLOW);       
-    testrects(COLOR_RGB565_BLACK,COLOR_RGB565_WHITE);
-    testroundrects();
-    testcircles(24,COLOR_RGB565_BLUE);
-    testtriangles(COLOR_RGB565_YELLOW);
-    testprint();
+    testDrawPixel();
+    testLine();
+    testFastLines(COLOR_RGB565_PURPLE,COLOR_RGB565_YELLOW);       
+    testRects(COLOR_RGB565_BLACK,COLOR_RGB565_WHITE);
+    testRoundRects();
+    testCircles(24,COLOR_RGB565_BLUE);
+    testTriangles(COLOR_RGB565_YELLOW);
+    testPrint();
 
 }
 /*测试画像素点*/
-void testdrawpixel() {
+void testDrawPixel() {
   /*
    *@brief 清屏
    *@param c 屏幕颜色
    */
   screen.fillScreen(0x0000);
   int x = 0;
-  int y = 240;
+  int y = 320;
   for(int i = 0; i <= 120; i += 10){
     for (x = 239 - i; x >= i; x-=10 ){
       /*
@@ -88,7 +88,7 @@ void testdrawpixel() {
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
-    for (y = 239 - i; y >= i; y-=10){
+    for (y = 319 - i; y >= i; y-=10){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
@@ -96,14 +96,14 @@ void testdrawpixel() {
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
-    for (y = i; y <= 239 - i + 1; y+=10){
+    for (y = i; y <= 319 - i + 1; y+=10){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
   }
 }
 /*测试画线*/
-void testline(){
+void testLine(){
   uint16_t color = 0x00FF;
   screen.fillScreen(0x0000);
   for (int16_t x=0; x < screen.width(); x+=6) {
@@ -129,7 +129,7 @@ void testline(){
   }
 }
 /*测试快速画线(需设置延时)，只有横线和纵线*/
-void testfastlines(uint16_t color1, uint16_t color2) {
+void testFastLines(uint16_t color1, uint16_t color2) {
   for (int16_t y=0; y < screen.height(); y+=4) {
     /*
      *@brief 画线段
@@ -141,7 +141,7 @@ void testfastlines(uint16_t color1, uint16_t color2) {
     screen.drawFastHLine(0, y, screen.width(), color2);
     delay(10);
   }
-  for(int16_t x=0; x < screen.width(); x+=4) {
+  for(int16_t x=0; x < screen.width(); x+=3) {
     /*
      *@brief 画线段
      *@param x 第一个顶点横坐标
@@ -154,7 +154,7 @@ void testfastlines(uint16_t color1, uint16_t color2) {
   }
 }
 /*测试画矩形*/
-void testrects(uint16_t color1, uint16_t color2) {
+void testRects(uint16_t color1, uint16_t color2) {
   /*
    *@brief 画填充矩形
    *@param x 顶点横坐标
@@ -163,7 +163,7 @@ void testrects(uint16_t color1, uint16_t color2) {
    *@param h 纵向边长
    *@param color 填充颜色，565结构的RGB色
    */
-  screen.fillRect(6,6, screen.width()-12, screen.width()-12, color1);
+  screen.fillScreen(COLOR_RGB565_BLACK);
     int16_t x=screen.width()-12;
     for (; x > 100; x-=12) {
       /*
@@ -174,18 +174,18 @@ void testrects(uint16_t color1, uint16_t color2) {
        *@param h 纵向边长
        *@param color 填充颜色，565结构的RGB色
        */
-      screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x/2 , x, x, color2+=0x0F00);
+      screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color2+=0x0F00);
       delay(100);
     }
-    screen.fillRect(screen.width()/2 -x/2, screen.height()/2 -x/2 , x, x, color2);
+    screen.fillRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color2);
     delay(100);
     for(; x > 6; x-=6){
-      screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x/2 , x, x, color1);
+      screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color1);
       delay(100);
     }
 }
 /*测试画圆角矩形*/
-void testroundrects() {
+void testRoundRects() {
   screen.fillScreen(COLOR_RGB565_BLACK);
   int color = 0xF00F;
   int i;
@@ -231,7 +231,7 @@ void testroundrects() {
   }
 }
 /*测试画圆*/
-void testcircles(uint8_t radius, uint16_t color) {
+void testCircles(uint8_t radius, uint16_t color) {
   screen.fillScreen(COLOR_RGB565_BLACK);
   for (int16_t x=radius; x <=screen.width()-radius; x+=radius*2) {
     for (int16_t y=radius; y <=screen.height()-radius; y+=radius*2) {
@@ -243,7 +243,7 @@ void testcircles(uint8_t radius, uint16_t color) {
        *@param color 圆周颜色，565结构的RGB色
        */
       screen.drawCircle(x, y, radius, color);
-        if(x == y ||x == -y)
+        if(x == y ||x == -y ||x == y + 2*radius)
           /*
            *@brief 画填充圆
            *@param x0 圆心横坐标
@@ -258,7 +258,7 @@ void testcircles(uint8_t radius, uint16_t color) {
   }
 }
 /*测试画三角形*/
-void testtriangles(uint16_t color){
+void testTriangles(uint16_t color){
   screen.fillScreen(COLOR_RGB565_BLACK);
   for (int16_t i=0; i <=screen.width(); i+=24)
     /*
@@ -271,11 +271,11 @@ void testtriangles(uint16_t color){
      *@param y2 第三个顶点纵坐标
      *@param color 边框颜色，565结构的RGB色
      */
-    screen.drawTriangle(i,0,0,239-i,239-i,239, color);
+    screen.drawTriangle(i,0,0,319-i,239-i,319, color);
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.drawTriangle(239,i,0,239-i,i,0, color);
+    screen.drawTriangle(239,i*4/3,0,319-i*4/3,i,0, color);
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.drawTriangle(239,i,i,0,239-i,239, color);
+    screen.drawTriangle(239,i*4/3,i,0,239-i,319, color);
   color = COLOR_RGB565_RED;
   for (int16_t i=0; i <=screen.width(); i+=24)
     /*
@@ -288,14 +288,14 @@ void testtriangles(uint16_t color){
      *@param y2 第三个顶点纵坐标
      *@param color 填充颜色，565结构的RGB色
      */
-    screen.fillTriangle(i,0,0,239-i,239-i,239, color+=100);
+    screen.fillTriangle(i,0,0,319-i,239-i,319, color+=100);
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.fillTriangle(239,i,0,239-i,i,0, color+=100);
+    screen.fillTriangle(239,i*4/3,0,319-i*4/3,i,0, color+=100);
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.fillTriangle(239,i,i,0,239-i,239, color+=100);
+    screen.fillTriangle(239,i*4/3,i,0,239-i,319, color+=100);
 }
 
-void testprint() {
+void testPrint() {
   int16_t color = 0x00FF;
   screen.setTextWrap(false);
   screen.fillScreen(COLOR_RGB565_BLACK);
