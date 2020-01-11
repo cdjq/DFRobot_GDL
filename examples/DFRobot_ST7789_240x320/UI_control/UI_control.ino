@@ -189,9 +189,7 @@ void setup()
 
 void loop()
 {
-  /**
-   * @brief 更新触摸点的数据
-   */
+  //更新触摸点的数据 
   ui.updateCoordinate();
   
   //刷新滑条

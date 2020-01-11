@@ -38,9 +38,9 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x320_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 
 /*
  *可供用户选择的宏定义颜色
@@ -119,7 +119,7 @@ void testLine(){
      *       y1 第二个顶点纵坐标
      *       c 线段颜色
      */
-    screen.drawLine(screen.width()/*屏幕宽度*//2, screen.height()/*屏幕高度*//2, x, 0, color+=0x0700);
+    screen.drawLine(/*x0=*/screen.width()/*屏幕宽度*//2, /*y0=*/screen.height()/*屏幕高度*//2, /*x1=*/x, /*y1=*/0, /*c=*/color+=0x0700);
   }
   for (int16_t y=0; y < screen.height(); y+=6) {
     screen.drawLine(screen.width()/2, screen.height()/2, screen.width(), y, color+=0x0700);
@@ -144,7 +144,7 @@ void testFastLines(uint16_t color1, uint16_t color2) {
      *       w 线段的长度
      *       c 线段颜色
      */
-    screen.drawFastHLine(0, y, screen.width(), color2);
+    screen.drawFastHLine(/*x=*/0, /*y=*/y, /*w=*/screen.width(),/*c=*/color2);
     delay(10);
   }
   
@@ -156,7 +156,7 @@ void testFastLines(uint16_t color1, uint16_t color2) {
      *       h 线段的长度
      *       c 线段颜色
      */
-    screen.drawFastVLine(x, 0, screen.height(), color1);
+    screen.drawFastVLine(/*x=*/x, /*y=*/0, /*h=*/screen.height(), /*c=*/color1);
     delay(10);
   }
 }
@@ -174,7 +174,7 @@ void testRects(uint16_t color1, uint16_t color2) {
        *@param h 纵向边长
        *@param color 填充颜色，565结构的RGB色
        */
-      screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color2+=0x0F00);
+      screen.drawRect(/*x=*/screen.width()/2 -x/2, /*y=*/screen.height()/2 -x*3/4 , /*w=*/x, /*h=*/x*4/3, /*color=*/color2+=0x0F00);
       delay(100);
     }
 	
@@ -186,7 +186,7 @@ void testRects(uint16_t color1, uint16_t color2) {
      *@param h 纵向边长
      *@param color 填充颜色，565结构的RGB色
     */
-    screen.fillRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color2);
+    screen.fillRect(/*x=*/screen.width()/2 -x/2, /*y=*/screen.height()/2 -x*3/4 , /*w=*/x, /*h=*/x*4/3, /*color=*/color2);
     delay(100);
     for(; x > 6; x-=6){
       screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color1);
@@ -213,7 +213,7 @@ void testRoundRects() {
      *@param radius 圆角半径
      *@param color 边框颜色，565结构的RGB色
      */
-    screen.drawRoundRect(x, y, w, h, 20, color);
+    screen.drawRoundRect(/*x0=*/x, /*y0=*/y, /*w=*/w, /*h=*/h, /*radius=*/20, /*color=*/color);
     x+=5;
     y+=5;
     w-=10;
@@ -231,7 +231,7 @@ void testRoundRects() {
      *@param radius 圆角半径
      *@param color 填充颜色，565结构的RGB色
      */
-    screen.fillRoundRect(x, y, w, h, 10, color);
+    screen.fillRoundRect(/*x0=*/x, /*y0=*/y, /*w=*/w, /*h=*/h, /*radius=*/10, /*color=*/color);
     x+=5;
     y+=5;
     w-=10;
@@ -253,7 +253,7 @@ void testCircles(uint8_t radius, uint16_t color) {
        *@param r 半径
        *@param color 圆周颜色，565结构的RGB色
        */
-      screen.drawCircle(x, y, radius, color);
+      screen.drawCircle(/*x0=*/x, /*y0=*/y, /*r=*/radius, /*color=*/color);
         if(x == y ||x == -y ||x == y + 2*radius)
           /*
            *@brief 画填充圆
@@ -262,7 +262,7 @@ void testCircles(uint8_t radius, uint16_t color) {
            *@param r 半径
            *@param color 填充颜色，565结构的RGB色
            */
-          screen.fillCircle(x, y, radius, color);
+          screen.fillCircle(/*x0=*/x, /*y0=*/y, /*r=*/radius, /*color=*/color);
        color += 800;
        delay(100);
     }
@@ -284,7 +284,7 @@ void testTriangles(uint16_t color){
      *@param y2 第三个顶点纵坐标
      *@param color 边框颜色，565结构的RGB色
      */
-    screen.drawTriangle(i,0,0,319-i,239-i,319, color);
+    screen.drawTriangle(/*x0=*/i,/*y0=*/0,/*x1=*/0,/*y1=*/319-i,/*x2=*/239-i,/*y2=*/319, /*color=*/color);
 	
   for (int16_t i=0; i <screen.width(); i+=24)
     screen.drawTriangle(239,i*4/3,0,319-i*4/3,i,0, color);
@@ -304,7 +304,7 @@ void testTriangles(uint16_t color){
      *@param y2 第三个顶点纵坐标
      *@param color 填充颜色，565结构的RGB色
      */
-    screen.fillTriangle(i,0,0,319-i,239-i,319, color+=100);
+    screen.fillTriangle(/*x0=*/i,/*y0=*/0,/*x1=*/0,/*y1=*/319-i,/*x2=*/239-i,/*y2=*/319, /*color=*/color+=100);
 	
   for (int16_t i=0; i <screen.width(); i+=24)
     screen.fillTriangle(239,i*4/3,0,319-i*4/3,i,0, color+=100);
@@ -315,6 +315,8 @@ void testTriangles(uint16_t color){
 
 void testPrint() {
   int16_t color = 0x00FF;
+  //设置文本自动换行模式
+  //true=文本自动换行，false=不自动换行
   screen.setTextWrap(false);
   //填充颜色，565结构的RGB色
   screen.fillScreen(COLOR_RGB565_BLACK);
@@ -378,7 +380,6 @@ void testPrint() {
   
   char *text = "Hi DFRobot!";
   screen.setTextColor(color+=0x0F00);
-  //设置有文本框的边框
   screen.setTextWrap(true);
   screen.setTextSize(3);
   screen.println(text);

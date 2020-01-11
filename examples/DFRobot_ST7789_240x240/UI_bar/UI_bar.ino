@@ -48,9 +48,9 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 
 /**
  * @brief 构造函数
@@ -60,19 +60,7 @@ DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
  */
 DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
 
-  /*!
-    sBar_t结构体里面的参数如下
-    posx:进度条在x轴的坐标
-    posy：进度条在y轴的坐标
-    width：进度条的宽度
-    height：进度条的高度
-    fgColor ：进度条前景颜色
-    bgColor：进度条背景颜色
-    sliderPos：进度条的进度的x坐标
-    callBack ：进度条回调函数的函数指针
-    lastValue ：进度条上一次的进度
-    value ：进度条的进度(0~99)
-  */
+//创建sBar_t类型的结构体对象bar1,bar2,bar3
 DFRobot_UI::sBar_t bar1,bar2,bar3;
 
 /**
@@ -83,7 +71,6 @@ void barCallback1(){
     //自动让进度条值每次+1;
     delay(50);
     bar1.value += 1;
-
 }
 
 void barCallback2(){
@@ -122,7 +109,7 @@ void setup()
    * @n mode  0 ： 正常显示
    *          1 ： 颜色反转
    */
-  ui.drawString(10,200,"Page of loading",WHITE_RGB565,DARKGREY_RGB565,2,0);
+  ui.drawString(/*x=*/10,/*y=*/200,/*c=*/"Page of loading",/*color=*/WHITE_RGB565,/*bg=*/DARKGREY_RGB565,/*size=*/2,/*mode=*/0);
 
   //初始化进度条1，会对进度条的参数进行初始化
   ui.initBar(&bar1);

@@ -38,9 +38,9 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 
 
 void setup() {
@@ -50,22 +50,18 @@ void setup() {
 }
 
 void loop() {
-  /*
-   *@brief 设置字体大小
-   *@param s 字体字号;有1-4级字体大小
-   */
+  ///设置字体字号为4 字号范围1-4
   screen.setTextSize(2);
   
-  /*
-   *@brief 清屏
-   *@param c 屏幕颜色
-   */
+  /*设置屏幕颜色
+   *可选颜色列表：COLOR_RGB565_BLACK   COLOR_RGB565_NAVY    COLOR_RGB565_DGREEN   COLOR_RGB565_DCYAN 
+                  COLOR_RGB565_MAROON  COLOR_RGB565_PURPLE  COLOR_RGB565_OLIVE    COLOR_RGB565_LGRAY     
+                  COLOR_RGB565_DGRAY   COLOR_RGB565_BLUE    COLOR_RGB565_GREEN    COLOR_RGB565_CYAN  
+                  COLOR_RGB565_RED     COLOR_RGB565_MAGENTA COLOR_RGB565_YELLOW   COLOR_RGB565_ORANGE           
+                  COLOR_RGB565_WHITE  
+  */
   screen.fillScreen(COLOR_RGB565_BLACK);
-  
-  /*
-   *@brief 设置字体
-   *@param *f 自带字体文件
-   */
+  //设置字体为FreeMono12pt7b
   screen.setFont(&FreeMono12pt7b);
   
   /*
@@ -73,26 +69,19 @@ void loop() {
    *@param x 文本第一个字横坐标
    *@param y 文本第一个字纵坐标
    */
-  screen.setCursor(10,120);
-  
-  /*
-   *@brief 设置文本颜色
-   *@param c 文本颜色
-   */
+  screen.setCursor(/*x=*/10,/*y=*/120);
+  //设置文本颜色
+  //可选颜色列表和fillScreen函数中使用的颜色列表相同
   screen.setTextColor(COLOR_RGB565_LGRAY);
-  
-  /*
-   *@brief 文本换行
-   *@param true=文本换行，false=不换行
-   */
+  //设置文本自动换行模式
+  //true=文本自动换行，false=不自动换行
   screen.setTextWrap(true);
-  
-  //brief 输出文本 
+  // 输出文本
   screen.print("This is");
   delay(500);
   
+  //使用FreeMonoBold12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeMonoBold12pt7b);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_GREEN);
@@ -100,8 +89,8 @@ void loop() {
   screen.print("a function");
   delay(500);
   
+  //使用FreeMonoBoldOblique12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeMonoBoldOblique12pt7b);
   screen.setCursor(10,160);
   screen.setTextColor(COLOR_RGB565_RED);
@@ -109,8 +98,8 @@ void loop() {
   screen.print("of every fonts");
   delay(500);
   
+  //使用FreeMonoOblique12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeMonoOblique12pt7b);
   screen.setCursor(80,160);
   screen.setTextColor(COLOR_RGB565_BLUE);
@@ -118,8 +107,8 @@ void loop() {
   screen.print("You");
   delay(500);
   
+  //使用FreeSans12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSans12pt7b);
   screen.setCursor(80,120);
   screen.setTextColor(COLOR_RGB565_LGRAY);
@@ -127,8 +116,8 @@ void loop() {
   screen.print("can");
   delay(500);
   
+  //使用FreeSansBold12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSansBold12pt7b);
   screen.setCursor(60,120);
   screen.setTextColor(COLOR_RGB565_RED);
@@ -136,8 +125,8 @@ void loop() {
   screen.print("change");
   delay(500);
   
+  //使用FreeSansBoldOblique12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSansBoldOblique12pt7b);
   screen.setCursor(80,120);
   screen.setTextColor(COLOR_RGB565_BLUE);
@@ -145,8 +134,8 @@ void loop() {
   screen.print("all");
   delay(500);
   
+  //使用FreeSansOblique12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSansOblique12pt7b);
   screen.setCursor(80,120);
   screen.setTextColor(COLOR_RGB565_LGRAY);
@@ -154,8 +143,8 @@ void loop() {
   screen.print("the");
   delay(500);
   
+  //使用FreeSerif12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSerif12pt7b);
   screen.setCursor(80,60);
   screen.setTextColor(COLOR_RGB565_BLUE);
@@ -163,8 +152,8 @@ void loop() {
   screen.print("fonts");
   delay(500);
   
+  //使用FreeSerifBold12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSerifBold12pt7b);
   screen.setCursor(50,60);
   screen.setTextColor(COLOR_RGB565_LGRAY);
@@ -172,8 +161,8 @@ void loop() {
   screen.print("just");
   delay(500);
   
+  //使用FreeSerifBoldItalic12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSerifBoldItalic12pt7b);
   screen.setCursor(20,50);
   screen.setTextColor(COLOR_RGB565_GREEN);
@@ -181,8 +170,8 @@ void loop() {
   screen.print("like");
   delay(500);
   
+  //使用FreeSerifItalic12pt7b字体
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体
   screen.setFont(&FreeSerifItalic12pt7b);
   screen.setCursor(20,80);
   screen.setTextColor(COLOR_RGB565_RED);

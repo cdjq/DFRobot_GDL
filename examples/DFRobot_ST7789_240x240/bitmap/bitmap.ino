@@ -45,9 +45,9 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 
 void setup() {
   Serial.begin(115200);
@@ -69,7 +69,7 @@ void loop() {
    * @param color  0xFF00 黑色图片部分设置为黄色
    * @param bg     0x00FF 白色背景部分设置为蓝色
    */
-  screen.drawBitmap(0,0,gImage_Bitmap,240,240,0xFF00,0x00FF);
+  screen.drawBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_Bitmap,/*w=*/240,/*h=*/240,/*color=*/0xFF00,/*bg=*/0x00FF);
   /**
    * @brief 画无背景的单色图
    * @param x      0 设置画图起点是屏幕左上方，靠左
@@ -79,7 +79,7 @@ void loop() {
    * @param h      240 图片高度
    * @param color  0x000F 黑色图片部分设置为深蓝色
    */
-  screen.drawBitmap(0,0,gImage_Bitmap,240,240,0x000F);
+  screen.drawBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_Bitmap,/*w=*/240,/*h=*/240,/*color=*/0x000F);
   screen.fillScreen(0xFFFF);
   /**
    * @brief 画位顺序不同的单色图
@@ -90,7 +90,7 @@ void loop() {
    * @param h      240 图片高度
    * @param color  0x0000 黑色图片部分设置为黑色
    */
-  screen.drawXBitmap(0,0,gImage_XBitmap,240,240,0x0000);
+  screen.drawXBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_XBitmap,/*w=*/240,/*h=*/240,/*color=*/0x0000);
   screen.fillScreen(0x66FF);
   /**
    * @brief 画彩色图
@@ -100,7 +100,7 @@ void loop() {
    * @param w      240 图片宽度
    * @param h      240 图片高度
    */
-  screen.drawRGBBitmap(0,0,(const unsigned uint16_t*)gImage_RGBBitmap,240,240);
+  screen.drawRGBBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/(const unsigned uint16_t*)gImage_RGBBitmap,/*w=*/240,/*h=*/240);
   /**
    * @brief 用掩码作为单色图，画单色图
    * @param x      0 设置画图起点是屏幕左上方，靠左
@@ -110,7 +110,7 @@ void loop() {
    * @param h      240 图片高度
    * @param color  0x0000 黑色图片部分设置为黑色
    */
-  screen.drawBitmap(0,0,gImage_mask,240,240,0x0000);
+  screen.drawBitmap(/*x=*/0,/*y=*/0/*dc=*/,/*bitmap gImage_Bitmap=*/gImage_mask,/*w=*/240,/*h=*/240,/*color=*/0x0000);
   /**
    * @brief 画彩色图，掩码白色部分不画
    * @param x      0 设置画图起点是屏幕左上方，靠左
@@ -120,7 +120,7 @@ void loop() {
    * @param w      240 图片宽度
    * @param h      240 图片高度
    */
-  screen.drawRGBBitmap(0,0,(const unsigned uint16_t*)gImage_RGBBitmap,gImage_mask,240,240);
+  screen.drawRGBBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/(const unsigned uint16_t*)gImage_RGBBitmap,/*mask=*/gImage_mask,/*w=*/240,/*h=*/240);
   screen.fillScreen(0x0000);
   /**
    * @brief 循环画无背景的单色图，颜色不断变化
@@ -132,8 +132,8 @@ void loop() {
    * @param color  i 黑色图片部分设置为偏蓝可变色
    */
   for (int16_t i = 0x00ff; ; i+=0x3300) {
-    screen.drawBitmap(0,0,gImage_Bitmap,240,240,i);
+    screen.drawBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_Bitmap,/*w=*/240,/*h=*/240,/*color=*/i);
   }
-  screen.drawGrayscaleBitmap(0,0,gImage_GrayscaleBitmap,240,240);//画灰度图，此屏幕不支持
-  screen.drawGrayscaleBitmap(0,0,gImage_GrayscaleBitmap,gImage_mask,240,240);//画灰度图,带掩码，此屏幕不支持
+  //screen.drawGrayscaleBitmap(0,0,gImage_GrayscaleBitmap,240,240);//画灰度图，此屏幕不支持
+  //screen.drawGrayscaleBitmap(0,0,gImage_GrayscaleBitmap,gImage_mask,240,240);//画灰度图,带掩码，此屏幕不支持
 }

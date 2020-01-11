@@ -46,9 +46,9 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 
 /**
  * @brief 构造函数
@@ -58,7 +58,7 @@ DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
  */
 DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
 
-//创建 sTableview_t类型的结构体变量，用来定义tableview的参数.
+//创建 sTableview_t类型的结构体对象tv
 DFRobot_UI::sTableview_t tv;
 
 /**
@@ -80,7 +80,7 @@ void tvCallback(uint8_t highLightPage) {
    * @n mode  0 ： 正常显示
    *          1 ： 颜色反转
    */
-    ui.drawString(10, 180, "this is tab1", WHITE_RGB565, ui.bgColor, 3, 0);
+    ui.drawString(/*x=*/10, /*y=*/180, /*c=*/"this is tab1",/*color=*/WHITE_RGB565, /*bg=*/ui.bgColor, /*size=*/3, /*mode=*/0);
   }
   
   //设置tab2

@@ -45,9 +45,9 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
 
 /**
    @brief 构造函数
@@ -57,13 +57,13 @@ DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 */
 DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
 
-//创建sTextBox_t类型的结构体变量，用来定义TextBox的参数.
+//创建sTextBox_t类型的结构体对象tb1,tb2.
 DFRobot_UI::sTextBox_t tb1, tb2;
 
-//创建sButton_t类型的结构体变量，用来定义Button的参数.
-DFRobot_UI::sButton_t btn1, btn2 ;
+//创建sButton_t类型的结构体对象btn1,btn2.
+DFRobot_UI::sButton_t btn1, btn2;
 
-//创建sKeyPad_t类型的结构体变量，用来定义KeyPad的参数.
+//创建sKeyPad_t类型的结构体对象kb.
 DFRobot_UI::sKeyPad_t kb;
 
 void keyboard() {
