@@ -1,7 +1,7 @@
 /*!
  * @file ChineseFont.ino
  * @brief 演示不同自带中文字库效果 
- * @      支持Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)
@@ -30,6 +30,14 @@
 #define TFT_RST 4
 #define TFT_BL  5
 #endif
+
+/**
+ * @brief Constructor  硬件SPI通信的构造函数
+ * @param dc  SPI通信的命令/数据线引脚
+ * @param cs  SPI通信的片选引脚
+ * @param rst  屏的复位引脚
+ * @param bl  屏幕的背光引脚
+ */
 DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
@@ -48,66 +56,77 @@ void loop() {
    *@param s 字体字号
    */
   screen.setTextSize(4);
+  
   /*
    *@brief 清屏
    *@param c 屏幕颜色
    */
   screen.fillScreen(COLOR_RGB565_WHITE);
+  
   /*
    *@brief 设置字体
    *@param *f 自制字体文件
    */
   screen.setFonts(&SIMKAIFont12pt);
+  
   /*
    *@brief 设置文本位置
    *@param x 文本第一个字横坐标
    *@param y 文本第一个字纵坐标
    */
   screen.setCursor(10,120);
-  /*
-   *@brief 设置文本颜色
-   *@param c 文本颜色
-   */
+  
+  //设置文本颜色
   screen.setTextColor(COLOR_RGB565_WHITE);
+  
   /*
    *@brief 文本换行
    *@param true=文本换行，false=不换行
    */
   screen.setTextWrap(true);
-  /*
-   *@brief 输出文本
-   */
+  
+  // 输出文本  
   screen.print("你好");
   delay(2000);
+  
   screen.fillScreen(COLOR_RGB565_WHITE);
+  //设置字体
   screen.setFonts(&SIMKAIFont48pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
+  
   screen.fillScreen(COLOR_RGB565_WHITE);
+  //设置字体
   screen.setFonts(&SIMKAIFont18pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
+  
   screen.fillScreen(COLOR_RGB565_WHITE);
+  //设置字体
   screen.setFonts(&SIMKAIFont24pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
+  
   screen.fillScreen(COLOR_RGB565_WHITE);
+  //设置字体
   screen.setFonts(&SIMKAIFont36pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
+  
   screen.fillScreen(COLOR_RGB565_WHITE);
+  //设置字体
   screen.setFonts(&SIMKAIFont72pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);

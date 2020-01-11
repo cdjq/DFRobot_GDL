@@ -1,7 +1,7 @@
 /*!
  * @file ballCollision.ino
  * @brief 演示小球在屏幕中运动碰撞的动画效果 
- * @      支持Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)
@@ -30,6 +30,14 @@
 #define TFT_RST 4
 #define TFT_BL  5
 #endif
+
+/**
+ * @brief Constructor  硬件SPI通信的构造函数
+ * @param dc  SPI通信的命令/数据线引脚
+ * @param cs  SPI通信的片选引脚
+ * @param rst  屏的复位引脚
+ * @param bl  屏幕的背光引脚
+ */
 DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
@@ -44,13 +52,16 @@ void setup() {
     // put your setup code here, to run once:
     Serial.begin(115200);
     screen.begin();
-  /*
-   *@brief 清屏
-   *@param c 屏幕颜色
-   */
+   /*
+    *@brief 清屏
+    *@param c 屏幕颜色
+    */
     screen.fillScreen(COLOR_RGB565_BLACK);
+	//画实心圆形1
     screen.fillCircle(xx0,yy0,10,color1);
+	//画实心圆形2
     screen.fillCircle(xx1,yy1,10,color2);
+	//画实心圆形3
     screen.fillCircle(xx2,yy2,10,color3);
 }
 

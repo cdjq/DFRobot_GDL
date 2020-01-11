@@ -1,7 +1,7 @@
 /*!
  * @file basicTest.ino
  * @brief 演示各种图形绘画效果 
- * @      支持Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)
@@ -30,28 +30,27 @@
 #define TFT_RST 4
 #define TFT_BL  5
 #endif
+
+/**
+ * @brief Constructor  硬件SPI通信的构造函数
+ * @param dc  SPI通信的命令/数据线引脚
+ * @param cs  SPI通信的片选引脚
+ * @param rst  屏的复位引脚
+ * @param bl  屏幕的背光引脚
+ */
 DFRobot_ST7789_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x320_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
+
 /*
- *COLOR_RGB565_BLACK     0x0000   //  黑色    
- *COLOR_RGB565_NAVY      0x000F   //  深蓝色  
- *COLOR_RGB565_DGREEN    0x03E0   //  深绿色  
- *COLOR_RGB565_DCYAN     0x03EF   //  深青色  
- *COLOR_RGB565_MAROON    0x7800   //  深红色      
- *COLOR_RGB565_PURPLE    0x780F   //  紫色  
- *COLOR_RGB565_OLIVE     0x7BE0   //  橄榄绿      
- *COLOR_RGB565_LGRAY     0xC618   //  灰白色
- *COLOR_RGB565_DGRAY     0x7BEF   //  深灰色      
- *COLOR_RGB565_BLUE      0x001F   //  蓝色    
- *COLOR_RGB565_GREEN     0x07E0   //  绿色          
- *COLOR_RGB565_CYAN      0x07FF   //  青色  
- *COLOR_RGB565_RED       0xF800   //  红色       
- *COLOR_RGB565_MAGENTA   0xF81F   //  品红    
- *COLOR_RGB565_YELLOW    0xFFE0   //  黄色
- *COLOR_RGB565_ORANGE    0xFD20   //  橙色        
- *COLOR_RGB565_WHITE     0xFFFF   //  白色
+ *可供用户选择的宏定义颜色
+ *COLOR_RGB565_BLACK   COLOR_RGB565_NAVY    COLOR_RGB565_DGREEN   COLOR_RGB565_DCYAN 
+ *COLOR_RGB565_MAROON  COLOR_RGB565_PURPLE  COLOR_RGB565_OLIVE    COLOR_RGB565_LGRAY     
+ *COLOR_RGB565_DGRAY   COLOR_RGB565_BLUE    COLOR_RGB565_GREEN    COLOR_RGB565_CYAN  
+ *COLOR_RGB565_RED     COLOR_RGB565_MAGENTA COLOR_RGB565_YELLOW   COLOR_RGB565_ORANGE           
+ *COLOR_RGB565_WHITE   
  */
+ 
 void setup() {
   Serial.begin(115200);
   screen.begin();//生成了screen对象
@@ -68,6 +67,7 @@ void loop(){
     testPrint();
 
 }
+
 /*测试画像素点*/
 void testDrawPixel() {
   /*
@@ -88,20 +88,24 @@ void testDrawPixel() {
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
+	
     for (y = 319 - i; y >= i; y-=10){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
+	
     for (x = i; x <= 239 - i + 1; x+=10 ){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
+	
     for (y = i; y <= 319 - i + 1; y+=10){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
   }
 }
+
 /*测试画线*/
 void testLine(){
   uint16_t color = 0x00FF;
@@ -124,10 +128,12 @@ void testLine(){
   for (int16_t x = screen.width(); x >= 0; x-=6) {
     screen.drawLine(screen.width()/2, screen.height()/2, x,screen.height(), color+=0x0700);
   }
+  
   for (int16_t y = screen.height(); y >= 0; y-=6) {
     screen.drawLine(screen.width()/2, screen.height()/2, 0, y, color+=0x0700);
   }
 }
+
 /*测试快速画线(需设置延时)，只有横线和纵线*/
 void testFastLines(uint16_t color1, uint16_t color2) {
   for (int16_t y=0; y < screen.height(); y+=4) {
@@ -141,6 +147,7 @@ void testFastLines(uint16_t color1, uint16_t color2) {
     screen.drawFastHLine(0, y, screen.width(), color2);
     delay(10);
   }
+  
   for(int16_t x=0; x < screen.width(); x+=3) {
     /*
      *@brief 画线段
@@ -153,17 +160,10 @@ void testFastLines(uint16_t color1, uint16_t color2) {
     delay(10);
   }
 }
+
 /*测试画矩形*/
-void testRects(uint16_t color1, uint16_t color2) {
-  /*
-   *@brief 画填充矩形
-   *@param x 顶点横坐标
-   *@param y 顶点纵坐标
-   *@param w 横向边长
-   *@param h 纵向边长
-   *@param color 填充颜色，565结构的RGB色
-   */
-  screen.fillScreen(COLOR_RGB565_BLACK);
+void testRects(uint16_t color1, uint16_t color2) { 
+    screen.fillScreen(COLOR_RGB565_BLACK);
     int16_t x=screen.width()-12;
     for (; x > 100; x-=12) {
       /*
@@ -177,6 +177,15 @@ void testRects(uint16_t color1, uint16_t color2) {
       screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color2+=0x0F00);
       delay(100);
     }
+	
+    /*
+     *@brief 画填充矩形
+     *@param x 顶点横坐标
+     *@param y 顶点纵坐标
+     *@param w 横向边长
+     *@param h 纵向边长
+     *@param color 填充颜色，565结构的RGB色
+    */
     screen.fillRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color2);
     delay(100);
     for(; x > 6; x-=6){
@@ -184,6 +193,7 @@ void testRects(uint16_t color1, uint16_t color2) {
       delay(100);
     }
 }
+
 /*测试画圆角矩形*/
 void testRoundRects() {
   screen.fillScreen(COLOR_RGB565_BLACK);
@@ -230,6 +240,7 @@ void testRoundRects() {
     delay(50);
   }
 }
+
 /*测试画圆*/
 void testCircles(uint8_t radius, uint16_t color) {
   screen.fillScreen(COLOR_RGB565_BLACK);
@@ -257,9 +268,11 @@ void testCircles(uint8_t radius, uint16_t color) {
     }
   }
 }
+
 /*测试画三角形*/
 void testTriangles(uint16_t color){
   screen.fillScreen(COLOR_RGB565_BLACK);
+  
   for (int16_t i=0; i <=screen.width(); i+=24)
     /*
      *@brief 画空心三角形
@@ -272,10 +285,13 @@ void testTriangles(uint16_t color){
      *@param color 边框颜色，565结构的RGB色
      */
     screen.drawTriangle(i,0,0,319-i,239-i,319, color);
+	
   for (int16_t i=0; i <screen.width(); i+=24)
     screen.drawTriangle(239,i*4/3,0,319-i*4/3,i,0, color);
+
   for (int16_t i=0; i <screen.width(); i+=24)
     screen.drawTriangle(239,i*4/3,i,0,239-i,319, color);
+
   color = COLOR_RGB565_RED;
   for (int16_t i=0; i <=screen.width(); i+=24)
     /*
@@ -289,8 +305,10 @@ void testTriangles(uint16_t color){
      *@param color 填充颜色，565结构的RGB色
      */
     screen.fillTriangle(i,0,0,319-i,239-i,319, color+=100);
+	
   for (int16_t i=0; i <screen.width(); i+=24)
     screen.fillTriangle(239,i*4/3,0,319-i*4/3,i,0, color+=100);
+
   for (int16_t i=0; i <screen.width(); i+=24)
     screen.fillTriangle(239,i*4/3,i,0,239-i,319, color+=100);
 }
@@ -298,31 +316,50 @@ void testTriangles(uint16_t color){
 void testPrint() {
   int16_t color = 0x00FF;
   screen.setTextWrap(false);
+  //填充颜色，565结构的RGB色
   screen.fillScreen(COLOR_RGB565_BLACK);
+  
+  //设置坐标位置x=0,y=50
   screen.setCursor(0, 50);
+  //设置文本颜色;这是变化的值
   screen.setTextColor(color+=0x3000);
+  //设置文本大小为0
   screen.setTextSize(0);
+  //输出文本
   screen.println("Hello World!");
+  
   screen.setTextColor(color+=0x3000);
+  //设置文本大小为1
   screen.setTextSize(1);
   screen.println("Hello World!");
+  
   screen.setTextColor(color+=0x3000);
+  //设置文本大小为2
   screen.setTextSize(2);
   screen.println("Hello World!");
+  
   screen.setTextColor(color+=0x3000);
+  //设置文本大小为3
   screen.setTextSize(3);
   screen.println("Hello World!");
+  
   screen.setTextColor(color+=0x3000);
+  //设置文本大小为4
   screen.setTextSize(4);
   screen.println("Hello!");
+  //设置文本大小为5
   screen.setTextSize(5);
   screen.print("Hello!");
   delay(2000);
+  
+  //设置坐标位置x=0,y=0
   screen.setCursor(0, 0);
+  //填充颜色，565结构的RGB色
   screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setTextSize(2);
   screen.setTextColor(color+=0x3000);
   screen.print("a = ");
+  
   screen.setTextColor(color+=0x3000);
   int a = 1234;
   screen.println(a, 1);
@@ -330,14 +367,18 @@ void testPrint() {
   screen.print(8675309, HEX);
   screen.println("this is HEX!");
   screen.println("");
+  
   screen.setTextColor(color+=0x0F00);
   screen.println("running for: ");
   screen.setTextColor(color+=0x0F00);
+  //输出毫秒时间
   screen.print(millis());
   screen.setTextColor(color+=0x0F00);
   screen.println("/1000 seconds.");
+  
   char *text = "Hi DFRobot!";
   screen.setTextColor(color+=0x0F00);
+  //设置有文本框的边框
   screen.setTextWrap(true);
   screen.setTextSize(3);
   screen.println(text);

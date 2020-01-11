@@ -1,6 +1,7 @@
 /*!
  * @file bitmap.ino
  * @brief 根据位图软件生成的图像数组画单色图、彩色图和灰度图，主控需要40000字节的动态内存，ESP8266和ESP32可运行，项目使用了近38万字节
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [YeHangYu](hangyu.ye@dfrobot.com)
@@ -36,12 +37,20 @@
 #define TFT_RST 4
 #define TFT_BL  5
 #endif
+
+/**
+ * @brief Constructor  硬件SPI通信的构造函数
+ * @param dc  SPI通信的命令/数据线引脚
+ * @param cs  SPI通信的片选引脚
+ * @param rst  屏的复位引脚
+ * @param bl  屏幕的背光引脚
+ */
 DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   screen.begin();
 }
 void loop() {

@@ -1,7 +1,7 @@
 /*!
  * @file UI_login.ino
  * @brief 一个登录的界面
- * @n 本示例支持的主板有arduino uno，esp8266，esp32，leonardo，M0，mega2560.
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -39,10 +39,11 @@
 #endif
 
 /**
- * @brief Constructor  当触摸采用XPT2046芯片时，可以调用此构造函数
- * @param cs  SPI片选信号
- * @param rst  复位信号
- * @param irq  中断信号
+ * @brief Constructor  硬件SPI通信的构造函数
+ * @param dc  SPI通信的命令/数据线引脚
+ * @param cs  SPI通信的片选引脚
+ * @param rst  屏的复位引脚
+ * @param bl  屏幕的背光引脚
  */
 DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 /*M0主板下DMA传输*/
@@ -56,47 +57,13 @@ DFRobot_ST7789_240x240_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST,TFT_BL);
 */
 DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
 
-/*!
-  文本框参数如下：
-  posx :文本框在x轴的坐标
-  posy ：文本框在y轴的坐标
-  width ：文本框的宽度
-  height：文本框的高度
-  fgColor ：文本框内字体的前景的颜色
-  bgColor：文本框内字体的背景颜色
-  fontSize:文本框内字体的大小
-  state：文本框的状态
-  cache ：文本框添加一个字符的缓存
-  text[40] ：文本框内容
-  cursorx ：文本框光标在x轴的坐标
-  cursory ：文本框光标在y轴的坐标
-*/
+//创建sTextBox_t类型的结构体变量，用来定义TextBox的参数.
 DFRobot_UI::sTextBox_t tb1, tb2;
-/*!
-  sButton_t结构体是存储按钮的参数，里面的参数如下
-  posx:按钮在x轴的坐标
-  posy：按钮在y轴的坐标
-  width ：按钮的宽度
-  height ：按钮的高度
-  fgColor：按钮的前景色
-  bgColor：按钮的背景色
-  fontSize：按钮字体的大小
-  text[10] ：按钮的名字
-  click ：按钮是否被点击的标志
-  callBack ：按钮的回电函数的函数指针
-*/
+
+//创建sButton_t类型的结构体变量，用来定义Button的参数.
 DFRobot_UI::sButton_t btn1, btn2 ;
 
-/*!
-  posx：数字键盘在x轴的坐标
-  posy：数字键盘在y轴的坐标
-  width：数字键盘的宽度
-  height：数字键盘的高度
-  mode;：文数字键盘的模式0.带有文本框,1.不带文本框，数字输出的位置由自己指定
-  btn[12]：数字键盘里面的按钮数据
-  callBack：数字键盘的回调函数
-  textBox：数字键盘的文本框数据
-*/
+//创建sKeyPad_t类型的结构体变量，用来定义KeyPad的参数.
 DFRobot_UI::sKeyPad_t kb;
 
 void keyboard() {
@@ -113,16 +80,17 @@ void keyboard() {
 void setup()
 {
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   //初始化显示屏幕
   screen.begin();
 
   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::CLASSIC);
   ui.begin();
-  //初始化文本框，会对文本框的参数进行初始化
+  
+  //初始化文本框1，会对文本框的参数进行初始化
   ui.initText(&tb1);
-    /**用户自定义文本框的参数*/
+  //用户自定义文本框的参数
   tb1.posx = 20;
   tb1.posy = 30;
   tb1.width = 180;
@@ -131,8 +99,10 @@ void setup()
   tb1.fontSize = 3;
   //在屏幕上创建一个文本框，根据自定义或初始化的参数绘制文本框
   ui.creatText(&tb1);
+  
+  //初始化文本框2，会对文本框的参数进行初始化
   ui.initText(&tb2);
-
+  //用户自定义文本框的参数
   tb2.posx = 20;
   tb2.posy = 80;
   tb2.width = 180;
@@ -143,7 +113,7 @@ void setup()
   
   //初始化按钮，会对按钮的参数进行初始化
   ui.initButton(&btn1);
-  /**用户自定义按钮参数*/
+  //用户自定义按钮参数
   btn1.posx = 20;
   btn1.posy = 120;
   btn1.width = 180;
@@ -155,6 +125,7 @@ void setup()
 
   //在屏幕上创建一个按钮，根据自定义或初始化的参数绘制按钮
   ui.creatButton(&btn1);
+  //mode为0是不带文本框；mode为1则是带文本框
   kb.mode = 1;
   kb.callBack = keyboard;
   ui.creatKeyBoard(&kb);
