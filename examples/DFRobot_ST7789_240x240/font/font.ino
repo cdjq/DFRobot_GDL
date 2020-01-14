@@ -16,19 +16,16 @@
 #define TFT_DC  7
 #define TFT_CS  5
 #define TFT_RST 6
-#define TFT_BL  9
 /*ESP32 and ESP8266*/
 #elif defined(ESP32) || defined(ESP8266)
 #define TFT_DC  D3
 #define TFT_CS  D4
 #define TFT_RST D5
-#define TFT_BL  D6
 /*AVR系列主板*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
 #define TFT_RST 4
-#define TFT_BL  5
 #endif
 
 /**
@@ -38,10 +35,20 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 
+/*
+ *可供用户选择的宏定义颜色
+ *COLOR_RGB565_BLACK   COLOR_RGB565_NAVY    COLOR_RGB565_DGREEN   COLOR_RGB565_DCYAN 
+ *COLOR_RGB565_MAROON  COLOR_RGB565_PURPLE  COLOR_RGB565_OLIVE    COLOR_RGB565_LGRAY     
+ *COLOR_RGB565_DGRAY   COLOR_RGB565_BLUE    COLOR_RGB565_GREEN    COLOR_RGB565_CYAN  
+ *COLOR_RGB565_RED     COLOR_RGB565_MAGENTA COLOR_RGB565_YELLOW   COLOR_RGB565_ORANGE           
+ *COLOR_RGB565_WHITE   
+ */
 
 void setup() {
   // put your setup code here, to run once:
@@ -52,14 +59,7 @@ void setup() {
 void loop() {
   ///设置字体字号为4 字号范围1-4
   screen.setTextSize(2);
-  
-  /*设置屏幕颜色
-   *可选颜色列表：COLOR_RGB565_BLACK   COLOR_RGB565_NAVY    COLOR_RGB565_DGREEN   COLOR_RGB565_DCYAN 
-                  COLOR_RGB565_MAROON  COLOR_RGB565_PURPLE  COLOR_RGB565_OLIVE    COLOR_RGB565_LGRAY     
-                  COLOR_RGB565_DGRAY   COLOR_RGB565_BLUE    COLOR_RGB565_GREEN    COLOR_RGB565_CYAN  
-                  COLOR_RGB565_RED     COLOR_RGB565_MAGENTA COLOR_RGB565_YELLOW   COLOR_RGB565_ORANGE           
-                  COLOR_RGB565_WHITE  
-  */
+  /*设置屏幕颜色*/
   screen.fillScreen(COLOR_RGB565_BLACK);
   //设置字体为FreeMono12pt7b
   screen.setFont(&FreeMono12pt7b);

@@ -16,19 +16,16 @@
 #define TFT_DC  7
 #define TFT_CS  5
 #define TFT_RST 6
-#define TFT_BL  9
 /*ESP32 and ESP8266*/
 #elif defined(ESP32) || defined(ESP8266)
 #define TFT_DC  D3
 #define TFT_CS  D4
 #define TFT_RST D5
-#define TFT_BL  D6
 /*AVR系列主板*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
 #define TFT_RST 4
-#define TFT_BL  5
 #endif
 
 /**
@@ -38,9 +35,11 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 
 /*
  *可供用户选择的宏定义颜色
@@ -76,9 +75,9 @@ void testDrawPixel() {
    */
   screen.fillScreen(0x0000);
   int x = 0;
-  int y = 320;
-  for(int i = 0; i <= 120; i += 10){
-    for (x = 239 - i; x >= i; x-=10 ){
+  int y = screen.height();
+  for(int i = 0; i <= screen.width()/2; i += 10){
+    for (x = screen.width() - i; x >= i; x-=10 ){
       /*
        *@brief 画像素点
        *@param x 横坐标
@@ -89,17 +88,17 @@ void testDrawPixel() {
       delay(10);
     }
 	
-    for (y = 319 - i; y >= i; y-=10){
+    for (y = screen.height() - i; y >= i; y-=10){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
 	
-    for (x = i; x <= 239 - i + 1; x+=10 ){
+    for (x = i; x <= screen.width() - i + 1; x+=10 ){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
 	
-    for (y = i; y <= 319 - i + 1; y+=10){
+    for (y = i; y <= screen.height() - i + 1; y+=10){
       screen.drawPixel(x, y, COLOR_RGB565_ORANGE);
       delay(10);
     }
@@ -165,7 +164,7 @@ void testFastLines(uint16_t color1, uint16_t color2) {
 void testRects(uint16_t color1, uint16_t color2) { 
     screen.fillScreen(COLOR_RGB565_BLACK);
     int16_t x=screen.width()-12;
-    for (; x > 100; x-=12) {
+    for (; x > 100; x-=screen.width()/40) {
       /*
        *@brief 画空心矩形
        *@param x 顶点横坐标
@@ -174,7 +173,7 @@ void testRects(uint16_t color1, uint16_t color2) {
        *@param h 纵向边长
        *@param color 填充颜色，565结构的RGB色
        */
-      screen.drawRect(/*x=*/screen.width()/2 -x/2, /*y=*/screen.height()/2 -x*3/4 , /*w=*/x, /*h=*/x*4/3, /*color=*/color2+=0x0F00);
+      screen.drawRect(/*x=*/screen.width()/2 -x/2, /*y=*/screen.height()/2 -x/2 , /*w=*/x, /*h=*/x, /*color=*/color2+=0x0F00);
       delay(100);
     }
 	
@@ -186,10 +185,10 @@ void testRects(uint16_t color1, uint16_t color2) {
      *@param h 纵向边长
      *@param color 填充颜色，565结构的RGB色
     */
-    screen.fillRect(/*x=*/screen.width()/2 -x/2, /*y=*/screen.height()/2 -x*3/4 , /*w=*/x, /*h=*/x*4/3, /*color=*/color2);
+    screen.fillRect(/*x=*/screen.width()/2 -x/2, /*y=*/screen.height()/2 -x/2 , /*w=*/x, /*h=*/x, /*color=*/color2);
     delay(100);
-    for(; x > 6; x-=6){
-      screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x*3/4 , x, x*4/3, color1);
+    for(; x > 6; x-=screen.width()/40){
+      screen.drawRect(screen.width()/2 -x/2, screen.height()/2 -x/2 , x, x, color1);
       delay(100);
     }
 }
@@ -284,13 +283,13 @@ void testTriangles(uint16_t color){
      *@param y2 第三个顶点纵坐标
      *@param color 边框颜色，565结构的RGB色
      */
-    screen.drawTriangle(/*x0=*/i,/*y0=*/0,/*x1=*/0,/*y1=*/319-i,/*x2=*/239-i,/*y2=*/319, /*color=*/color);
+    screen.drawTriangle(/*x0=*/i,/*y0=*/0,/*x1=*/0,/*y1=*/screen.height()-i,/*x2=*/screen.width()-i,/*y2=*/screen.height(), /*color=*/color);
 	
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.drawTriangle(239,i*4/3,0,319-i*4/3,i,0, color);
+    screen.drawTriangle(screen.width(),i*4/3,0,screen.height()-i*4/3,i,0, color);
 
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.drawTriangle(239,i*4/3,i,0,239-i,319, color);
+    screen.drawTriangle(screen.width(),i*4/3,i,0,screen.width()-i,screen.height(), color);
 
   color = COLOR_RGB565_RED;
   for (int16_t i=0; i <=screen.width(); i+=24)
@@ -304,13 +303,13 @@ void testTriangles(uint16_t color){
      *@param y2 第三个顶点纵坐标
      *@param color 填充颜色，565结构的RGB色
      */
-    screen.fillTriangle(/*x0=*/i,/*y0=*/0,/*x1=*/0,/*y1=*/319-i,/*x2=*/239-i,/*y2=*/319, /*color=*/color+=100);
+    screen.fillTriangle(/*x0=*/i,/*y0=*/0,/*x1=*/0,/*y1=*/screen.height()-i,/*x2=*/screen.width()-i,/*y2=*/screen.height(), /*color=*/color+=100);
 	
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.fillTriangle(239,i*4/3,0,319-i*4/3,i,0, color+=100);
+    screen.fillTriangle(screen.width(),i*4/3,0,screen.height()-i*4/3,i,0, color+=100);
 
   for (int16_t i=0; i <screen.width(); i+=24)
-    screen.fillTriangle(239,i*4/3,i,0,239-i,319, color+=100);
+    screen.fillTriangle(screen.width(),i*4/3,i,0,screen.width()-i,screen.height(), color+=100);
 }
 
 void testPrint() {
