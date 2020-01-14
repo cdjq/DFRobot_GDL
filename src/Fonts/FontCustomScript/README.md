@@ -14,7 +14,7 @@
 - **在text.txt文件中输入你想生成的字符，例如：你好，世界！**
 - **打开config.txt文件，配置生成字体文件的名字前缀和字体大小:**
     - **FontFileNamePre: 生成的字体文件名前缀**
-    - **FontSizeList: 生成的字体的大小列表，如果为空[]，则默认生成12,18,24,36,48,72大小的文件, 如果是汉字，不要小于12**
+    - **FontSizeList: 生成的字体的大小列表，如果为空[]，则默认生成12,18,24,36,48,72大小的文件, 如果是汉字，不要小于12**<br>
   **FontFileNamePre**代表文件名的前缀，如果为default，则代表无前缀<br>
         - 例1：如果**FontFileNamePre = default**<br>
              **FontSizeList = [12]**<br>
