@@ -41,7 +41,7 @@
 #define COLOR_RGB565_OLIVE     0x7BE0   //  橄榄绿      
 #define COLOR_RGB565_LGRAY     0xC618   //  灰白色
 #define COLOR_RGB565_DGRAY     0x7BEF   //  深灰色      
-#define COLOR_RGB565_BLUE      0x001F   //  蓝色    
+#define COLOR_RGB565_BLUE     0x001F   //  蓝色    
 #define COLOR_RGB565_GREEN     0x07E0   //  绿色          
 #define COLOR_RGB565_CYAN      0x07FF   //  青色  
 #define COLOR_RGB565_RED       0xF800   //  红色       

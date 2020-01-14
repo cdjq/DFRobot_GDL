@@ -13,16 +13,12 @@
 #include "DFRobot_Type.h"
 
 DFRobot_GDL::DFRobot_GDL(sGdlIFDev_t *dev, int16_t w, int16_t h, uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
-  :Adafruit_GFX(w,h),DFRobot_IF(dev, dc, cs, rst, bl){
-  memset(&_lcd, 0, sizeof(_lcd));
-  _lcd.buffer = NULL;
+  :Adafruit_GFX(w,h),DFRobot_IF(dev, dc, cs, rst, bl),_xStart(0),_yStart(0),_icWidth(w),_icHeight(h),invertOnCmd(0),invertOffCmd(0){
+  memset(&madctlReg, 0, sizeof(madctlReg));
 }
 
 DFRobot_GDL::DFRobot_GDL(sGdlIFDev_t *dev, int16_t w, int16_t h, uint8_t addr, uint8_t rst, uint8_t bl)
-  :Adafruit_GFX(w,h),DFRobot_IF(dev, addr, rst, bl){
-  memset(&_lcd, 0, sizeof(_lcd));
-  _lcd.buffer = NULL;
-}
+  :Adafruit_GFX(w,h),DFRobot_IF(dev, addr, rst, bl),_xStart(0),_yStart(0),_icWidth(w),_icHeight(h),invertOnCmd(0),invertOffCmd(0){}
 DFRobot_GDL::~DFRobot_GDL(){
   if(_lcd.buffer != NULL){
        free(_lcd.buffer);
@@ -30,6 +26,10 @@ DFRobot_GDL::~DFRobot_GDL(){
   _lcd.buffer = NULL;
 }
 void DFRobot_GDL::gdlInit(uint32_t freq){
+  _gdlFont = NULL;
+  _fontType = FONT_TYPE_BUILTIN;
+  memset(&_lcd, 0, sizeof(_lcd));
+  _lcd.buffer = NULL;
   if((_if.interface == IF_HW_SPI)&&(freq == 0)) freq = MCU_SPI_FREQ;
   _if.freq = freq;
   initInterface();
@@ -77,6 +77,49 @@ void DFRobot_GDL::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 
 void DFRobot_GDL::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color){
   setDisplayArea((uint16_t)x, (uint16_t)y, w, h, color);
+}
+void DFRobot_GDL::setRotation(uint8_t r){
+  if(madctlReg.madctl == 0) return;
+  rotation = r & 3;
+  uint8_t temp = madctlReg.args.value;
+  switch(rotation){
+      case 0:
+		  _width = WIDTH;
+          _height = HEIGHT;
+          _xStart = 0;
+          _yStart = 0;
+          break;
+      case 1:
+          madctlReg.args.mv = 1;
+          madctlReg.args.mx = 1;
+          _width = HEIGHT;
+          _height = WIDTH;
+          _xStart = 0;
+          _yStart = 0;
+          break;
+      case 2:
+          madctlReg.args.my = 1;
+          madctlReg.args.mx = 1;
+          _width = WIDTH;
+          _height = HEIGHT;
+          _xStart = 0;
+          _yStart = _icHeight - HEIGHT;
+          break;
+      default:
+          madctlReg.args.mv = 1;
+          madctlReg.args.my = 1;
+          _width = HEIGHT;
+          _height = WIDTH;
+          _xStart = _icHeight - HEIGHT;
+          _yStart = 0;
+          break;
+  }
+  sendCommand(madctlReg.madctl, &madctlReg.args.value, 1,true);
+  madctlReg.args.value = temp;
+}
+void DFRobot_GDL::invertDisplay(bool i){
+  if(invertOnCmd == invertOffCmd) return;
+  sendCommand(i ? invertOnCmd : invertOffCmd);
 }
 void DFRobot_GDL::getColorFormat(uint8_t *pBuf, uint8_t &len, uint8_t &pixel, uint16_t color){
   switch(_lcd.cMode){
@@ -186,439 +229,8 @@ void DFRobot_GDL::sendColor(uint8_t *c, uint8_t cBytes, uint32_t len, bool isRam
   else
       _if.dev->talk(&_if, IF_COM_WRITE_FLASH_FIXED, buf, len);
 }
-
-
-
-/*
-
-#ifdef ARDUINO_AVR_UNO
-DFRobot_LT768_320x480_3W_SPI::DFRobot_LT768_320x480_3W_SPI(uint8_t cs)
-  :DFRobot_GDL(800,480),_cs(cs){
-  
+void DFRobot_GDL::setDriverICResolution(int16_t w, int16_t h){
+  if(w < _width ||  h < _height) return;
+  _icWidth = w;
+  _icHeight = h;
 }
-void DFRobot_LT768_320x480_3W_SPI::begin(){
-  sw3WireSPI.begin();
-  WriteCommand(0x05);
-  WriteData(202);
-  WriteCommand(0x07);
-  WriteData(138);
-  WriteCommand(0x09);
-  WriteData(138);
-  WriteCommand(0x06);
-  WriteData(70);
-  WriteCommand(0x80);
-  WriteData(100);
-  WriteCommand(0x0A);
-  WriteData(100);
-  WriteCommand(0x00);
-  delayMicroseconds(1);
-  WriteData(0x80);
-  delay(1);
-  WriteCommand(0xe0);
-  WriteData(0x41);
-  WriteCommand(0xe1);
-  WriteData(3);
-  WriteCommand(0xe2);
-  WriteData(11);
-  WriteCommand(0xe3);
-  WriteData(3);
-  WriteCommand(0xe4);
-  WriteData(1);
-  WriteCommand(0x01);
-  WriteData(0xD1);
-
-  WriteCommand(0x02);
-  WriteData(0x40);
-
-  WriteCommand(0x03);
-  WriteData(0x00);
-   
-  WriteCommand(0x12);
-  WriteData(0x80);
-  WriteCommand(0x13);
-   WriteData(0x03);
-
-  WriteCommand(0x14);
-  WriteData(99);
-  WriteCommand(0x15);
-  WriteData(0);
-  WriteCommand(0x1A);
-  WriteData(223);
-  WriteCommand(0x1B);
-  WriteData(1);
-  WriteCommand(0x16);
-  WriteData(16);
-  WriteCommand(0x17);
-  WriteData(4);
-  WriteCommand(0x18);
-  WriteData(19);
-  WriteCommand(0x19);
-  WriteData(1);
-  WriteCommand(0x1C);
-  WriteData(19);
-  WriteCommand(0x1D);
-  WriteData(19);
-  WriteCommand(0x1E);
-  WriteData(11);
-  WriteCommand(0x1F);
-  WriteData(2);
-  WriteCommand(0x5E);
-  WriteData(0x01);
-  WriteCommand(0xB7);
-  WriteData(0x41);
-
-  WriteCommand(0x85);
-  WriteData(0x0A);
-  WriteCommand(0x84);
-  WriteData(199);
-  WriteCommand(0x8A);
-  WriteData(100);
-  WriteCommand(0x8B);
-  WriteData(0);
-  WriteCommand(0x86);
-   WriteData(0x3A);
-  WriteCommand(0x84);
-  WriteData(199);
-  WriteCommand(0x8E);
-  WriteData(100);
-  WriteCommand(0x8F);
-  WriteData(0);
-  WriteCommand(0x8C);
-  WriteData(50);
-  WriteCommand(0x8D);
-  WriteData(0);
-  WriteCommand(0x12);
-  WriteData(0xC0);
-  WriteCommand(0x10);
-  WriteData(4);
-  WriteCommand(0x20);
-  WriteData(0);
-  WriteCommand(0x21);
-  WriteData(0);
-  WriteCommand(0x22);
-  WriteData(0);
-  WriteCommand(0x23);
-  WriteData(0);
-  WriteCommand(0x24);
-  WriteData(800&0x00FF);//w
-  WriteCommand(0x25);
-  WriteData(800>>8);//w
-  WriteCommand(0x26);
-  WriteData(0);
-  WriteCommand(0x27);
-  WriteData(0);
-  WriteCommand(0x28);
-  WriteData(0);
-  WriteCommand(0x29);
-  WriteData(0);
-
-  WriteCommand(0x50);
-  WriteData(0);
-  WriteCommand(0x51);
-  WriteData(0);
-  WriteCommand(0x52);
-  WriteData(0);
-  WriteCommand(0x53);
-  WriteData(0);
-  WriteCommand(0x54);
-  WriteData(800&0x00FF);
-  WriteCommand(0x51);
-  WriteData(800>>8);
-  WriteCommand(0x56);
-  WriteData(0);
-  WriteCommand(0x57);
-  WriteData(0);
-  WriteCommand(0x58);
-  WriteData(0);
-  WriteCommand(0x59);
-  WriteData(0);
-  WriteCommand(0x5A);
-  WriteData(800&0xff);
-  WriteCommand(0x5B);
-  WriteData(800>>8);
-  WriteCommand(0x5C);
-  WriteData(480&0xFF);
-  WriteCommand(0x57);
-  WriteData(480>>8);
-}
-
-void DFRobot_LT768_320x480_3W_SPI::WriteCommand(uint8_t cmd) {
-  digitalWrite(_cs, LOW);
-  sw3WireSPI.spiSendByte(0x00);
-  sw3WireSPI.spiSendByte(cmd);
-  digitalWrite(_cs, HIGH);
-}
-void DFRobot_LT768_320x480_3W_SPI::WriteData(uint8_t dat) {
-  digitalWrite(_cs, LOW);
-  sw3WireSPI.spiSendByte(0x80);
-  sw3WireSPI.spiSendByte(dat);
-  digitalWrite(_cs, HIGH);
-}
-
-void DFRobot_LT768_320x480_3W_SPI::WriteData16(uint16_t dat) {
-  uint8_t buf[2] = {dat >> 8, dat};
-  digitalWrite(_cs, LOW);
-  sw3WireSPI.spiSendByte(0x80);
-  sw3WireSPI.spiSendByte(buf[1]);
-  digitalWrite(_cs, HIGH);
-  digitalWrite(_cs, LOW);
-  sw3WireSPI.spiSendByte(0x80);
-  sw3WireSPI.spiSendByte(buf[0]);
-  digitalWrite(_cs, HIGH);
-}
-uint16_t DFRobot_LT768_320x480_3W_SPI::SPI_DataRead(void)
-{
-  uint8_t temp = 0;
-  digitalWrite(_cs, LOW);
-  sw3WireSPI.spiSendByte(0xC0);
-  temp =sw3WireSPI.spiReadByte();
-  digitalWrite(_cs, HIGH);
-  return (uint16_t)temp;
-}
-
-uint8_t DFRobot_LT768_320x480_3W_SPI::SPI_StatusRead(void)
-{
-  uint8_t temp = 0;
-  digitalWrite(_cs, LOW);
-  sw3WireSPI.spiSendByte(0x40);
-  temp = sw3WireSPI.spiReadByte();
-  digitalWrite(_cs, HIGH);
-  return temp;
-}
-uint8_t DFRobot_LT768_320x480_3W_SPI::LCD_StatusRead(void)
-{
-  uint8_t temp = 0;
-  temp = SPI_StatusRead();
-  return temp;
-}
-uint16_t DFRobot_LT768_320x480_3W_SPI::LCD_DataRead(void)
-{
-  uint16_t temp = 0; 
-  temp = SPI_DataRead(); 
-  return temp;
-}
-void DFRobot_LT768_320x480_3W_SPI::LCD_RegisterWrite(uint8_t cmd,uint8_t data){
-  WriteCommand(cmd);
-  WriteData(data);
-}
-void DFRobot_LT768_320x480_3W_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color){
-  uint16_t x1 = x + w;
-  uint16_t y1 = y + h;
-  uint8_t temp;
-    /*WriteCommand(0x10);
-    temp = LCD_DataRead();
-    Serial.print("temp 0x10= ");Serial.print(temp,HEX);
-    temp &= 0xF7;
-    temp |= 0x04;
-    Serial.print("___");Serial.println(temp, HEX);
-    WriteCommand(temp);
-    LCD_RegisterWrite(0x20,0);
-    LCD_RegisterWrite(0x21,0);
-    LCD_RegisterWrite(0x22,0);
-    LCD_RegisterWrite(0x23,0);
-    LCD_RegisterWrite(0x24,0x20);//0x320 = 800
-    LCD_RegisterWrite(0x25,3);
-    LCD_RegisterWrite(0x26,0);
-    LCD_RegisterWrite(0x27,0);
-    LCD_RegisterWrite(0x28,0);
-    LCD_RegisterWrite(0x29,0);
-    LCD_RegisterWrite(0x50,0);
-    LCD_RegisterWrite(0x51,0);
-    LCD_RegisterWrite(0x52,0);
-    LCD_RegisterWrite(0x53,0);
-    LCD_RegisterWrite(0x54,0x20);
-    LCD_RegisterWrite(0x55,3);
-    LCD_RegisterWrite(0x56,x);
-    LCD_RegisterWrite(0x57,x>>8);
-    LCD_RegisterWrite(0x58,y);
-    LCD_RegisterWrite(0x59,y>>8);
-    LCD_RegisterWrite(0x5A,w);
-    LCD_RegisterWrite(0x5B,w>>8);
-    LCD_RegisterWrite(0x5C,y);
-    LCD_RegisterWrite(0x5D,y>>8);
-    
-    WriteData(0x03);
-    temp = LCD_DataRead();
-    Serial.print("temp 0x03= ");Serial.print(temp,HEX);
-    temp &= 0xfb;
-    Serial.print("___");Serial.println(temp, HEX);
-    WriteData(temp);
-    
-    WriteData(0x5E);
-    temp = LCD_DataRead();
-    Serial.print("temp 0x5E= ");Serial.print(temp,HEX);
-    temp |= 0x02;
-    temp |= 0x01;
-    Serial.print("___");Serial.println(temp, HEX);
-    WriteData(temp);
-    WriteCommand(0x40);
-    uint8_t n = 0,buf[2] = {color, color >> 8};
-    for(uint16_t i=0;i < h;i++)
-  { 
-      for(uint16_t j=0;j < w;j++)
-      {
-        do{
-        }while( LCD_StatusRead()&0x80 );
-        WriteData(buf[n++]);
-        if(n == 2){
-            n = 0;
-        }
-      }
-   }
-    do{
-    }while( (LCD_StatusRead()&0x40) == 0x00 );*/
- // uint32_t color = 0x00ff0000;
- /* WriteCommand(0xD2);
-  WriteData(color>>8);
-  WriteCommand(0xD3);
-  WriteData(color>>3);
-  WriteCommand(0xD4);
-  WriteData(color<<3);
-  
-  WriteCommand(0x68);
-  WriteData(x);
-  WriteCommand(0x69);
-  WriteData(x>>8);
-  WriteCommand(0x6A);
-  WriteData(y);
-  WriteCommand(0x6B);
-  WriteData(y>>8);
-  
-  WriteCommand(0x6C);
-  WriteData(x1);
-  WriteCommand(0x6D);
-  WriteData(x1>>8);
-  WriteCommand(0x6E);
-  WriteData(y1);
-  WriteCommand(0x6F);
-  WriteData(y1>>8);
-  
-  WriteCommand(0x76);
-  WriteData(0xA0);
-  do
-  {
-      temp=LCD_StatusRead();
-  }while(temp&0x08);
-  
-  
-  WriteCommand(0x03);
-  temp = LCD_DataRead();
-  temp &= 0xfb;
-  WriteCommand(temp);
-  
-  WriteCommand(0x56);
-  WriteData(x);
-  WriteCommand(0x57);
-  WriteData(x>>8);
-  WriteCommand(0x58);
-  WriteData(y);
-  WriteCommand(0x59);
-  WriteData(y>>8);
-  WriteCommand(0x5A);
-  WriteData(w);
-  WriteCommand(0x5B);
-  WriteData(w>>8);
-  WriteCommand(0x5C);
-  WriteData(h);
-  WriteCommand(0x5D);
-  WriteData(h>>8);
-  
-  WriteCommand(0x5F);
-  WriteData(x);
-  WriteCommand(0x60);
-  WriteData(x>>8);
-  WriteCommand(0x61);
-  WriteData(y);
-  WriteCommand(0x62);
-  WriteData(y>>8);
-  WriteCommand(0x04);
-  uint8_t buf[2] = {color, color>>8};
-  uint8_t n = 0;
-  for(uint16_t i=0;i< 480;i++)
-  { 
-      //Serial.print("i = ");Serial.println(i);
-      for(uint16_t j=0;j< 800;j++)
-      {
-        do{
-        }while( LCD_StatusRead()&0x80 );
-        WriteData(buf[0]);
-        do{
-        }while( LCD_StatusRead()&0x80 );
-        WriteData(buf[1]);
-      }
-   }
-    do{
-    }while( (LCD_StatusRead()&0x40) == 0x00 );
-  
-/*
-  WriteCommand(0x01);
-  temp = LCD_DataRead();
-  Serial.print("temp 0x01= ");Serial.println(temp);
-  temp |= 0x02;
-  WriteData(temp);
-  
-  WriteCommand(0xB7);
-  temp = LCD_DataRead();
-  Serial.print("temp 0xB7= ");Serial.println(temp);
-  temp |= 0x80;
-  WriteData(temp);
-  WriteCommand(0xB7);
-  temp = LCD_DataRead();
-  Serial.print("temp 0xB7= ");Serial.println(temp);
-  temp |= 0x40;
-  WriteData(temp);
-  WriteCommand(0xBB);
-  WriteData(0x00);
-  
-  WriteCommand(0x5F);
-  WriteData(x);
-  WriteCommand(0x60);
-  WriteData(x>>8);
-  WriteCommand(0x61);
-  WriteData(y);
-  WriteCommand(0x62);
-  WriteData(y>>8);
-  WriteCommand(0xC0);
-  WriteData(x);
-  WriteCommand(0xC1);
-  WriteData(x>>8);
-  WriteCommand(0xC2);
-  WriteData(y);
-  WriteCommand(0xC3);
-  WriteData(y>>8);
-  
-  WriteCommand(0xC6);
-  WriteData(x);
-  WriteCommand(0xC7);
-  WriteData(x>>8);
-  
-  WriteCommand(0xC8);
-  WriteData(y);
-  WriteCommand(0xC9);
-  WriteData(y>>8);
-  
-  WriteCommand(0xCA);
-  WriteData(x);
-  WriteCommand(0xCB);
-  WriteData(x>>8);
-  WriteCommand(0xC0);
-  WriteData(0);
-  WriteCommand(0xC1);
-  WriteData(0);
-  WriteCommand(0xC2);
-  WriteData(0);
-  WriteCommand(0xC3);
-  WriteData(0);
-  
-  WriteCommand(0xB6);
-  temp = LCD_DataRead();
-  temp |= 0x01;
-  WriteData(temp);
-  WriteCommand(0xB6);
-    do{       
-    }while((LCD_DataRead()&0x01)==0x01);
-
-  //uint32_t color = 0x00ff0000;
- */ 
-//}
-//#endif

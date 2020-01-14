@@ -57,7 +57,7 @@ void loop() {
    *@brief 设置字体
    *@param *f 自制字体文件
    */
-  screen.setFonts(&SIMKAIFont12pt);
+  screen.setFont(&SIMKAIFont12pt);
   /*
    *@brief 设置文本位置
    *@param x 文本第一个字横坐标
@@ -80,35 +80,35 @@ void loop() {
   screen.print("你好");
   delay(2000);
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont48pt);
+  screen.setFont(&SIMKAIFont48pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont18pt);
+  screen.setFont(&SIMKAIFont18pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont24pt);
+  screen.setFont(&SIMKAIFont24pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont36pt);
+  screen.setFont(&SIMKAIFont36pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont72pt);
+  screen.setFont(&SIMKAIFont72pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);

@@ -13,7 +13,13 @@ GDL_IF_PB_DEV(gdl_Dev_ILI9488_R480x320_HW_SPI, DEV_TYPE_SCREEN, (uint8_t *)DFRob
 GDL_IF_PB_DEV(gdl_Dev_SSD1306_R128x32_HW_IIC, DEV_TYPE_SCREEN, (uint8_t *)DFRobot_SSD1306_initCmd, IF_COM_HW_IIC);
 
 DFRobot_ST7789_240x240_HW_SPI::DFRobot_ST7789_240x240_HW_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
-  :DFRobot_GDL(&gdl_Dev_ST7789_R240x240_HW_SPI, 240, 240, dc, cs, rst, bl){}
+  :DFRobot_GDL(&gdl_Dev_ST7789_R240x240_HW_SPI, 240, 240, dc, cs, rst, bl){
+  setDriverICResolution(ST7789_IC_WIDTH, ST7789_IC_HEIGHT);
+  madctlReg.madctl = ST7789_MADCTL;
+  madctlReg.args.value = ST7789_MADCTL_RGB;
+  invertOffCmd = ST7789_INVOFF;
+  invertOnCmd = ST7789_INVON;
+}
 DFRobot_ST7789_240x240_HW_SPI::~DFRobot_ST7789_240x240_HW_SPI(){}
 void DFRobot_ST7789_240x240_HW_SPI::begin(uint32_t freq)
 {
@@ -24,22 +30,29 @@ void DFRobot_ST7789_240x240_HW_SPI::begin(uint32_t freq)
   PIN_HIGH(_if.pinList[IF_PIN_RST]);
   delay(1000);
   initDisplay();
+  setRotation(0);
 }
 void DFRobot_ST7789_240x240_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
   sendCommand(ST7789_COLSET);
-  sendData16(x);
-  sendData16(x + w -1);
+  sendData16(_xStart + x);
+  sendData16(_xStart + x + w -1);
   sendCommand(ST7789_RAWSET);
-  sendData16(y);
-  sendData16(y + h -1);
+  sendData16(_yStart + y);
+  sendData16(_yStart + y + h -1);
   sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
 DFRobot_ST7789_240x320_HW_SPI::DFRobot_ST7789_240x320_HW_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
   :DFRobot_GDL(&gdl_Dev_ST7789_R240x320_HW_SPI, 240, 320, dc, cs, rst, bl){}
-DFRobot_ST7789_240x320_HW_SPI::~DFRobot_ST7789_240x320_HW_SPI(){}
+DFRobot_ST7789_240x320_HW_SPI::~DFRobot_ST7789_240x320_HW_SPI(){
+  setDriverICResolution(ST7789_IC_WIDTH, ST7789_IC_HEIGHT);
+  madctlReg.madctl = ST7789_MADCTL;
+  madctlReg.args.value = ST7789_MADCTL_RGB;
+  invertOffCmd = ST7789_INVOFF;
+  invertOnCmd = ST7789_INVON;
+}
 void DFRobot_ST7789_240x320_HW_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
@@ -53,18 +66,24 @@ void DFRobot_ST7789_240x320_HW_SPI::begin(uint32_t freq)
 void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
   sendCommand(ST7789_COLSET);
-  sendData16(x);
-  sendData16(x + w -1);
+  sendData16(_xStart + x);
+  sendData16(_xStart + x + w -1);
   sendCommand(ST7789_RAWSET);
-  sendData16(y);
-  sendData16(y + h -1);
+  sendData16(_yStart + y);
+  sendData16(_yStart + y + h -1);
   sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
 DFRobot_ST7735S_80x160_HW_SPI::DFRobot_ST7735S_80x160_HW_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
   :DFRobot_GDL(&gdl_Dev_ST7735S_R80x160_HW_SPI, 80, 160, dc, cs, rst, bl){}
-DFRobot_ST7735S_80x160_HW_SPI::~DFRobot_ST7735S_80x160_HW_SPI(){}
+DFRobot_ST7735S_80x160_HW_SPI::~DFRobot_ST7735S_80x160_HW_SPI(){
+  setDriverICResolution(ST7735S_IC_WIDTH, ST7735S_IC_HEIGHT);
+  madctlReg.madctl = ST7735S_MADCTL;
+  madctlReg.args.value = ST7735S_MADCTL_RGB;
+  invertOffCmd = ST7735S_INVOFF;
+  invertOnCmd = ST7735S_INVON;
+}
 void DFRobot_ST7735S_80x160_HW_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
@@ -89,7 +108,13 @@ void DFRobot_ST7735S_80x160_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint1
 
 DFRobot_ILI9488_480x320_HW_SPI::DFRobot_ILI9488_480x320_HW_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
   :DFRobot_GDL(&gdl_Dev_ILI9488_R480x320_HW_SPI, 480, 320, dc, cs, rst, bl){}
-DFRobot_ILI9488_480x320_HW_SPI::~DFRobot_ILI9488_480x320_HW_SPI(){}
+DFRobot_ILI9488_480x320_HW_SPI::~DFRobot_ILI9488_480x320_HW_SPI(){
+  setDriverICResolution(ILI9488_IC_WIDTH, ILI9488_IC_HEIGHT);
+  madctlReg.madctl = ILI9488_MADCTL;
+  madctlReg.args.value = ILI9488_MADCTL_RGB;
+  invertOffCmd = ILI9488_INVOFF;
+  invertOnCmd = ILI9488_INVON;
+}
 void DFRobot_ILI9488_480x320_HW_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
@@ -103,22 +128,23 @@ void DFRobot_ILI9488_480x320_HW_SPI::begin(uint32_t freq)
 void DFRobot_ILI9488_480x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
   sendCommand(ILI9488_COLSET);
-  sendData16(x);
-  sendData16(x + w -1);
+  sendData16(_xStart + x);
+  sendData16(_xStart + x + w -1);
   sendCommand(ILI9488_RAWSET);
-  sendData16(y);
-  sendData16(y + h -1);
+  sendData16(_yStart + y);
+  sendData16(_yStart + y + h -1);
   sendCommand(ILI9488_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
 DFRobot_SSD1306_128x32_HW_IIC::DFRobot_SSD1306_128x32_HW_IIC(uint8_t addr, uint8_t rst, uint8_t bl)
   :DFRobot_GDL(&gdl_Dev_SSD1306_R128x32_HW_IIC, 128, 32, addr, rst, bl){
-  
+
 }
 
 DFRobot_SSD1306_128x32_HW_IIC::~DFRobot_SSD1306_128x32_HW_IIC(){
-  
+  invertOffCmd = SSD1306_INVOFF;
+  invertOnCmd = SSD1306_INVON;
 }
 
 void DFRobot_SSD1306_128x32_HW_IIC::begin(uint32_t freq){
@@ -186,11 +212,18 @@ void DFRobot_SSD1306_128x32_HW_IIC::setDisplayArea(uint16_t x, uint16_t y, uint1
 
 #ifdef ARDUINO_SAM_ZERO
 GDL_IF_PB_DEV(gdl_Dev_ST7789_R240x240_DMA_SPI, DEV_TYPE_SCREEN, (uint8_t *)DFRobot_ST7789_initCmd, IF_COM_DMA_SPI);
+GDL_IF_PB_DEV(gdl_Dev_ST7789_R240x320_DMA_SPI, DEV_TYPE_SCREEN, (uint8_t *)DFRobot_ST7789_initCmd, IF_COM_DMA_SPI);
 GDL_IF_PB_DEV(gdl_Dev_ST7735S_R80x160_DMA_SPI, DEV_TYPE_SCREEN, (uint8_t *)DFRobot_ST7735S_initCmd, IF_COM_DMA_SPI);
 
 DFRobot_ST7789_240x240_DMA_SPI::DFRobot_ST7789_240x240_DMA_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
   :DFRobot_GDL(&gdl_Dev_ST7789_R240x240_DMA_SPI, 240, 240, dc, cs, rst, bl){}
-DFRobot_ST7789_240x240_DMA_SPI::~DFRobot_ST7789_240x240_DMA_SPI(){}
+DFRobot_ST7789_240x240_DMA_SPI::~DFRobot_ST7789_240x240_DMA_SPI(){
+  setDriverICResolution(ST7789_IC_WIDTH, ST7789_IC_HEIGHT);
+  madctlReg.madctl = ST7789_MADCTL;
+  madctlReg.args.value = ST7789_MADCTL_RGB;
+  invertOffCmd = ST7789_INVOFF;
+  invertOnCmd = ST7789_INVON;
+}
 void DFRobot_ST7789_240x240_DMA_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
@@ -204,17 +237,23 @@ void DFRobot_ST7789_240x240_DMA_SPI::begin(uint32_t freq)
 void DFRobot_ST7789_240x240_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
   sendCommand(ST7789_COLSET);
-  sendData16(x);
-  sendData16(x + w -1);
+  sendData16(_xStart + x);
+  sendData16(_xStart + x + w -1);
   sendCommand(ST7789_RAWSET);
-  sendData16(y);
-  sendData16(y + h -1);
+  sendData16(_yStart + y);
+  sendData16(_yStart + y + h -1);
   sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 
 DFRobot_ST7735S_80x160_DMA_SPI::DFRobot_ST7735S_80x160_DMA_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
-  :DFRobot_GDL(&gdl_Dev_ST7735S_R80x160_DMA_SPI, 80, 160, dc, cs, rst, bl){}
+  :DFRobot_GDL(&gdl_Dev_ST7735S_R80x160_DMA_SPI, 80, 160, dc, cs, rst, bl){
+  setDriverICResolution(ST7735S_IC_WIDTH, ST7735S_IC_HEIGHT);
+  madctlReg.madctl = ST7735S_MADCTL;
+  madctlReg.args.value = ST7735S_MADCTL_RGB;
+  invertOffCmd = ST7735S_INVOFF;
+  invertOnCmd = ST7735S_INVON;
+}
 DFRobot_ST7735S_80x160_DMA_SPI::~DFRobot_ST7735S_80x160_DMA_SPI(){}
 void DFRobot_ST7735S_80x160_DMA_SPI::begin(uint32_t freq)
 {
@@ -229,12 +268,43 @@ void DFRobot_ST7735S_80x160_DMA_SPI::begin(uint32_t freq)
 void DFRobot_ST7735S_80x160_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
   sendCommand(ST7735S_COLSET);
-  sendData16(x);
-  sendData16(x + w -1);
+  sendData16(_xStart + x);
+  sendData16(_xStart + x + w -1);
   sendCommand(ST7735S_RAWSET);
-  sendData16(y);
-  sendData16(y + h -1);
+  sendData16(_yStart + y);
+  sendData16(_yStart + y + h -1);
   sendCommand(ST7735S_RAMWR);
+  sendColor(color, (uint32_t)w*h);
+}
+
+DFRobot_ST7789_240x320_DMA_SPI::DFRobot_ST7789_240x320_DMA_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
+  :DFRobot_GDL(&gdl_Dev_ST7789_R240x320_DMA_SPI, 240, 320, dc, cs, rst, bl){}
+DFRobot_ST7789_240x320_DMA_SPI::~DFRobot_ST7789_240x320_DMA_SPI(){
+  setDriverICResolution(ST7789_IC_WIDTH, ST7789_IC_HEIGHT);
+  madctlReg.madctl = ST7789_MADCTL;
+  madctlReg.args.value = ST7789_MADCTL_RGB;
+  invertOffCmd = ST7789_INVOFF;
+  invertOnCmd = ST7789_INVON;
+}
+void DFRobot_ST7789_240x320_DMA_SPI::begin(uint32_t freq)
+{
+  gdlInit(freq);
+  /*复位*/
+  PIN_LOW(_if.pinList[IF_PIN_RST]);
+  delay(1000);
+  PIN_HIGH(_if.pinList[IF_PIN_RST]);
+  delay(1000);
+  initDisplay();
+}
+void DFRobot_ST7789_240x320_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
+{
+  sendCommand(ST7789_COLSET);
+  sendData16(_xStart + x);
+  sendData16(_xStart + x + w -1);
+  sendCommand(ST7789_RAWSET);
+  sendData16(_yStart + y);
+  sendData16(_yStart + y + h -1);
+  sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
 

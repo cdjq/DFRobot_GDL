@@ -62,7 +62,7 @@ void loop() {
   /*设置屏幕颜色*/
   screen.fillScreen(COLOR_RGB565_WHITE);
   //设置字体文件
-  screen.setFonts(&SIMKAIFont12pt);
+  screen.setFont(&SIMKAIFont12pt);
   
   /*
    *@brief 设置文本位置
@@ -82,7 +82,7 @@ void loop() {
   
   //使用SIMKAIFont48pt字体
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont48pt);
+  screen.setFont(&SIMKAIFont48pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
@@ -91,7 +91,7 @@ void loop() {
   
   //使用SIMKAIFont18pt字体
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont18pt);
+  screen.setFont(&SIMKAIFont18pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
@@ -100,7 +100,7 @@ void loop() {
   
   //使用SIMKAIFont24pt字体
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont24pt);
+  screen.setFont(&SIMKAIFont24pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
@@ -109,7 +109,7 @@ void loop() {
   
   //使用SIMKAIFont36pt字体
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont36pt);
+  screen.setFont(&SIMKAIFont36pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);
@@ -118,7 +118,7 @@ void loop() {
   
   //使用SIMKAIFont72pt字体
   screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFonts(&SIMKAIFont72pt);
+  screen.setFont(&SIMKAIFont72pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
   screen.setTextWrap(true);

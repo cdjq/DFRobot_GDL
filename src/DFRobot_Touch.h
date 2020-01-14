@@ -119,7 +119,6 @@ public:
   String scan();
   uint16_t readxy(uint8_t cmd);
 private:
-  uint8_t _cs;
   String id;
 };
 #endif

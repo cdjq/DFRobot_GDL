@@ -2,30 +2,26 @@
 #define _GDLFONTDEF_H_
 #include "Arduino.h"
 #include <DFRobot_Type.h>
+#define FONT_TYPE_BUILTIN  0//内置字体
+#define FONT_TYPE_CUSTOM   1//自定义字体
 
-/// Font data stored PER GLYPH
 typedef struct{
-  uint16_t unicode;
-  uint16_t length;
-  uint8_t  width;            ///< Bitmap dimensions in pixels
-  uint8_t  height;           ///< Bitmap dimensions in pixels
-  int8_t xOffset;
-  int8_t yOffset;
-  uint8_t xAdvance;
+  uint16_t unicode;  /**< 字体Unicode码*/
+  uint16_t length;  /**< 字体有效数据长度*/
+  uint8_t  width;   /**< 字体轮廓宽度*/
+  uint8_t  height;  /**< 字体轮廓高度*/
+  int8_t xOffset;  /**< 原点x方向偏移*/
+  int8_t yOffset;  /**< 原点y方向偏移*/
+  uint8_t xAdvance; /**< 字体总宽度*/
 } gdl_Glyph_t;
 
-/// Data stored for FONT AS A WHOLE
 typedef struct{
-  uint8_t  *bitmap;      /*< Glyph bitmaps, concatenated*/
-  gdl_Glyph_t *glyph;       ///< Glyph array
-  uint8_t yAdvance;    
-  uint32_t length;
+  uint8_t  *bitmap;      /**< Glyph bitmaps, concatenated*/
+  gdl_Glyph_t *glyph;       /**< Glyph array*/
+  uint8_t type;  /**<字体类型，表示是自定义字体*/
+  uint8_t last;  /**<该值一直为0，以此区分GFXfont*/
+  uint8_t yAdvance; /**< 字体高度*/
 }gdl_Font_t;
 
-#include "Fonts/SIMKAIFont12pt.h"
-#include "Fonts/SIMKAIFont18pt.h"
-#include "Fonts/SIMKAIFont24pt.h"
-#include "Fonts/SIMKAIFont36pt.h"
-#include "Fonts/SIMKAIFont48pt.h"
-#include "Fonts/SIMKAIFont72pt.h"
+#include "DFRobot_Font.h"
 #endif 

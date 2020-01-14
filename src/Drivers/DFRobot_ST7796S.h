@@ -1,9 +1,15 @@
 #ifndef __DFROBOT_ST7796S_H
 #define __DFROBOT_ST7796S_H
 
+#define ST7796S_IC_WIDTH  320
+#define ST7796S_IC_HEIGHT  480
 #define ST7796S_COLSET  0x2A
 #define ST7796S_RAWSET  0x2B
 #define ST7796S_RAMWR   0x2C
+#define ST7796S_MADCTL  0x36
+#define ST7796S_MADCTL_RGB 0x00
+#define ST7796S_INVOFF  0x20
+#define ST7796S_INVON   0x21
 
 static const uint8_t PROGMEM DFRobot_ST7796S_initCmd[] = {
 0x01, 0x11, 0x80, 100,

@@ -32,13 +32,6 @@
 #define COLOR_MODE_RGB666  3
 #define COLOR_MODE_RGB888  4
 
-// #define GDL_PIN_NC     255 
-// /*IO口操纵方式*/
-// #define PIN_IN(pin)   if(pin != GDL_PIN_NC) pinMode(pin, INPUT)
-// #define PIN_OUT(pin)  if(pin != GDL_PIN_NC) pinMode(pin, OUTPUT)
-// #define PIN_HIGH(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, HIGH)
-// #define PIN_LOW(pin)  if(pin != GDL_PIN_NC) digitalWrite(pin, LOW)
-
 #if 1
 #ifdef ARDUINO_SAM_ZERO//M0板子的串口与其他串口使用方式有区别
 #define DBG(...) {SerialUSB.print("["); SerialUSB.print(__FUNCTION__); SerialUSB.print("(): "); SerialUSB.print(__LINE__); SerialUSB.print(" ] "); SerialUSB.println(__VA_ARGS__);}
@@ -49,6 +42,34 @@
 #define DBG(...)
 #endif
 
+
+/*
+ 0x36 寄存器的MADCTL：
+   * -------------------------------------------------------------------------
+   * |   D7   |   D6   |   D5   |   D4   |   D3   |   D2   |   D1   |   D0   |
+   * -------------------------------------------------------------------------
+   * |   MY   |   MX   |   MV   |   ML   |   RGB  |   MH   |      reserve    |
+   * -------------------------------------------------------------------------
+   *默认值0x00,显示方式从上到下，从左到右，RGB顺序
+*/
+typedef union{
+  struct{
+      uint8_t rsrv: 2; /**< reserve */
+      uint8_t mh: 1;   /**< Display Data Latch Order */
+      uint8_t rgb: 1;  /**< RGB/BGR Order 0: RGB, 1: BGR*/
+      uint8_t ml: 1;   /**< Line Address Order */
+      uint8_t mv: 1;   /**< Page/Column Order */
+      uint8_t mx: 1;   /**< Column Address Order */
+      uint8_t my: 1;   /**< Page Address Order */
+  };
+  uint8_t value; /**<寄存器MADCTL的值*/
+}uMadctlArgs_t;
+
+typedef struct{
+  uint8_t madctl; /**<寄存器的MADCTL命令*/
+  uMadctlArgs_t args; /**<寄存器MADCTL的值*/
+}sMadctlCmd_t;
+
 typedef struct{
   uint8_t rotation;/**<旋转角度 0：不旋转，1：旋转90°，2：旋转180°，3：旋转270°*/
   uint8_t cMode; /**<屏的颜色格式，如RGB565，RGB666，RGB888*/
@@ -57,7 +78,6 @@ typedef struct{
 
 class DFRobot_GDL : public Adafruit_GFX, public DFRobot_IF{
 public:
-  sGdlLcdDev_t _lcd;
   /**
    * @brief Constructor  当屏采用硬件SPI通信时，可以调用此构造函数
    * @param dev  通信接口结构体指针，该结构体保存了屏的通信接口类型、通信频率、相关IO引脚，在不同的主控上，一次通信处理的最大字节数，及屏初始化数组和接口函数指针
@@ -80,12 +100,7 @@ public:
    */
   DFRobot_GDL(sGdlIFDev_t *dev, int16_t w, int16_t h, uint8_t addr, uint8_t rst, uint8_t bl);
   ~DFRobot_GDL();
-  /**
-   * @brief 显示屏初始化函数
-   * @param freq  频率
-   */
-  void initDisplay();
-  void gdlInit(uint32_t freq = 0);
+
   /**
    * @brief 画像素点函数
    * @param x  像素点的x坐标位置
@@ -123,18 +138,87 @@ public:
    * @param color  矩形的颜色，该颜色为RGB565格式
    */
   void fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+  /**
+   * @brief 设置字体
+   * @param font  字体结构体指针，指向GFXfont或gdl_Font_t
+   */
+  void setFont(const void *font = NULL);
+  /**
+   * @brief 设置旋转方式
+   * @param r  旋转方式 0,1,2,3有效
+   */
+  void setRotation(uint8_t r);
   
-  void getColorFormat(uint8_t *pBuf, uint8_t &len, uint8_t &pixel, uint16_t color);
+  /**
+   * @brief  Invert the colors of the display (if supported by hardware).
+   * @n        Self-contained, no transaction setup required.
+   * @param  i  true = inverted display, false = normal display.
+   */
+  void invertDisplay(bool i);
+  /**
+   * @brief 将RGB565格式的颜色数据伸缩为RGB666格式的颜色数据
+   * @param rgb666  存放的RGB666的颜色数据指针数组
+   * @param color  原始RGB565格式颜色数据
+   */
   uint8_t rgb565ToRGB666(uint8_t *rgb666, uint16_t color);
+  /**
+   * @brief 将RGB565格式的颜色数据伸缩为RGB888格式的颜色数据,24位真彩色
+   * @param r  RGB888的红色分量
+   * @param g  RGB888的绿色分量
+   * @param b  RGB888的蓝色分量
+   * @param color  原始RGB565格式颜色数据
+   */
   void rgb565ToRGB888(uint8_t *r, uint8_t *g, uint8_t *b, uint16_t color);
+  /**
+   * @brief 将RGB888格式的颜色数据压缩为RGB666格式的颜色数据
+   * @param r  原始颜色数据RGB888格式的红色分量
+   * @param g  原始颜色数据RGB888格式的绿色分量
+   * @param b  原始颜色数据RGB888格式的蓝色分量
+   * @return  RGB565格式颜色数据
+   */
   uint16_t rgb888ToRGB565(uint8_t r, uint8_t g, uint8_t b);
-  void setFonts(const gdl_Font_t *font);
+  /**
+   * @brief Write  bytes into screen.
+   * @n The following are the overload functions of the byte of different data type. 
+   * @param buffer  存放发送数据的buffer
+   * @param size  发送的字节数
+   * @return 返回实际写入的字节数
+   */
   virtual size_t write(const uint8_t *buffer, size_t size);
+  /**
+   * @brief 将utf-8编码转为Unicode编码
+   * @param num  数据UTF-8编码的字节数
+   * @param buf  数据的UTF-8编码
+   * @return  32位的Unicode编码数据
+   */
   uint32_t utf8ToUnicode(uint8_t num, uint8_t *buf);
+  /**
+   * @brief 获取某个数据UTF-8编码的字节数
+   * @param b  数据UTF-8编码的第一个数据
+   * @return  数据UTF-8编码的字节数
+   */
   uint8_t getUtf_8Bytes(uint8_t b);
+  /**
+   * @brief 自定义字体的画位图方式
+   * @param x  字符在屏上显示的x起始坐标
+   * @param y  字符在屏上显示的y起始坐标
+   * @param gdlFont 自定义字体结构体指针，存放字符的数据信息
+   * @param fg  前景色，文本颜色
+   * @param bg  背景色，文本底色
+   */
   void drawCharBitmaps(uint16_t x, uint16_t y, gdl_Font_t *gdlFont, uint16_t fg, uint16_t bg);
   
 protected:
+  /**
+   * @brief 显示屏初始化函数,初始化完毕后，即可显示
+   * @param freq  频率
+   */
+  void initDisplay();
+  /**
+   * @brief 显示屏初始化函数
+   * @param freq  频率
+   */
+  void gdlInit(uint32_t freq = 0);
   /**
    * @brief 纯虚函数，设置矩形显示区域，该函数有子类实例化
    * @param x  起始行的位置
@@ -180,9 +264,34 @@ protected:
    * @param isRamData  指针c是指向ROM还是RAM, 默认指向ROM,需用特殊的方法读取args指向的数据
    */
   void sendColor(uint8_t *c, uint8_t cBytes, uint32_t len, bool isRamData = true);
+  /**
+   * @brief 设置显示驱动IC的分辨率
+   * @param w 驱动IC的x分辨率，当rotation = 0时的分辨率
+   * @param h 驱动IC的y分辨率，当rotation = 0时的分辨率
+   */
+  void setDriverICResolution(int16_t w, int16_t h);
+  /**
+   * @brief 将16位RGB565格式颜色数据，切换成其他颜色格式，如RGB888，黑白格式等
+   * @param pBuf 里面存放的是切换后的颜色数据
+   * @param len pBuf里颜色数据的长度，代表颜色数据可以用几个byte表示
+   * @param pixel pBuf里的颜色数据可控制的像素点的个数
+   * @param color 原始颜色数据，为RGB565
+   */
+  void getColorFormat(uint8_t *pBuf, uint8_t &len, uint8_t &pixel, uint16_t color);
+
+protected:
+  uint8_t _xStart;
+  uint8_t _yStart;
+  int16_t _icWidth;
+  int16_t _icHeight;
+  uint8_t invertOnCmd;
+  uint8_t invertOffCmd;
+  sGdlLcdDev_t _lcd;
+  sMadctlCmd_t madctlReg;
 
 private:
   gdl_Font_t *_gdlFont;
+  uint8_t _fontType;
 };
 
 /**
@@ -196,8 +305,10 @@ public:
   DFRobot_ST7789_240x240_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
   ~DFRobot_ST7789_240x240_HW_SPI();
   void begin(uint32_t freq = 0);
+protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
+
 
 /**
  * @brief 1.54寸SPI彩屏
@@ -210,6 +321,7 @@ public:
   DFRobot_ST7789_240x320_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
   ~DFRobot_ST7789_240x320_HW_SPI();
   void begin(uint32_t freq = 0);
+protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 
@@ -218,6 +330,7 @@ public:
   DFRobot_ST7735S_80x160_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
   ~DFRobot_ST7735S_80x160_HW_SPI();
   void begin(uint32_t freq = 0);
+protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 class DFRobot_ILI9488_480x320_HW_SPI: public DFRobot_GDL{
@@ -239,6 +352,7 @@ public:
   DFRobot_SSD1306_128x32_HW_IIC(uint8_t addr = 0x3C, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
   ~DFRobot_SSD1306_128x32_HW_IIC();
   void begin(uint32_t freq = 0);
+protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 
@@ -248,6 +362,7 @@ public:
   DFRobot_ST7789_240x240_DMA_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
   ~DFRobot_ST7789_240x240_DMA_SPI();
   void begin(uint32_t freq = 0);
+protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 class DFRobot_ST7735S_80x160_DMA_SPI: public DFRobot_GDL{
@@ -255,6 +370,15 @@ public:
   DFRobot_ST7735S_80x160_DMA_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
   ~DFRobot_ST7735S_80x160_DMA_SPI();
   void begin(uint32_t freq = 0);
+protected:
+  void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+};
+class DFRobot_ST7789_240x320_DMA_SPI: public DFRobot_GDL{
+public:
+  DFRobot_ST7789_240x320_DMA_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
+  ~DFRobot_ST7789_240x320_DMA_SPI();
+  void begin(uint32_t freq = 0);
+protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 #endif

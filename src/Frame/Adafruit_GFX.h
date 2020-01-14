@@ -9,22 +9,6 @@
 #endif
 #include "gfxfont.h"
 
-#include "Fonts/FreeMono12pt7b.h"//正常字体
-#include "Fonts/FreeMonoBold12pt7b.h"
-#include "Fonts/FreeMonoBoldOblique12pt7b.h"
-#include "Fonts/FreeMonoOblique12pt7b.h"
-#include "Fonts/FreeSans12pt7b.h"
-#include "Fonts/FreeSansBold12pt7b.h"
-#include "Fonts/FreeSansBoldOblique12pt7b.h"
-#include "Fonts/FreeSansOblique12pt7b.h"
-
-#include "Fonts/FreeSerif12pt7b.h"
-#include "Fonts/FreeSerifBold12pt7b.h"
-#include "Fonts/FreeSerifBoldItalic12pt7b.h"
-#include "Fonts/FreeSerifItalic12pt7b.h"
-
-
-
 /// A generic graphics superclass that can handle all sorts of drawing. At a minimum you can subclass and provide drawPixel(). At a maximum you can do a ton of overriding to optimize. Used for any/all Adafruit displays!
 class Adafruit_GFX : public Print {
 
@@ -226,8 +210,9 @@ class Adafruit_GFX : public Print {
   */
   /************************************************************************/
   int16_t getCursorY(void) const { return cursor_y; };
-
+  
  protected:
+  void getGFXFontBaselineAndMaxXAdvance(const GFXfont *f, uint8_t *baseline, uint8_t *xAdvanceMax = NULL);
   void
     charBounds(char c, int16_t *x, int16_t *y,
       int16_t *minx, int16_t *miny, int16_t *maxx, int16_t *maxy);

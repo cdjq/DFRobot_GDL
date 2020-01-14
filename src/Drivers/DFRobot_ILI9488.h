@@ -1,9 +1,15 @@
 #ifndef __DFROBOT_ILI9488_H
 #define __DFROBOT_ILI9488_H
 
+#define ILI9488_IC_WIDTH  320
+#define ILI9488_IC_HEIGHT  480
 #define ILI9488_COLSET  0x2A
 #define ILI9488_RAWSET  0x2B
 #define ILI9488_RAMWR   0x2C
+#define ILI9488_MADCTL  0x36
+#define ILI9488_MADCTL_RGB 0x00
+#define ILI9488_INVOFF  0x20
+#define ILI9488_INVON   0x21
 
 /*static const uint8_t PROGMEM DFRobot_ILI9488_initCmd[] */
 static const uint8_t PROGMEM DFRobot_ILI9488_initCmd[]= {

@@ -86,7 +86,7 @@
 #define IF_COM_WRITE_RAM_INC     7
 
 /*无用引脚，空引脚*/
-#define GDL_PIN_NC     255 
+#define GDL_PIN_NC     0xFF 
 /*IO口操纵方式*/
 #define PIN_IN(pin)   if(pin != GDL_PIN_NC) pinMode(pin, INPUT)
 #define PIN_OUT(pin)  if(pin != GDL_PIN_NC) pinMode(pin, OUTPUT)

@@ -1,6 +1,8 @@
 #ifndef __DFROBOT_SSD1306_H
 #define __DFROBOT_SSD1306_H
 
+#define SSD1306_INVOFF  0xA6
+#define SSD1306_INVON   0xA7
 
 
 static const uint8_t PROGMEM DFRobot_SSD1306_initCmd[] = {

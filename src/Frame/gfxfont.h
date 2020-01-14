@@ -18,12 +18,28 @@ typedef struct {
 } GFXglyph;
 
 /// Data stored for FONT AS A WHOLE
-typedef struct { 
+typedef struct {
 	uint8_t  *bitmap;      ///< Glyph bitmaps, concatenated
 	GFXglyph *glyph;       ///< Glyph array
 	uint8_t   first;       ///< ASCII extents (first char)
-        uint8_t   last;        ///< ASCII extents (last char)
+    uint8_t   last;        ///< ASCII extents (last char)
 	uint8_t   yAdvance;    ///< Newline distance (y axis)
 } GFXfont;
+
+#include "Fonts/FreeMono9pt7b.h"
+#include "Fonts/FreeMono12pt7b.h"//正常字体
+#include "Fonts/FreeMonoBold12pt7b.h"
+#include "Fonts/FreeMonoBoldOblique12pt7b.h"
+#include "Fonts/FreeMonoOblique12pt7b.h"
+#include "Fonts/FreeSans12pt7b.h"
+#include "Fonts/FreeSansBold12pt7b.h"
+#include "Fonts/FreeSansBoldOblique12pt7b.h"
+#include "Fonts/FreeSansOblique12pt7b.h"
+#include "Fonts/FreeSerif12pt7b.h"
+#include "Fonts/FreeSerifBold12pt7b.h"
+#include "Fonts/FreeSerifBoldItalic12pt7b.h"
+#include "Fonts/FreeSerifItalic12pt7b.h"
+#include "Fonts/FreeMono24pt7b.h"
+
 
 #endif // _GFXFONT_H_

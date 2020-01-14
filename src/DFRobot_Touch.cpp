@@ -119,11 +119,8 @@ String DFRobot_Touch_GTXXXX::scan(){
 }
 
 DFRobot_Touch_XPT2046::DFRobot_Touch_XPT2046(uint8_t cs, uint8_t rst , uint8_t irq )
-:DFRobot_Touch(&gdl_Dev_XPT2046_TOUCH_HW_SPI, cs, rst, irq, GDL_PIN_NC){ 
-_cs = cs;}
-DFRobot_Touch_XPT2046::~DFRobot_Touch_XPT2046(){
-
-}
+:DFRobot_Touch(&gdl_Dev_XPT2046_TOUCH_HW_SPI, cs, rst, irq, GDL_PIN_NC){}
+DFRobot_Touch_XPT2046::~DFRobot_Touch_XPT2046(){}
 
 void DFRobot_Touch_XPT2046::begin(uint32_t freq){
   setFrequency(freq);

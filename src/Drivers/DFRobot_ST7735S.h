@@ -1,9 +1,15 @@
 #ifndef __DFROBOT_ST7735S_H
 #define __DFROBOT_ST7735S_H
 
+#define ST7735S_IC_WIDTH  132
+#define ST7735S_IC_HEIGHT  162
 #define ST7735S_COLSET  0x2A
 #define ST7735S_RAWSET  0x2B
 #define ST7735S_RAMWR   0x2C
+#define ST7735S_MADCTL  0x36
+#define ST7735S_MADCTL_RGB 0x00
+#define ST7735S_INVOFF  0x20
+#define ST7735S_INVON   0x21
 
 static const uint8_t PROGMEM DFRobot_ST7735S_initCmd[] = {
   //cmd delayFlag/argsNum argsValue 延时（超过255）延时/255

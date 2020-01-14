@@ -1,7 +1,0 @@
-#Manual configuration: 0
-#Auto configuration : 1
-
-#AutoConfiguration = 0
-AutoConfiguration = 0
-ttfSourceFloder = E:\arduino-1.8.4\libraries\DFRobot_GDL\src\Fonts\script\ttf
-FontTargeFloder = E:\arduino-1.8.4\libraries\DFRobot_GDL\src\Fonts\Fonts

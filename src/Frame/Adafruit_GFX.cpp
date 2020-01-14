@@ -1181,11 +1181,11 @@ size_t Adafruit_GFX::write(uint8_t c) {
 
         if(c == '\n') {                        // Newline?
             cursor_x  = 0;                     // Reset x to zero,
-            cursor_y += textsize_y * 8;        // advance y one line
+            cursor_y += textsize_y * 10;        // advance y one line
         } else if(c != '\r') {                 // Ignore carriage returns
             if(wrap && ((cursor_x + textsize_x * 6) > _width)) { // Off right?
                 cursor_x  = 0;                 // Reset x to zero,
-                cursor_y += textsize_y * 8;    // advance y one line
+                cursor_y += textsize_y * 10;    // advance y one line
             }
             drawChar(cursor_x, cursor_y, c, textcolor, textbgcolor, textsize_x, textsize_y);
             cursor_x += textsize_x * 6;          // Advance x one char
@@ -1238,6 +1238,10 @@ void Adafruit_GFX::setTextSize(uint8_t s) {
 */
 /**************************************************************************/
 void Adafruit_GFX::setTextSize(uint8_t s_x, uint8_t s_y) {
+    if(cursor_x && (textsize_y != s_y)){
+        cursor_x = 0;
+        gfxFont ? cursor_y += (uint8_t)pgm_read_byte(&gfxFont->yAdvance)*textsize_y : cursor_y += 10*textsize_y;
+    }
     textsize_x = (s_x > 0) ? s_x : 1;
     textsize_y = (s_y > 0) ? s_y : 1;
 }
@@ -1271,18 +1275,42 @@ void Adafruit_GFX::setRotation(uint8_t x) {
 */
 /**************************************************************************/
 void Adafruit_GFX::setFont(const GFXfont *f) {
-    if(f) {            // Font struct pointer passed in?
-        if(!gfxFont) { // And no current font struct?
-            // Switching from classic to new font behavior.
-            // Move cursor pos down 6 pixels so it's on baseline.
-            cursor_y += 6;
-        }
-    } else if(gfxFont) { // NULL passed.  Current font struct defined?
-        // Switching from new to classic font behavior.
-        // Move cursor pos up 6 pixels so it's at top-left of char.
-        cursor_y -= 6;
+    uint8_t baslineOld, baslineNew, xMaxAdavanceNew, yAdvance;
+    getGFXFontBaselineAndMaxXAdvance(gfxFont, &baslineOld);
+    getGFXFontBaselineAndMaxXAdvance(f, &baslineNew, &xMaxAdavanceNew);
+    if(cursor_y) cursor_y -= baslineOld*textsize_y;
+    gfxFont ? baslineOld = (uint8_t)pgm_read_byte(&gfxFont->yAdvance) : baslineOld = 10;
+    if(cursor_x + xMaxAdavanceNew*textsize_x > _width){
+        cursor_x = 0;
+        cursor_y += baslineOld*textsize_y;
     }
+    f ? yAdvance = (uint8_t)pgm_read_byte(&f->yAdvance) : yAdvance = 10;
+    if(cursor_x && (baslineOld > yAdvance))
+        cursor_y += (baslineOld - yAdvance)*textsize_y;
+    cursor_y += baslineNew*textsize_y;
     gfxFont = (GFXfont *)f;
+}
+
+void Adafruit_GFX::getGFXFontBaselineAndMaxXAdvance(const GFXfont *f, uint8_t *baseline, uint8_t *xAdvanceMax){
+  int8_t baselineOffset = 0;
+  *baseline = 0;
+  if(xAdvanceMax) *xAdvanceMax = 0;
+  if(f){
+      GFXglyph *glyph  = pgm_read_glyph_ptr(f, 0);
+      for(uint8_t c = pgm_read_byte(&f->first); c <= (uint8_t)pgm_read_byte(&f->last); c++){
+          if(baselineOffset > (int8_t)pgm_read_byte(&glyph->yOffset))
+              baselineOffset = (int8_t)pgm_read_byte(&glyph->yOffset);
+          if(xAdvanceMax){
+              if(*xAdvanceMax < (uint8_t)pgm_read_byte(&glyph->xAdvance))
+                  *xAdvanceMax = (uint8_t)pgm_read_byte(&glyph->xAdvance);
+          }
+          glyph++;
+      }
+  }else{
+      if(xAdvanceMax) *xAdvanceMax = 6;
+      baselineOffset = 0;
+  }
+  *baseline = (uint8_t)(0 - baselineOffset);
 }
 
 

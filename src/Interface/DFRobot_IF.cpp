@@ -18,19 +18,14 @@
 
 #include "DFRobot_IF.h"
 #include "DFRobot_Type.h"
+#include "Arduino.h"
 
 DFRobot_IF::DFRobot_IF(sGdlIFDev_t *dev, uint8_t addr, uint8_t rst, uint8_t bl/*irq*/){
   memset(&_if, 0, sizeof(_if));
-  _if.pinList = NULL;
-  _if.dev = NULL;
-  _if.interface = NULL;
   initHWIIC(dev, addr, rst, bl);
 }
 DFRobot_IF::DFRobot_IF(sGdlIFDev_t *dev, uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl/*irq*/){
   memset(&_if, 0, sizeof(_if));
-  _if.pinList = NULL;
-  _if.dev = NULL;
-  _if.interface = NULL;
   initHWSPI(dev, dc, cs, rst, bl);
 }
 DFRobot_IF::~DFRobot_IF(){
@@ -60,7 +55,6 @@ void DFRobot_IF::initIFCommon(){
 }
 void DFRobot_IF::initHWIIC(sGdlIFDev_t *dev, uint8_t addr, uint8_t rst, uint8_t bl/*irq*/){
   _if.interface = IF_HW_IIC;
-  _if.freq = 0;
   if((_if.pinList =(uint8_t *)malloc(_if.interface)) == NULL){
       return;
   }
@@ -79,8 +73,6 @@ void DFRobot_IF::initHWIIC(sGdlIFDev_t *dev, uint8_t addr, uint8_t rst, uint8_t 
 }
 void DFRobot_IF::initHWSPI(sGdlIFDev_t *dev, uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl/*irq*/){
   _if.interface = IF_HW_SPI;
-  _if.freq = 0;
- 
   if((_if.pinList =(uint8_t *)malloc(_if.interface)) == NULL){
       return;
   }
@@ -95,7 +87,6 @@ void DFRobot_IF::initHWSPI(sGdlIFDev_t *dev, uint8_t dc, uint8_t cs, uint8_t rst
       pinMode(_if.pinList[i], OUTPUT);
       digitalWrite(_if.pinList[i], HIGH);
   }
-  _if.length = I2C_BUFFER_LENGTH;
   _if.dev = dev;
 }
 
