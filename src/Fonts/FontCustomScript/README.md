@@ -26,7 +26,7 @@ b. FontSizeList ：生成的字体的大小列表，如果为空[]，则默认�
              FontSizeList = [12,24]<br>
     则会生成名字为EnglishSIMYOUFont12pt.h和EnglishSIMYOUFont24pt.h的文件<br>
 生成字体文件命名和后缀 = FontFileNamePre + TTF文件名 + Font + size + pt + .h<br>
-    其中FontFileNamePre只能是英文字符,size及字体的大小<br>
+*  其中FontFileNamePre只能是英文字符,size及字体的大小<br>
 * 运行setup.py脚本，会在font文件夹生成一系列后缀名为.h的字体文件，并弹出一个font.txt的文本，再进行以下步骤，即可在屏上显示：你好，世界！<br>
 - **a. 将font文件夹里的文件复制到DFRobot_GDL\src\Fonts\Fonts目录下；<br>
 - **b. 将弹出的font.txt的内容粘贴到DFRobot_GDL\src\Fonts\DFRobot_Font.h文件中;<br>
