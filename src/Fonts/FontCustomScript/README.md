@@ -18,13 +18,13 @@
   **FontFileNamePre**代表文件名的前缀，如果为default，则代表无前缀<br>
         - 例1：如果**FontFileNamePre = default**<br>
              **FontSizeList = [12]**<br>
-    则会生成一个名字为**SIMYOUFont12pt.h**的文件<br>
+    则会生成一个名字为**SIMKAIFont12pt.h**的文件<br>
         - 例2：如果**FontFileNamePre = English**<br>
              **FontSizeList = [12]**<br>
-    则会生成一个名字为**EnglishSIMYOUFont12pt.h**的文件<br>
+    则会生成一个名字为**EnglishSIMKAIFont12pt.h**的文件<br>
         - 例3：如果FontFileNamePre = English<br>
              **FontSizeList = [12,24]**<br>
-    则会生成名字为**EnglishSIMYOUFont12pt.h**和**EnglishSIMYOUFont24pt.h**的文件<br>
+    则会生成名字为**EnglishSIMKAIFont12pt.h**和**EnglishSIMKAIFont24pt.h**的文件<br>
 **生成字体文件命名和后缀 = FontFileNamePre + TTF文件名 + Font + size + pt + .h**<br>
 其中FontFileNamePre只能是**英文字符**,size,即生成字体的大小<br>
 - **运行setup.py脚本，会在font文件夹生成一系列后缀名为.h的字体文件，并弹出一个font.txt的文本，再进行以下步骤，即可在屏上显示：你好，世界！<br>**
