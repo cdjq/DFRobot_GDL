@@ -33,7 +33,6 @@
  * @param dc  SPI通信的命令/数据线引脚
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
- * @param bl  屏幕的背光引脚
  */
 DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
