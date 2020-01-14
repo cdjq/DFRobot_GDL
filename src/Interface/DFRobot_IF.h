@@ -74,7 +74,13 @@
 /**
  * @brief Communication interface function command.
  * @param IF_COM_PROTOCOL_INIT: Communication protocol initialization.
- *
+ * @param IF_COM_SET_FREQUENCY: 设置通信频率.
+ * @param IF_COM_WRITE_CMD: 写命令.
+ * @param IF_COM_READ_DATA: 写数据
+ * @param IF_COM_WRITE_FLASH_FIXED: 传输保存在ROM中的数据，且传输过程中数据位置不变，及多次传输同一个数据
+ * @param IF_COM_WRITE_FLASH_INC: 传输保存在ROM中的数据，且数据地址依次增加
+ * @param IF_COM_WRITE_RAM_FIXED: 传输保存在RAM中的数据，且传输过程中数据位置不变，及多次传输同一个数据
+ * @param IF_COM_WRITE_RAM_INC: 传输保存在RMA中的数据，且数据地址依次增加
  */
 #define IF_COM_PROTOCOL_INIT  0
 #define IF_COM_SET_FREQUENCY     1
@@ -100,18 +106,18 @@
 #define IF_SW_SPI 7  //7代表硬件SPI的最大参数个数，即(rst),(bl),dc,(cs),sck,mosi,(miso)
 
 
-#define IF_PIN_RST    0
-#define IF_PIN_BL     1
-#define IF_PIN_IRQ    1
-#define IF_PIN_ADDR   2
-#define IF_PIN_DC     2
-#define IF_PIN_CS     3
+#define IF_PIN_RST    0 //复位
+#define IF_PIN_BL     1 //背光
+#define IF_PIN_IRQ    1 //中断
+#define IF_PIN_ADDR   2 //IIC地址
+#define IF_PIN_DC     2 //SPI命令数据控制引脚
+#define IF_PIN_CS     3 //SPI片选引脚
 
 typedef struct sGdlIF sGdlIF_t;
 typedef uint8_t(*devInterfaceFunctionPtr)(sGdlIF_t *gdl, uint8_t step, uint8_t *addr, uint32_t len);//FP->function pointer函数指针
 
 typedef struct{
-  uint8_t devName;
+  uint8_t devName; /**<记录设备类型，DEV_TYPE_TOUCH代表触摸，DEV_TYPE_SCREEN代表屏*/
   uint8_t *addr;  /**<记录设备的初始化数组*/
   devInterfaceFunctionPtr talk;/**<注册屏的通信接口函数，指向函数的指针*/
 }sGdlIFDev_t;
@@ -122,7 +128,7 @@ typedef union{
 #ifdef ARDUINO_SAM_ZERO
   DFRobot_DMA_SPI *dma;/**<定义一个dma类指针*/
 #endif
-  void *interface;
+  void *interface;/*公共接口*/
 }uProtocol_t;
 
 struct sGdlIF{
@@ -206,7 +212,6 @@ private:
    * @param valBytes  当regIscmd为true时，该数据无效，可填任意值，当regIscmd为false时，该值代表寄存器对应的数值的字节数
    */
   bool readBuf(void *reg, uint8_t regBytes, void *pBuf, uint32_t len, bool regIscmd, uint8_t valBytes = 0);
-  //bool writeBuf(void *reg, uint8_t regBytes, void *pBuf, uint32_t len, bool regIscmd, uint8_t valBytes = 0);
 };
 
 #endif
