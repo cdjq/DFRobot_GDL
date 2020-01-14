@@ -36,6 +36,10 @@ DFRobot_IF::~DFRobot_IF(){
 }
 
 void DFRobot_IF::initInterface(){
+  PIN_LOW(_if.pinList[IF_PIN_RST]);
+  delay(100);
+  PIN_HIGH(_if.pinList[IF_PIN_RST]);
+  delay(100);
   _if.dev->talk(&_if, IF_COM_PROTOCOL_INIT, NULL, 0);
 }
 

@@ -1,3 +1,15 @@
+/*!
+ * @file DFRobot_Font.cpp
+ * @brief 定义DFRobot_GDL显示库, 字体显示细节实现
+ *
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [Arya](xue.peng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-12-23
+ * @https://github.com/DFRobot/DFRobot_GDL
+ */
+
 #include "DFRobot_GDL.h"
 #include "gdlFontDef.h"
 #ifndef pgm_read_byte
@@ -146,9 +158,7 @@ void DFRobot_GDL::drawCharBitmaps(uint16_t x, uint16_t y, gdl_Font_t *gdlFont, u
           }
           if(val & 0x08){
               drawFastHLine(x, y,w,fg);
-          }//else{
-              // if(fg != bg) drawFastHLine(x, y,w,bg);
-          // }
+          }
           x += w;
       }
   }

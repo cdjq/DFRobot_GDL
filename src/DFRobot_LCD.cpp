@@ -1,5 +1,15 @@
-#ifndef __DFROBOT_TYPE_H
-#define __DFROBOT_TYPE_H
+/*!
+ * @file DFRobot_LCD.cpp
+ * @brief 定义DFRobot_GDL显示库的子类，屏的实现
+ *
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [Arya](xue.peng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-12-23
+ * @https://github.com/DFRobot/DFRobot_GDL
+ */
+
 #include "Arduino.h"
 #include "DFRobot_Type.h"
 #include "DFRobot_GDL.h"
@@ -24,11 +34,6 @@ DFRobot_ST7789_240x240_HW_SPI::~DFRobot_ST7789_240x240_HW_SPI(){}
 void DFRobot_ST7789_240x240_HW_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
-  /*复位*/
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();
   setRotation(0);
 }
@@ -56,11 +61,6 @@ DFRobot_ST7789_240x320_HW_SPI::~DFRobot_ST7789_240x320_HW_SPI(){
 void DFRobot_ST7789_240x320_HW_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
-  /*复位*/
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
@@ -87,11 +87,6 @@ DFRobot_ST7735S_80x160_HW_SPI::~DFRobot_ST7735S_80x160_HW_SPI(){
 void DFRobot_ST7735S_80x160_HW_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
-  /*复位*/
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7735S_80x160_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
@@ -118,11 +113,6 @@ DFRobot_ILI9488_480x320_HW_SPI::~DFRobot_ILI9488_480x320_HW_SPI(){
 void DFRobot_ILI9488_480x320_HW_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
-  /*复位*/
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();
 }
 void DFRobot_ILI9488_480x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
@@ -151,10 +141,6 @@ void DFRobot_SSD1306_128x32_HW_IIC::begin(uint32_t freq){
   gdlInit(freq);
   _lcd.buffer = (uint8_t *)malloc(128*64/8);
   memset(_lcd.buffer,0xff,128*64/8);
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();//显示屏初始化
 }
 
@@ -227,11 +213,6 @@ DFRobot_ST7789_240x240_DMA_SPI::~DFRobot_ST7789_240x240_DMA_SPI(){
 void DFRobot_ST7789_240x240_DMA_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
-  /*复位*/
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7789_240x240_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
@@ -258,11 +239,6 @@ DFRobot_ST7735S_80x160_DMA_SPI::~DFRobot_ST7735S_80x160_DMA_SPI(){}
 void DFRobot_ST7735S_80x160_DMA_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
-  /*复位*/
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7735S_80x160_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
@@ -289,11 +265,6 @@ DFRobot_ST7789_240x320_DMA_SPI::~DFRobot_ST7789_240x320_DMA_SPI(){
 void DFRobot_ST7789_240x320_DMA_SPI::begin(uint32_t freq)
 {
   gdlInit(freq);
-  /*复位*/
-  PIN_LOW(_if.pinList[IF_PIN_RST]);
-  delay(1000);
-  PIN_HIGH(_if.pinList[IF_PIN_RST]);
-  delay(1000);
   initDisplay();
 }
 void DFRobot_ST7789_240x320_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
@@ -309,6 +280,3 @@ void DFRobot_ST7789_240x320_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint
 }
 
 #endif//end M0
-
-
-#endif

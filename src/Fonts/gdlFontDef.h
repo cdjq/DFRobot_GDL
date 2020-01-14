@@ -1,3 +1,15 @@
+/*!
+ * @file gdlFontDef.h
+ * @brief 自定义字体结构的格式
+ *
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [Arya](xue.peng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-12-23
+ * @https://github.com/DFRobot/DFRobot_GDL
+ */
+
 #ifndef _GDLFONTDEF_H_
 #define _GDLFONTDEF_H_
 #include "Arduino.h"
