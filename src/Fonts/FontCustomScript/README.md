@@ -1,13 +1,13 @@
 # 自定义字体生成方式
-在使用setup.py脚本生成自定义字体之前，需要做如下准备：
 ## Table of Contents
 * [环境搭建](#环境搭建)
 * [生成自定义字体](#生成自定义字体)
 ## 环境搭建
-登录网址https://www.python.org/downloads/，下载python3.6及以上版本；<br>
-安装完毕后，你需要用下列命令安装python第三方依赖包: <br>
- * pip3 install numpy
- * pip install freetype-py 
+在使用setup.py脚本生成自定义字体之前，需要做如下准备:
+- **登录网址https://www.python.org/downloads/，下载python3.6及以上版本；**<br>
+- **安装完毕后，需要用下列命令安装python第三方依赖包:** <br>
+    - pip3 install numpy
+    - pip install freetype-py 
 
 ## 生成自定义字体
 - **将TTF字体文件存放在ttf文件夹里，例如：SIMKAI.TTF（简体字 楷体）**
