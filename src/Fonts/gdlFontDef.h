@@ -20,12 +20,12 @@
 typedef struct{
   uint16_t unicode;  /**< 字体Unicode码*/
   uint16_t length;  /**< 字体有效数据长度*/
-  uint8_t  width;   /**< 字体轮廓宽度*/
-  uint8_t  height;  /**< 字体轮廓高度*/
+  uint8_t width;   /**< 字体轮廓宽度*/
+  uint8_t height;  /**< 字体轮廓高度*/
   int8_t xOffset;  /**< 原点x方向偏移*/
   int8_t yOffset;  /**< 原点y方向偏移*/
   uint8_t xAdvance; /**< 字体总宽度*/
-} gdl_Glyph_t;
+}gdl_Glyph_t;
 
 typedef struct{
   uint8_t  *bitmap;      /**< Glyph bitmaps, concatenated*/

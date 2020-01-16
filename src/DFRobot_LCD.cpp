@@ -128,22 +128,17 @@ void DFRobot_ILI9488_480x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint
 }
 
 DFRobot_SSD1306_128x32_HW_IIC::DFRobot_SSD1306_128x32_HW_IIC(uint8_t addr, uint8_t rst, uint8_t bl)
-  :DFRobot_GDL(&gdl_Dev_SSD1306_R128x32_HW_IIC, 128, 32, addr, rst, bl){
-
-}
-
+  :DFRobot_GDL(&gdl_Dev_SSD1306_R128x32_HW_IIC, 128, 32, addr, rst, bl){}
 DFRobot_SSD1306_128x32_HW_IIC::~DFRobot_SSD1306_128x32_HW_IIC(){
   invertOffCmd = SSD1306_INVOFF;
   invertOnCmd = SSD1306_INVON;
 }
-
 void DFRobot_SSD1306_128x32_HW_IIC::begin(uint32_t freq){
   gdlInit(freq);
   _lcd.buffer = (uint8_t *)malloc(128*64/8);
   memset(_lcd.buffer,0xff,128*64/8);
   initDisplay();//显示屏初始化
 }
-
 void DFRobot_SSD1306_128x32_HW_IIC::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color){
   uint8_t buf[w];//定义大小为w的数组，该数组存放一次性发送的数据
   memset(buf, 0x00, w);
@@ -195,7 +190,6 @@ void DFRobot_SSD1306_128x32_HW_IIC::setDisplayArea(uint16_t x, uint16_t y, uint1
   }
 }
 
-
 #ifdef ARDUINO_SAM_ZERO
 GDL_IF_PB_DEV(gdl_Dev_ST7789_R240x240_DMA_SPI, DEV_TYPE_SCREEN, (uint8_t *)DFRobot_ST7789_initCmd, IF_COM_DMA_SPI);
 GDL_IF_PB_DEV(gdl_Dev_ST7789_R240x320_DMA_SPI, DEV_TYPE_SCREEN, (uint8_t *)DFRobot_ST7789_initCmd, IF_COM_DMA_SPI);
@@ -236,13 +230,11 @@ DFRobot_ST7735S_80x160_DMA_SPI::DFRobot_ST7735S_80x160_DMA_SPI(uint8_t dc, uint8
   invertOnCmd = ST7735S_INVON;
 }
 DFRobot_ST7735S_80x160_DMA_SPI::~DFRobot_ST7735S_80x160_DMA_SPI(){}
-void DFRobot_ST7735S_80x160_DMA_SPI::begin(uint32_t freq)
-{
+void DFRobot_ST7735S_80x160_DMA_SPI::begin(uint32_t freq){
   gdlInit(freq);
   initDisplay();
 }
-void DFRobot_ST7735S_80x160_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
-{
+void DFRobot_ST7735S_80x160_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color){
   sendCommand(ST7735S_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -252,7 +244,6 @@ void DFRobot_ST7735S_80x160_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint
   sendCommand(ST7735S_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
-
 DFRobot_ST7789_240x320_DMA_SPI::DFRobot_ST7789_240x320_DMA_SPI(uint8_t dc, uint8_t cs, uint8_t rst, uint8_t bl)
   :DFRobot_GDL(&gdl_Dev_ST7789_R240x320_DMA_SPI, 240, 320, dc, cs, rst, bl){}
 DFRobot_ST7789_240x320_DMA_SPI::~DFRobot_ST7789_240x320_DMA_SPI(){
@@ -262,13 +253,11 @@ DFRobot_ST7789_240x320_DMA_SPI::~DFRobot_ST7789_240x320_DMA_SPI(){
   invertOffCmd = ST7789_INVOFF;
   invertOnCmd = ST7789_INVON;
 }
-void DFRobot_ST7789_240x320_DMA_SPI::begin(uint32_t freq)
-{
+void DFRobot_ST7789_240x320_DMA_SPI::begin(uint32_t freq){
   gdlInit(freq);
   initDisplay();
 }
-void DFRobot_ST7789_240x320_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
-{
+void DFRobot_ST7789_240x320_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color){
   sendCommand(ST7789_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -278,5 +267,4 @@ void DFRobot_ST7789_240x320_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint
   sendCommand(ST7789_RAMWR);
   sendColor(color, (uint32_t)w*h);
 }
-
 #endif//end M0
