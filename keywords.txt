@@ -107,7 +107,7 @@ creatTableview	KEYWORD2
 setTableviewName	KEYWORD2
 creatBar	KEYWORD2
 setBarStyle	KEYWORD2
-
+setKeyPadText	KEYWORD2
 setCallBack	KEYWORD2
 sObject_t	LITERAL1
 sTextState_t	LITERAL1
