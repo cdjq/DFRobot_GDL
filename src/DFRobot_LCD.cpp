@@ -40,7 +40,7 @@ void DFRobot_ILI9341_240x320_HW_SPI::begin(uint32_t freq)
 }
 void DFRobot_ILI9341_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   sendCommand(ILI9341_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -67,7 +67,7 @@ void DFRobot_ST7789_240x240_HW_SPI::begin(uint32_t freq)
 }
 void DFRobot_ST7789_240x240_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   sendCommand(ST7789_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -94,7 +94,7 @@ void DFRobot_ST7789_240x320_HW_SPI::begin(uint32_t freq)
 }
 void DFRobot_ST7789_240x320_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   sendCommand(ST7789_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -121,7 +121,7 @@ void DFRobot_ST7735S_80x160_HW_SPI::begin(uint32_t freq)
 }
 void DFRobot_ST7735S_80x160_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) ;
   switch(rotation){
       case 0:
       case 2:
@@ -160,7 +160,7 @@ void DFRobot_ILI9488_320x480_HW_SPI::begin(uint32_t freq)
 }
 void DFRobot_ILI9488_320x480_HW_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   sendCommand(ILI9488_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -190,7 +190,7 @@ void DFRobot_SSD1306_128x32_HW_IIC::begin(uint32_t freq){
   initDisplay();//显示屏初始化
 }
 void DFRobot_SSD1306_128x32_HW_IIC::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color){
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   if(x == 0 && y == 0 && w == (uint16_t)_width && h == (uint16_t)_height){
       color ? memset(_lcd.buffer, 0xFF, _width*_height/8) : memset(_lcd.buffer, 0x00, _width*_height/8);
   }else{
@@ -234,7 +234,7 @@ void DFRobot_ST7789_240x240_DMA_SPI::begin(uint32_t freq)
 }
 void DFRobot_ST7789_240x240_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   sendCommand(ST7789_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -261,7 +261,7 @@ void DFRobot_ST7735S_80x160_DMA_SPI::begin(uint32_t freq)
 }
 void DFRobot_ST7735S_80x160_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   switch(rotation){
       case 0:
       case 2:
@@ -300,7 +300,7 @@ void DFRobot_ST7789_240x320_DMA_SPI::begin(uint32_t freq)
 }
 void DFRobot_ST7789_240x320_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   sendCommand(ST7789_COLSET);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);
@@ -327,7 +327,7 @@ void DFRobot_ILI9488_320x480_DMA_SPI::begin(uint32_t freq)
 }
 void DFRobot_ILI9488_320x480_DMA_SPI::setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
-  if((x + w ) > _width || (y + h) > _height) return;
+  //if((x + w ) > _width || (y + h) > _height) return;
   sendCommand(0x2A);
   sendData16(_xStart + x);
   sendData16(_xStart + x + w -1);

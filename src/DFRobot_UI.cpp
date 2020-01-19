@@ -826,11 +826,7 @@ void DFRobot_UI::changeTableview(sObject_t* obj,uint8_t page)
        _gdl->fillRect(tv->text[page-1].posx, tv->text[page-1].posy, tv->text[page-1].width, tv->text[page-1].height, tv->text[page-1].fgColor);
      }
     drawkpString(&tv->text[page-1],CENTER,CENTER,&tv->text[page-1].text[0]);
-	 if (theme == MODERN) {
-         _gdl->fillRoundRect(tv->text[page-1].posx - 1, tv->text[page-1].posy - 1, tv->text[page-1].width + 2, tv->text[page-1].height + 2, 11, DCYAN_RGB565);
-         _gdl->fillRoundRect(tv->text[page-1].posx, tv->text[page-1].posy, tv->text[page-1].width, tv->text[page-1].height, 10, tv->text[page-1].bgColor);
-       }
-     else {
+ 美女呢                          
         _gdl->fillRect(tv->text[page-1].posx, tv->text[page-1].posy, tv->text[page-1].width, tv->text[page-1].height, tv->text[page-1].bgColor);
         }
        drawkpString(&tv->text[page-1],CENTER,CENTER,&tv->text[page-1].text[0]);

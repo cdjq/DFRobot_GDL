@@ -22,19 +22,16 @@
 #define TFT_DC  7
 #define TFT_CS  5
 #define TFT_RST 6
-#define TFT_BL  9
 /*ESP32 and ESP8266*/
 #elif defined(ESP32) || defined(ESP8266)
 #define TFT_DC  D3
 #define TFT_CS  D4
 #define TFT_RST D5
-#define TFT_BL  D6
 /*AVR系列主板*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
 #define TFT_RST 4
-#define TFT_BL  5
 #endif
 
 /**
@@ -42,43 +39,23 @@
  * @param dc  SPI通信的命令/数据线引脚
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
- * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 
 void setup() {
   Serial.begin(115200);
   screen.begin();
 }
+
 void loop() {
   /**
    * @brief 将屏幕刷成白色
    * @param 0xFFFF 白色参数
    */
-  screen.fillScreen(0xFFFF);
-  /**
-   * @brief 画带背景的单色图
-   * @param x      0 设置画图起点是屏幕左上方，靠左
-   * @param y      0 靠上
-   * @param bitmap gImage_Bitmap 头文件Bitmap中的数组，数组元素是单字节
-   * @param w      240 图片宽度
-   * @param h      240 图片高度
-   * @param color  0xFF00 黑色图片部分设置为黄色
-   * @param bg     0x00FF 白色背景部分设置为蓝色
-   */
-  screen.drawBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_Bitmap,/*w=*/240,/*h=*/240,/*color=*/0xFF00,/*bg=*/0x00FF);
-  /**
-   * @brief 画无背景的单色图
-   * @param x      0 设置画图起点是屏幕左上方，靠左
-   * @param y      0 靠上
-   * @param bitmap gImage_Bitmap 头文件Bitmap中的数组，数组元素是单字节
-   * @param w      240 图片宽度
-   * @param h      240 图片高度
-   * @param color  0x000F 黑色图片部分设置为深蓝色
-   */
-  screen.drawBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_Bitmap,/*w=*/240,/*h=*/240,/*color=*/0x000F);
   screen.fillScreen(0xFFFF);
   /**
    * @brief 画位顺序不同的单色图
@@ -90,7 +67,7 @@ void loop() {
    * @param color  0x0000 黑色图片部分设置为黑色
    */
   screen.drawXBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_XBitmap,/*w=*/240,/*h=*/240,/*color=*/0x0000);
-  screen.fillScreen(0x66FF);
+  screen.fillScreen(0xFFFF);
   /**
    * @brief 画彩色图
    * @param x      0 设置画图起点是屏幕左上方，靠左

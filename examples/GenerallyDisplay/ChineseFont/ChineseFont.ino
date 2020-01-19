@@ -60,7 +60,7 @@ void loop() {
   //设置字体字号为4 字号范围1-4
   screen.setTextSize(4);
   /*设置屏幕颜色*/
-  screen.fillScreen(COLOR_RGB565_WHITE);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   //设置字体文件
   screen.setFont(&SIMKAIFont12pt);
   
@@ -72,7 +72,7 @@ void loop() {
   screen.setCursor(/*x=*/10,/*y=*/120);
   //设置文本颜色
   //可选颜色列表和fillScreen函数中使用的颜色列表相同
-  screen.setTextColor(COLOR_RGB565_WHITE); 
+  screen.setTextColor(COLOR_RGB565_BLUE); 
   //设置文本自动换行模式
   //true=文本自动换行，false=不自动换行
   screen.setTextWrap(true);
@@ -80,35 +80,26 @@ void loop() {
   screen.print("你好");
   delay(2000);
   
-  //使用SIMKAIFont48pt字体
-  screen.fillScreen(COLOR_RGB565_WHITE);
-  screen.setFont(&SIMKAIFont48pt);
-  screen.setCursor(10,120);
-  screen.setTextColor(COLOR_RGB565_WHITE);
-  screen.setTextWrap(true);
-  screen.print("你好");
-  delay(2000);
-  
   //使用SIMKAIFont18pt字体
-  screen.fillScreen(COLOR_RGB565_WHITE);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont18pt);
   screen.setCursor(10,120);
-  screen.setTextColor(COLOR_RGB565_WHITE);
+  screen.setTextColor(COLOR_RGB565_RED);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
   
   //使用SIMKAIFont24pt字体
-  screen.fillScreen(COLOR_RGB565_WHITE);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont24pt);
   screen.setCursor(10,120);
-  screen.setTextColor(COLOR_RGB565_WHITE);
+  screen.setTextColor(COLOR_RGB565_BLUE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
   
   //使用SIMKAIFont36pt字体
-  screen.fillScreen(COLOR_RGB565_WHITE);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont36pt);
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_WHITE);
@@ -116,11 +107,20 @@ void loop() {
   screen.print("你好");
   delay(2000);
   
+  //使用SIMKAIFont48pt字体
+  screen.fillScreen(COLOR_RGB565_BLACK);
+  screen.setFont(&SIMKAIFont48pt);
+  screen.setCursor(10,120);
+  screen.setTextColor(COLOR_RGB565_YELLOW);
+  screen.setTextWrap(true);
+  screen.print("你好");
+  delay(2000);
+  
   //使用SIMKAIFont72pt字体
-  screen.fillScreen(COLOR_RGB565_WHITE);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont72pt);
   screen.setCursor(10,120);
-  screen.setTextColor(COLOR_RGB565_WHITE);
+  screen.setTextColor(COLOR_RGB565_ORANGE);
   screen.setTextWrap(true);
   screen.print("你好");
   delay(2000);
