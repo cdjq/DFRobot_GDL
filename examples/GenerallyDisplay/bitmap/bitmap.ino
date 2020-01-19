@@ -11,7 +11,6 @@
  */
  
 #include "DFRobot_GDL.h"
-#include "pgmspace.h"
 #include "Bitmap.h"
 #include "XBitmap.h"
 #include "GrayscaleBitmap.h"
