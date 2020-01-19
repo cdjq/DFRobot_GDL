@@ -1,6 +1,7 @@
 /*!
- * @file UI_gesture.ino
- * @brief 在屏幕指定区域可以识别到用户所使用的手势，手势的名称会显示到文本框内
+ * @file UI_contal.ino
+ * @brief 在屏幕上创建一个开关，文本框和滑条控件，用户可以这些控件的参数，也可以使用默认的参数
+ * @n 当用户使用控件时，会在文本框显示你当前的操作
  * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
  * @n 需要文本框显示时，需要点击文本框以使光标移到文本框内
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
@@ -51,11 +52,12 @@ DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS);
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-//DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
-DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+
 
 /**
  * @brief 构造函数
@@ -66,43 +68,61 @@ DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST
  */
 DFRobot_UI ui(&screen, &touch,/*width=*/240,/*height=*/320);
 
-//声明文本框
-DFRobot_UI::sObject_t *tb;
 
+DFRobot_UI::sObject_t * tb;
+
+
+//滑条控件的回调函数
+void changeColor(void* value) {
+	uint16_t *value1 = (uint16_t*)value;
+  char str[3];
+  char text[30] = {0};
+  itoa((int)*value1, str, 10);
+  memcpy(text, "slider's value is ", 19);
+  memcpy(text + 19, "\0", 1);
+  memcpy(text + 18, str, 3);
+ui.setText(tb,text);
+}
+
+//开关控件的回调函数
+void swCallBack(void *state) {
+  uint8_t *state1 = (uint8_t*)state;
+  Serial.println(*state1);
+  if (*state1 == 0) {
+    ui.setText(tb,"you have turn off the Switch!");
+  }
+  else {
+    ui.setText(tb,"you have turn on the Switch!");
+  }
+}
 void setup()
 {
-  
+
   Serial.begin(9600);
   ui.begin();
   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
+
+
+  //初始化滑条控件，对滑条的参数进行初始化赋值
+  DFRobot_UI::sObject_t *slider = ui.creatSlider();
+  slider->setCallBack(slider,changeColor);
+  //在指定位置绘制滑条
+  ui.draw(slider,/*x = */40,/*y = */120);
+  
+  DFRobot_UI::sObject_t *sw = ui.creatSwitch();
+  sw->setCallBack(sw,swCallBack);
+  //在指定位置绘制开关
+  ui.draw(sw,/*x = */40,/*y = */200,/*width=*/55,/*height=*/20);
   
   //创建一个文本框控件
   tb = ui.creatText();
   //在屏幕上创建一个文本框控件，根据自定义或初始化的参数绘制文本框
   ui.draw(tb);
-  /**
-   * @brief 设置触摸的手势识别区域
-   */
-  ui.setGestureArea(/*x=*/screen.width()/2-75,/*y=*/100,/*width=*/150,/*height=*/150);
 }
 
 
 void loop()
 {
-   //刷新
-   ui.refresh();
-    // getGestures()： 获取手势
-    switch(ui.getGestures()){
-      //setText：使文本框显示字符串
-      case ui.UPGLIDE : ui.setText(tb,"upwards slide"); break;
-      case ui.DOWNGLIDE : ui.setText(tb,"down slide"); break;
-      case ui.LEFTGLIDE : ui.setText(tb,"left slide"); break;
-      case ui.RIGHTGLIDE : ui.setText(tb,"right slide"); break;
-      case ui.LONGPRESSDE : ui.setText(tb,"long press"); break;
-      case ui.SINGLECLICK : ui.setText(tb,"click"); break;
-      case ui.DOUBLECLICK : ui.setText(tb,"double click"); break;
-      default  :  break;
-      }
-
+  ui.refresh();
 }

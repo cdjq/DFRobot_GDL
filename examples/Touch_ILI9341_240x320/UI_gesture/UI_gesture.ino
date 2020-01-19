@@ -1,10 +1,8 @@
 /*!
- * @file UI_keypad.ino
- * @brief 在屏幕上创建一个数字键盘控件
- * @n 用户可以点击键盘上面的数字然后会看到输出的结果显示在上面的文本框里面，在输入时需要点击
- * @n 文本框确保文本框被选中
+ * @file UI_gesture.ino
+ * @brief 在屏幕指定区域可以识别到用户所使用的手势，手势的名称会显示到文本框内
  * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
- *
+ * @n 需要文本框显示时，需要点击文本框以使光标移到文本框内
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -13,6 +11,7 @@
  * @get from https://www.dfrobot.com
  * @url https://github.com/DFRobot/DFRobot_GDL/src/DFRpbot_UI
 */
+
 
 #include "DFRobot_UI.h"
 #include "Arduino.h"
@@ -52,8 +51,8 @@ DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS);
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-//DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
-DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
@@ -67,34 +66,43 @@ DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST
  */
 DFRobot_UI ui(&screen, &touch,/*width=*/240,/*height=*/320);
 
-/*!
-  posx：数字键盘在x轴的坐标
-  posy：数字键盘在y轴的坐标
-  width：数字键盘的宽度
-  height：数字键盘的高度
-  mode;：文数字键盘的模式0.带有文本框,1.不带文本框，数字输出的位置由自己指定
-  btn[12]：数字键盘里面的按钮数据
-  callBack：数字键盘的回调函数
-  textBox：数字键盘的文本框数据
-*/
-DFRobot_UI::sKeyPad_t kb;
+//声明文本框
+DFRobot_UI::sObject_t *tb;
+
 void setup()
 {
-
+  
   Serial.begin(9600);
-
   ui.begin();
   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
-  ui.setTheme(DFRobot_UI::CLASSIC);
+  ui.setTheme(DFRobot_UI::MODERN);
   
-   //创建一个数字键盘
-  DFRobot_UI::sObject_t *kp = ui.creatKeyPad();
-   ui.draw(kp);
+  //创建一个文本框控件
+  tb = ui.creatText();
+  //在屏幕上创建一个文本框控件，根据自定义或初始化的参数绘制文本框
+  ui.draw(tb);
+  /**
+   * @brief 设置触摸的手势识别区域
+   */
+  ui.setGestureArea(/*x=*/screen.width()/2-75,/*y=*/100,/*width=*/150,/*height=*/150);
 }
+
 
 void loop()
 {
-  // 刷新
-  ui.refresh();
+   //刷新
+   ui.refresh();
+    // getGestures()： 获取手势
+    switch(ui.getGestures()){
+      //setText：使文本框显示字符串
+      case ui.UPGLIDE : ui.setText(tb,"upwards slide"); break;
+      case ui.DOWNGLIDE : ui.setText(tb,"down slide"); break;
+      case ui.LEFTGLIDE : ui.setText(tb,"left slide"); break;
+      case ui.RIGHTGLIDE : ui.setText(tb,"right slide"); break;
+      case ui.LONGPRESSDE : ui.setText(tb,"long press"); break;
+      case ui.SINGLECLICK : ui.setText(tb,"click"); break;
+      case ui.DOUBLECLICK : ui.setText(tb,"double click"); break;
+      default  :  break;
+      }
 
 }
