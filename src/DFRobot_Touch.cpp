@@ -59,7 +59,7 @@ DFRobot_Touch_GTXXXX::DFRobot_Touch_GTXXXX(uint8_t addr, uint8_t rst, uint8_t ir
 DFRobot_Touch_GTXXXX::~DFRobot_Touch_GTXXXX(){
   
 }
-void DFRobot_Touch_GTXXXX::begin(){
+void DFRobot_Touch_GTXXXX::begin(uint32_t freq){
   initTouch();
   char temp[4]={0};//获取芯片id
   uint16_t sizeReg = 0;
@@ -154,7 +154,7 @@ String DFRobot_Touch_XPT2046::scan(){
      x = x;
      y = 320 - y;
     }
-    delay(10);
+    //delay(10);
     s += String(1) + "," + String(x) + "," + String(y) + "," + String(10) + ","+ String(10) + " ";
     return s;
 }

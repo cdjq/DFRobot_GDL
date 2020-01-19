@@ -15,6 +15,7 @@
 
 #include "Arduino.h"
 #include "DFRobot_GDL.h"
+#include "DFRobot_Touch.h"
 #if defined (__AVR__)
 #define TOUCHPOINTS   1
 #else
@@ -40,7 +41,7 @@
 #define ORANGE_RGB565       0xFD20
 #define GREENYELLOW_RGB565  0xAFE5
 #define DCYAN_RGB565        0x03EF
-
+//class DFRobot_UI;
 
 class DFRobot_UI
 {
@@ -52,35 +53,57 @@ public:
    * @param value 进度条的值
    * @n 回调函数里面发生的事件，用户需自定义
    */
-  typedef void sliderCallback(uint16_t value);
+  typedef void sliderCallback(void* value);
   
   /**
    * @brief tableview的回调函数
    * @param highLightPage 高亮的页的页数
    * @n 回调函数里面发生的事件，用户需自定义
    */
-  typedef void tableViewCallback(uint8_t highLightPage);
+  typedef void tableViewCallback(void *highLightPage);
   
   /**
    * @brief 开关的回调函数，当开关的状态发生改变时，会进入此回调函数
    * @param state 进度条的值
    * @n 回调函数里面发生的事件，用户需自定义
    */
-  typedef void switchCallback(uint8_t state);
+  typedef void switchCallback(void *state);
   
   /**
    * @brief 按钮的回调函数，当按钮被按下，会进入此回调函数
    * @param text 按钮的名字
    * @n 回调函数里面发生的事件，用户需自定义
    */
-  typedef void buttonCallback(char* text);
+  typedef void buttonCallback(void * btn);
   
   /**
    * @brief 进度条的回调函数
    * @n 引发进度条发生改变的事件应该写在里面
    */
-  typedef void barCallback();
-  typedef void keyPadCallback();
+  typedef void barCallback(void *obj);
+  
+  /**
+   * @brief 数字键盘回调函数类型
+   * @param kp 控件私有数据的地址
+   */  
+  typedef void keyPadCallback(void *kp);
+  
+  /**
+   * @brief 控件事件处理函数函数类型
+   */
+  typedef void(DFRobot_UI::*eventHanding)(void *obj);
+  
+  /**
+   * @brief 控件绘制函数类型
+   */
+  typedef void(DFRobot_UI::*drawingControl)(void *obj);
+  
+  /**
+   * @brief 设置控件的回调函数类型
+   * @param obj 控件的地址
+   * @n用户自定义的回调函数
+   */
+  typedef void setCbFun(void *obj,buttonCallback *callBack);
   /*!
     文本框的状态
   */
@@ -90,7 +113,7 @@ public:
     ADDCHAR,/**<向文本框添加一个字符.>**/
     NOCHANGE,/**<无改变.>**/
     CLEARACHAR,/**<删除文本框内容的最后一个字符.>**/
-  } sTextState_t;
+  } eTextState_t;
   
   /*!
     触摸点的数据
@@ -107,12 +130,6 @@ public:
     开关控件的参数 sSwitch_t类型
   */
   typedef struct {
-    uint16_t posx; /**<开关在x轴的坐标>**/
-    uint16_t posy;/**<开关在y轴的坐标>**/
-    uint16_t  width ;/**<开关的宽度>**/
-    uint16_t  height ;/**<开关的高度>**/
-    uint16_t fgColor;/**<开关的前景色>**/
-    uint16_t bgColor;/**<开关的背景色>**/
     bool change;/**<开关是否改变的标志>**/
     uint8_t  laststate;/**<开关的上一次的状态>**/
     uint8_t  state;/**<开关的状态(on / off)>**/
@@ -123,14 +140,8 @@ public:
     sSlider_t类型的结构体 ,用来存储开关控件的参数
   */
   typedef struct {
-    uint16_t posx;/**<滑条在x轴的坐标>**/
-    uint16_t posy;/**<滑条在y轴的坐标>**/
     uint16_t sliderHeight;/**<滑块的高度>**/
     uint16_t sliderWidth;/**<滑块的宽度>**/
-    uint16_t fgColor;/**<前景颜色>**/
-    uint16_t bgColor;/**<背景颜色>**/
-    uint16_t  width;/**<宽度>**/
-    uint16_t  height ;/**<高度>**/
     uint16_t range;/**<范围>**/
     uint16_t  lastsliderPos;/**<滑块上一次的位置(y坐标)>**/
     uint16_t  sliderPos;/**<滑块的位置>**/
@@ -140,15 +151,9 @@ public:
   } sSlider_t;
   
   /*!
-    结构体，用来存储进度条控件的参数
+    结构体，用来存储进度条控件的私有参数
   */
   typedef struct{
-    uint16_t posx;/**<进度条在x轴的坐标>**/
-    uint16_t posy;/**<进度条在y轴的坐标>**/
-    uint16_t width;/**<进度条的宽度>**/
-    uint16_t height;/**<进度条的高度>**/
-    uint16_t fgColor;/**<进度条前景颜色>**/
-    uint16_t bgColor;/**<进度条背景颜色>**/
     uint16_t sliderPos;/**<进度条的进度的x坐标>**/
     uint16_t color;
     uint8_t mode;  /**<可以选择不同类型的进度条>**/
@@ -158,7 +163,7 @@ public:
   } sBar_t ;
   
   /*!
-    结构体类型，用来存储按钮控件的参数
+    结构体类型，用来存储按钮控件的私有参数
   */
   typedef struct {
     uint16_t posx;/**<按钮在x轴的坐标>**/
@@ -182,17 +187,10 @@ public:
   } eTheme_t;
 
   /*!
-    结构体类型，用来存储文本框控件的参数
+    结构体类型，用来存储文本框控件的私有参数
   */
   typedef struct {
-    uint16_t posx;/**<文本框在x轴的坐标>**/
-    uint16_t posy;/**<文本框在y轴的坐标>**/
-    uint16_t  width;/**<文本框的宽度>**/
-    uint16_t  height;/**<文本框的高度>**/
-    uint16_t fgColor;/**<文本框内字体的前景的颜色>**/
-    uint16_t bgColor;/**<文本框内字体的背景颜色>**/
-    uint8_t fontSize;/**<文本框内字体的大小>**/
-    sTextState_t state;/**<文本框的状态>**/
+    eTextState_t state;/**<文本框的状态>**/
     char cache ;/**<文本框添加一个字符的缓存>**/
     char  text[100] ;/**<文本框内容>**/
     uint16_t cursorx;/**<文本框光标在x轴的坐标>**/
@@ -201,7 +199,7 @@ public:
   } sTextBox_t;
   
   /*!
-    结构体类型，用来存储tableview控件的参数
+    结构体类型，用来存储tableview控件的私有参数
   */
   typedef struct {
     uint16_t offset;/**<table间的间距>**/
@@ -212,15 +210,11 @@ public:
   } sTableview_t;
 
   typedef struct {
-    uint16_t posx; /**<数字键盘在x轴的坐标>**/
-    uint16_t posy;/**<数字键盘在y轴的坐标>**/
-    uint16_t width;/**<数字键盘的宽度>**/
-    uint16_t height;/**<数字键盘的高度>**/
     uint8_t mode;/**<文数字键盘的模式0.带有文本框,1.不带文本框，数字输出的位置由自己指定>**/
-                 
+    bool text;
     sButton_t btn[12];/**<数字键盘里面的按钮数据>**/
     keyPadCallback *callBack;/**<数字键盘的回调函数>**/
-    sTextBox_t *textBox;/**<数字键盘的文本框数据>**/
+    void *textBox;/**<数字键盘的文本框数据>**/
   } sKeyPad_t;
   typedef enum {
     CENTER,
@@ -242,6 +236,22 @@ public:
     NONE,/**<没有识别到有效手势>**/
   } eGestures_t;
   
+  struct object{
+    uint16_t posx;/**<对象在x轴的坐标>**/
+    uint16_t posy;/**<对象在y轴的坐标>**/
+    uint16_t  width;/**<对象的宽度>**/
+    uint16_t  height;/**<对象的高度>**/
+    uint16_t fgColor;/**<对象字体的前景的颜色>**/
+    uint16_t bgColor;/**<对象字体的背景颜色>**/
+    uint8_t fontSize;/**<控件字体元素的大小>**/
+    
+    drawingControl draw; /**<绘制控件的函数>**/
+    setCbFun *setCallBack;/**<设置控件回调函数>**/
+    struct object * next;/**<链表下一个结构体的头指针>**/
+    void * privateData;/**<不同控件的不同参数>**/
+    eventHanding event;/**<控件的事件处理函数>**/
+  };
+  typedef struct object sObject_t;
 protected:
   scanF * scan;
 public:
@@ -249,51 +259,24 @@ public:
   /**
    * @brief 构造函数
    * @param gdl 
+   * @param touch 触摸对象
    * @param width 屏幕的宽度.
    * @param height 屏幕的高度.
    */
-  DFRobot_UI(DFRobot_GDL *gdl, uint16_t width, uint16_t height);
+  DFRobot_UI(DFRobot_GDL *gdl,DFRobot_Touch *touch, uint16_t width, uint16_t height);
   
   /**
    * @brief 初始化函数,初始化UI使用到的一些参数
    */
   void begin();
-  
-  /**
-   * @brief 初始化按钮控件的参数
-   * @param bu sButton_t类型的结构体数据，存储按钮参数的结构体
-   * @n 若用户徐自定义按钮的参数，如长度和宽度等可在此函数后自定义这些数据
-   */
-  void initButton(sButton_t *bu);
-
-  /**
-   * @brief 在屏幕上创建一个按钮控件
-   * @param bu sButton_t类型的结构体数据，里面包含了按钮的位置，长度和宽度等参数
-   * @n 用户可以自定义这些数据
-   */
-  void creatButton(sButton_t *bu);
-  
-  /**
-   * @brief 刷新按钮，根据所发生的事件来刷新按钮
-   * @param bu sButton_t类型的结构体数据，里面包含了按钮的位置，长度和宽度等参数
-   * @n 用户需要自定义这些数据
-   */
-  void refreshButton(sButton_t *bu);
-  
   /**
    * @brief 设置UI的主题
-   * @param the sTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
+   * @param the eTheme_t类型数据，包含了了两种主题，主要是颜色和按钮验收的不同
    * @n   the 的参数 ：THEME1,
                      ：THEME2,
    */
   void setTheme(eTheme_t the);
-  
-  /**
-   * @brief 注册一个触摸函数
-   * @param fuc 用户自定义的一个函数的指针，类型须于scanF保持一致
-   */
-  void setTouchFunction(scanF* fuc);
-  
+
   /**
    * @brief 绘制字符串
    * @param x 所需绘制字符串在屏幕上的x坐标
@@ -309,136 +292,42 @@ public:
   void drawString(int16_t x, int16_t y, char  *c, uint16_t color, uint16_t bg, uint8_t size, boolean mode);
   
   /**
-   * @brief 刷新滑条
-   * @param slider sSlider_t，里面包含了滑条的位置，长度和宽度等参数
+   * @brief 刷新屏幕
    */
-  void refreshSliser(sSlider_t *slider);
+  void refresh();
   
   /**
-   * @brief 初始化滑条控件
-   * @param slider 用户创建的存储滑条参数的结构体变量
-   * @n 用户如果需要可以自定义这些参数
+   * @brief 改变Tableview的高亮页
+   * @param tb Tableview对象地址
+   * @param page 高亮页
    */
-  void initSlider(sSlider_t *slider);
-  
-  /**
-   * @brief 在屏幕上创建一个滑条
-   * @param slider sSlider_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
-  void creatSlider(sSlider_t *slider);
-  
-  /**
-   * @brief 初始化进度条控件
-   * @param bar sSlider_t类型的变量，用户创建的存储进度条参数的结构体变量
-   * @n 用户如果需要可以自定义这些参数
-   */
-  void initBar(sBar_t *bar);
-  
-  /**
-   * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
-   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
-   */
-  void creatBar(sBar_t *bar);
-  
-  /**
-   * @brief 刷新进度条
-   * @param bar sBar_t，里面包含了进度条的位置，长度和宽度等参数
-   */
-  void refreshBar(sBar_t *bar);
-  
-  /**
-   * @brief 在屏幕上创建一个tableview控件
-   * @param tv sTableview_t，里面包含了tableview的页数，内容等参数
-   * @n 用户需要自定义这些数据
-   */
-  void creatTableview(sTableview_t *tv);
-  
-  /**
-   * @brief 刷新tableview
-   * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
-   */
-  void refreshTableview(sTableview_t *tv);
-  
-  /**
-   * @brief 改变tableview的高亮页
-   * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
-   * @param page 需要高亮的页数
-   */
-  void changeTableview(sTableview_t *tv,uint8_t page);
-  
-  /**
-   * @brief 初始化开关控件,对开关的某些参数进行初始化
-   * @param sw sSwitch_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
-  void initSwitch(sSwitch_t *sw);
-  
-  /**
-   * @brief 创建一个开关控件
-   * @param sw sSwitch_t 类型的结构体
-   */
-  void creatSwitch(sSwitch_t *sw);
-  
-  /**
-   * @brief 刷新开关控件
-   * @param sw sSwitch_t，里面包含了开关的位置，长度和宽度等参数
-   * @n 当某事件产生，会进入开关的回调函数
-   */
-  void refreshSwitch(sSwitch_t *sw);
-
-  /**
-   * @brief 初始化文本框控件,对文本框的某些参数进行初始化
-   * @param tb sTextBox_t 类型的结构体
-   * @n 里面的参数配置都是默认的，如果用户需要自定义可以直接修改结构体里面的参数
-   */
-  void initText(sTextBox_t *tb);
-  /**
-   * @brief 创建一个文本框，
-   * @param tb sTextBox_t 类型的结构体，
-   */
-  void creatText(sTextBox_t *tb);
-  
-  /**
-   * @brief 刷新文本框
-   * @param te sTextBox_t，里面包含了开关的位置，长度和宽度等参数
-   * @n 可以对文本框的操作有：
-     @n                    1.让文本框显示字符串
-     @n                    2.在文本框添加一个字符
-     @n                    2.在文本框删除一个字符
-   */
-  void refreshTextBox(sTextBox_t *te);
+  void changeTableview(sObject_t* obj,uint8_t page);
   
   /**
    * @brief 让文本框显示字符串，
-   * @param tb sTextBox_t 类型的结构体
+   * @param tb 文本框对象地址
    * @param text 需要让文本框显示的字符
    */
-  void setText(sTextBox_t *te,char * text);
+  void setText( void *te,char *txt);
   
   /**
    * @brief 在文本框删除一个字符
    * @param te sTextBox_t 类型的结构体
    */
-  void textDeleteChar(sTextBox_t *te);
+  void textDeleteChar(void *te);
   
   /**
    * @brief 在文本框添加一个字符
-   * @param te sTextBox_t 类型的结构体
+   * @param te  需要传进文本框的类型的结构体变量
    * @param txt 需要添加的字符
    */
-  void textAddChar(sTextBox_t *te,char txt);
+  void textAddChar(void *te,char txt);
   
   /**
    * @brief 使文本框停止输入
    */
   void endInput();
-  /**
-   * @brief 更新触摸点的数据
-   */
-  void updateCoordinate();
-  
+
   /**
    * @brief 设置触摸的手势识别区域
    * @param x 识别区域的开始位置的x坐标
@@ -463,40 +352,189 @@ public:
   eGestures_t getGestures();
   
   /**
+   * @brief 在屏幕上创建一个数字键盘
+   * @return 数字键盘对象的地址
+   */
+  sObject_t *creatKeyPad();
+  
+  /**
+   * @brief 设置数字键盘的模式 
+   * @param obj 键盘对象的地址
+   * @param mode 数字键盘的模式
+     @n  0：自带文本框
+         1：需要自行指定文本框 
+   */    
+  void setKeyPadMode(sObject_t * obj,uint8_t mode);
+  void setKeyPadText(sObject_t * kp,sObject_t * text);
+  /**
+   * @brief 绘制控件
+   * @param posx 控件的x坐标
+   * @param posy 控件的y坐标
+   * @param width 控件的宽度
+   * @param height 控件的高度
+   */
+  void draw(sObject_t* obj,uint16_t posx = 0,uint16_t posy = 0,uint16_t width = 0,uint16_t height = 0);
+  
+  /**
+   * @brief 在屏幕上创建一个按钮控件
+   * @return 按钮对象的地址
+   */
+  sObject_t *creatButton();
+  /**
+   * @brief 设置按钮的名字
+   * @param obj 按钮对象的地址
+   * @param c 按钮名字
+   */ 
+  void setButtonText(sObject_t* obj,char * c);
+  /**
+   * @brief 在屏幕上创建一个文本框控件
+   * @return 文本框对象的地址
+   */
+  sObject_t *creatText();
+  /**
+   * @brief 获取文本框的状态
+   * @param obj 文本框对象的地址
+   * @return true：表示文本框被选中
+   *         false：没被选中
+   */
+  bool getTextState(sObject_t* obj);
+  /**
+   * @brief 在屏幕上创建一个滑条控件
+   * @return 滑条对象的地址
+   */
+  sObject_t *creatSlider();
+  /**
+   * @brief 在屏幕上创建一个开关控件
+   * @return 开关对象的地址
+   */
+  sObject_t *creatSwitch();
+  
+  /**
+   * @brief 设置进度条的进度值
+   * @param obj 进度条对象的地址
+   * @param c 进度值
+   */ 
+  void setBarValue(sObject_t * obj,uint8_t value);
+  
+  /**
+   * @brief 在屏幕上创建一个tableview控件
+   * @return tableview对象的地址
+   */
+  sObject_t *creatTableview();
+  
+  /**
+   * @brief 设置tableview每页的名字
+   * @param obj tableview对象的地址
+   * @param pageNum tableview的页数
+   * @param c1 第一页的名字
+   * @param c2 第二页的名字
+   * @param c3 第三页的名字
+   * @param c4 第四页的名字
+   * @n 最大只能是四页
+   */
+  void setTableviewName(sObject_t *obj,uint16_t pageNum,char * c1 = NULL,char * c2 = NULL,char * c3= NULL,char * c4= NULL);
+  
+  /**
+   * @brief 在屏幕上创建一个进度条
+   * @param bar sBar_t类型的数据
+   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
+   */
+  sObject_t *creatBar();
+  
+  /**
+   * @brief 设置进度条的样式
+   * @param obj 进度条的结构体变量的地址
+   * @param mode 进度条的样式，1:长条形，2：圆形
+   */
+  void setBarStyle(sObject_t *obj,uint8_t mode);
+  
+  uint16_t bgColor; //屏幕背景颜色
+private:
+  /**
+   * @brief 刷新进度条
+   * @param bar sBar_t，里面包含了进度条的位置，长度和宽度等参数
+   */
+  void barEvent(void *obj);
+  /**
+   * @brief 刷新tableview
+   * @param sTableview_t sSlider_t，里面包含了滑条的位置，长度和宽度等参数
+   */
+  void tableviewEvent(void *obj);
+  /**
+   * @brief 在屏幕上创建一个tableview控件
+   * @param tv sTableview_t，里面包含了tableview的页数，内容等参数
+   * @n 用户需要自定义这些数据
+   */
+  void drawBar(void *obj);
+  void sliderEvent(void *obj);
+  void buttonEvent(void *obj);
+  /**
    * @brief 创建一个数字键盘控件
    * @param te sKeyPad_t 类型的结构体
    */
-  void creatKeyBoard(sKeyPad_t *kb);
+  void drawKeyBoard(void *obj);
   
   /**
    * @brief 刷新数字键盘
    * @param te sKeyPad_t，里面包含了数字键盘的位置，长度和宽度等参数
    */
-  void refreshKeyBoard(sKeyPad_t *kb);
-  uint16_t bgColor;
-private:
+  void KeyBoardEvent(void *obj);
+  /**
+   * @brief 绘制文本框
+   * @param obj 文本框对象的地址
+   */
+  void drawText(void *obj);
+  /**
+   * @brief 更新触摸点的数据
+   */
+  void updateCoordinate();
+  
+  /**
+   * @brief 刷新文本框
+   * @param te 里面包含了开关的位置，长度和宽度等参数
+   * @n 可以对文本框的操作有：
+     @n                    1.让文本框显示字符串
+     @n                    2.在文本框添加一个字符
+     @n                    2.在文本框删除一个字符
+   */
+  void refreshTextBox(void *obj);
+  /**
+   * @brief 刷新滑条
+   * @param slider sSlider_t，里面包含了滑条的位置，长度和宽度等参数
+   */
+  void refreshSliser(void *obj);
+  
+  /**
+   * @brief 在屏幕上创建一个滑条
+   * @param slider sSlider_t类型的数据
+   * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
+   */
+  void drawSlider(void *obj);
+  void drawSwitch(void *obj);
+  void switchEvent(void *obj);
+  void drawTableview(void *obj);
   uint8_t pointNum(String str);
   uint8_t stringToPoint(String str, sPoint_t *point);
-  void drawClickButton(sButton_t *bu);
-  void drawButtonString(sButton_t *bu , eLocation_t x, eLocation_t y, char * c);
-  void drawButton(sButton_t *bu);
-  void drawCursor(sTextBox_t *text, uint8_t offset_x, uint8_t offset_y, bool state);
-  bool judgePress(sButton_t *bu, uint16_t x, uint16_t y);
-  bool buttonPressed(sButton_t *bu , uint16_t touch_x, uint16_t touch_y);
-  bool buttonRelease(sButton_t *bu, uint16_t touch_x, uint16_t touch_y);
+  void drawClickButton(sObject_t *obj,char *text,bool click);
+  void drawButtonString(sObject_t *obj, eLocation_t x, eLocation_t y, char * c,bool click);
+  void drawkpString(sButton_t *kp, eLocation_t x, eLocation_t y, char * c);
+  void drawButton(void *obj);
+  void drawCursor(sObject_t* obj, uint8_t offset_x, uint8_t offset_y, bool state);
+  bool judgePress(sObject_t *obj, uint16_t x, uint16_t y);
+  bool judgeKpPress(sButton_t*obj, uint16_t x, uint16_t y);
   bool release(uint16_t x,uint16_t y);
   bool press(uint16_t x,uint16_t y);
   bool focus(uint16_t x,uint16_t y);
   sPoint_t * position;
   DFRobot_GDL *_gdl;
+  DFRobot_Touch *_touch;
   uint8_t number;
   long long timer;
   long long timer1;
   eTheme_t theme;
-  sTextBox_t te1;
+  sObject_t *te1;
+  sObject_t head;
   bool cursorState;
-  uint16_t cursorx;
-  uint16_t cursory;
   uint16_t  cursorPosx ,cursorPosy;
   uint16_t lcdWidth;
   uint16_t lcdHeight;

@@ -57,6 +57,7 @@ void DFRobot_GDL::initDisplay(){
        sendCommand(cmd, addr, argsNum);
        addr += argsNum;
   }
+  setRotation(0);
 }
 
 void DFRobot_GDL::drawPixel(int16_t x, int16_t y, uint16_t color){
@@ -80,42 +81,57 @@ void DFRobot_GDL::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t 
 }
 void DFRobot_GDL::setRotation(uint8_t r){
   if(madctlReg.madctl == 0) return;
-  rotation = r & 3;
-  uint8_t temp = madctlReg.args.value;
-  switch(rotation){
-      case 0:
-		  _width = WIDTH;
-          _height = HEIGHT;
-          _xStart = 0;
-          _yStart = 0;
-          break;
-      case 1:
-          madctlReg.args.mv = 1;
-          madctlReg.args.mx = 1;
-          _width = HEIGHT;
-          _height = WIDTH;
-          _xStart = 0;
-          _yStart = 0;
-          break;
-      case 2:
-          madctlReg.args.my = 1;
-          madctlReg.args.mx = 1;
-          _width = WIDTH;
-          _height = HEIGHT;
-          _xStart = 0;
-          _yStart = _icHeight - HEIGHT;
-          break;
-      default:
-          madctlReg.args.mv = 1;
-          madctlReg.args.my = 1;
-          _width = HEIGHT;
-          _height = WIDTH;
-          _xStart = _icHeight - HEIGHT;
-          _yStart = 0;
-          break;
+  if(madctlReg.madctl == 0xA0){
+      rotation = r&1;
+      switch(rotation){
+          case 0:
+                sendCommand(madctlReg.madctl);
+                sendCommand(madctlReg.args.value);
+                break;
+          case 1:
+                sendCommand(madctlReg.madctl | 1);
+                sendCommand(madctlReg.args.value | 8);
+                break;
+      }
+  }else{
+        rotation = r&3;
+        uint8_t temp = madctlReg.args.value;
+        switch(rotation){
+            case 0:
+                _width = WIDTH;
+                _height = HEIGHT;
+                _xStart = 0;
+                _yStart = 0;
+                break;
+            case 1:
+                madctlReg.args.mv = 1;
+                madctlReg.args.mx = 1;
+                _width = HEIGHT;
+                _height = WIDTH;
+                _xStart = 0;
+                _yStart = 0;
+                break;
+            case 2:
+                madctlReg.args.my = 1;
+                madctlReg.args.mx = 1;
+                _width = WIDTH;
+                _height = HEIGHT;
+                _xStart = 0;
+                _yStart = _icHeight - HEIGHT;
+                break;
+            default:
+                madctlReg.args.mv = 1;
+                madctlReg.args.my = 1;
+                _width = HEIGHT;
+                _height = WIDTH;
+                _xStart = _icHeight - HEIGHT;
+                _yStart = 0;
+                break;
+        }
+        sendCommand(madctlReg.madctl, &madctlReg.args.value, 1,true);
+        madctlReg.args.value = temp;
   }
-  sendCommand(madctlReg.madctl, &madctlReg.args.value, 1,true);
-  madctlReg.args.value = temp;
+
 }
 void DFRobot_GDL::invertDisplay(bool i){
   if(invertOnCmd == invertOffCmd) return;
@@ -184,6 +200,10 @@ uint16_t DFRobot_GDL::rgb888ToRGB565(uint8_t r, uint8_t g, uint8_t b){
   return color;
 }
 
+void DFRobot_GDL::update(){
+  if(_lcd.buffer == NULL) return;
+  sendBuf(_lcd.buffer, (uint32_t)(_width*_height/8));
+}
 
 void DFRobot_GDL::sendCommand(uint8_t cmd){
   _if.dev->talk(&_if, IF_COM_WRITE_CMD, &cmd, 1);

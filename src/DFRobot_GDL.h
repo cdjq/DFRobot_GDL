@@ -100,7 +100,7 @@ public:
    */
   DFRobot_GDL(sGdlIFDev_t *dev, int16_t w, int16_t h, uint8_t addr, uint8_t rst, uint8_t bl);
   ~DFRobot_GDL();
-
+  virtual void begin(uint32_t freq = 0){};
   /**
    * @brief 画像素点函数
    * @param x  像素点的x坐标位置
@@ -207,6 +207,10 @@ public:
    * @param bg  背景色，文本底色
    */
   void drawCharBitmaps(uint16_t x, uint16_t y, gdl_Font_t *gdlFont, uint16_t fg, uint16_t bg);
+  /**
+   * @brief 使用oled屏时，操作完成后，必须调用update函数才会生效
+   */
+  void update();
   
 protected:
   /**
@@ -309,6 +313,7 @@ protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 
+
 /**
  * @brief 1.54寸SPI彩屏
  * 驱动IC: ST7789
@@ -332,13 +337,21 @@ public:
 protected:
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
-class DFRobot_ILI9488_480x320_HW_SPI: public DFRobot_GDL{
+class DFRobot_ILI9488_320x480_HW_SPI: public DFRobot_GDL{
 public:
-  DFRobot_ILI9488_480x320_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
-  ~DFRobot_ILI9488_480x320_HW_SPI();
+  DFRobot_ILI9488_320x480_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
+  ~DFRobot_ILI9488_320x480_HW_SPI();
   void begin(uint32_t freq = 0);
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
+class DFRobot_ILI9341_240x320_HW_SPI: public DFRobot_GDL{
+public:
+  DFRobot_ILI9341_240x320_HW_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
+  ~DFRobot_ILI9341_240x320_HW_SPI();
+  void begin(uint32_t freq = 0);
+  void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+};
+
 /**
  * @brief 0.91寸oled屏（黑白）
  * 驱动IC: SSD1306
@@ -378,6 +391,13 @@ public:
   ~DFRobot_ST7789_240x320_DMA_SPI();
   void begin(uint32_t freq = 0);
 protected:
+  void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+};
+class DFRobot_ILI9488_320x480_DMA_SPI: public DFRobot_GDL{
+public:
+  DFRobot_ILI9488_320x480_DMA_SPI(uint8_t dc, uint8_t cs = GDL_PIN_NC, uint8_t rst = GDL_PIN_NC, uint8_t bl = GDL_PIN_NC);
+  ~DFRobot_ILI9488_320x480_DMA_SPI();
+  void begin(uint32_t freq = 0);
   void setDisplayArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 };
 #endif

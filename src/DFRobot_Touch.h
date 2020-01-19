@@ -77,6 +77,7 @@ public:
    * @brief 触摸初始化，包括接口初始化和配置初始化
    */
   void initTouch();
+  virtual void begin(uint32_t freq = 0)=0;
   /**
    * @brief 触摸配置函数
    * @param addr 配置数组
@@ -94,7 +95,7 @@ class DFRobot_Touch_GTXXXX: public DFRobot_Touch{
 public:
   DFRobot_Touch_GTXXXX(uint8_t addr = 0x5D, uint8_t rst = 255, uint8_t irq = 255);
   ~DFRobot_Touch_GTXXXX();
-  void begin();
+  void begin(uint32_t freq = 0);
   String scan();
 private:
   typedef struct{
@@ -111,7 +112,7 @@ private:
   String id;//GT911和GT5688都有id
 };
 
-class DFRobot_Touch_XPT2046:DFRobot_Touch{
+class DFRobot_Touch_XPT2046:public DFRobot_Touch{
 public:
   DFRobot_Touch_XPT2046(uint8_t cs, uint8_t rst = GDL_PIN_NC, uint8_t irq = GDL_PIN_NC);
   ~DFRobot_Touch_XPT2046();

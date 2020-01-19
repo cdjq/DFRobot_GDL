@@ -46,7 +46,8 @@ void DFRobot_IF::initInterface(){
 void DFRobot_IF::setFrequency(uint32_t freq){
   if(!freq) return;
   _if.freq = freq;
-  _if.dev->talk(&_if, IF_COM_SET_FREQUENCY, NULL, 0);
+  if(_if.isBegin == true)
+      _if.dev->talk(&_if, IF_COM_SET_FREQUENCY, NULL, 0);
 }
 
 void DFRobot_IF::initIFCommon(){

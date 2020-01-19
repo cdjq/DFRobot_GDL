@@ -14,31 +14,23 @@
 
 
 #include "DFRobot_UI.h"
-#include "Arduino.h"
-#include "DFRobot_GDL.h"
-#include "DFRobot_Touch.h"
-
-/*M0*/
+ #include "DFRobot_GDL.h"  
+ 
+/*M0*/ 
 #if defined ARDUINO_SAM_ZERO
-#define TFT_DC  7
-#define TFT_CS  5
-#define TFT_RST 6
-#define TFT_BL  9
-#define TOUCH_CS 2
+ #define TFT_RST 6
+
 /*ESP32 and ESP8266*/
 #elif defined(ESP32) || defined(ESP8266)
-#define TFT_DC  D2
-#define TFT_CS  D3
-#define TFT_RST D4
-#define TFT_BL  D5
-#define TOUCH_CS D6
+#define TFT_DC  D3
+#define TFT_CS  D4
+#define TFT_RST D5
+
 /*AVR系列主板*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
 #define TFT_RST 4
-#define TFT_BL  5
-#define TOUCH_CS 6
 #endif
 
 /**
@@ -48,105 +40,84 @@
  * @param rst  屏的复位引脚
  * @param bl  屏幕的背光引脚
  */
-DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
-//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST,/*bl=*/TFT_BL);
+//DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 
 /**
  * @brief 构造函数
  * @param gdl 屏幕对象
+ * @param touch 触摸对象
  * @param width 屏幕的宽度.
  * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, /*width=*/240,/*height=*/240);
+DFRobot_UI ui(&screen, NULL,/*width=*/240,/*height=*/240);
 
-//创建sBar_t类型的结构体对象bar1,bar2,bar3
-DFRobot_UI::sBar_t bar1,bar2,bar3;
 
-/**
- * @brief 进度条的回调函数
- * @n 引发进度条发生改变的事件应该写在里面
- */
-void barCallback1(){
+uint8_t value1 = 0;
+uint8_t value2 = 0;
+uint8_t value3 = 0;
+//进度条bar1的回调函数
+void barCallback1(void *obj){
+	DFRobot_UI::sObject_t *bar1 = (DFRobot_UI::sObject_t *)obj;
+    //自动让进度条值每次+1;
+   delay(50);
+    ui.setBarValue(bar1,value1);
+	if(value1 < 100) value1++;
+}
+//进度条bar2的回调函数
+void barCallback2(void *obj){
+    DFRobot_UI::sObject_t *bar2 = (DFRobot_UI::sObject_t *)obj;
     //自动让进度条值每次+1;
     delay(50);
-    bar1.value += 1;
+    ui.setBarValue(bar2,value2);
+	if(value2 < 100) value2++;
+	
 }
-
-void barCallback2(){
+//进度条bar3的回调函数
+void barCallback3(void *obj){
+	DFRobot_UI::sObject_t *bar3 = (DFRobot_UI::sObject_t *)obj;
     //自动让进度条值每次+1;
     delay(50);
-    bar2.value += 1;
-
+    ui.setBarValue(bar3,value3);
+	if(value3 < 100) value3++;
 }
-
-void barCallback3(){
-    //自动让进度条值每次+1;
-    delay(50);
-    bar3.value += 1;
-
-}
-
 void setup()
 {
   
-  Serial.begin(115200);
-  //初始化显示屏幕
-  screen.begin();
-   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
+  Serial.begin(9600);
+  // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
+  //ui初始化
   ui.begin();
-
-  /**
-   * drawString：绘制字符串
-   * @param x 所需绘制字符串在屏幕上的x坐标
-   * @param y 所需绘制字符串在屏幕上的x坐标
-   * @param c 字符数组的指针
-   * @param color 字体的颜色(RGB565)
-   * @param bg 字体背景的颜色(RGB565)
-   * @param size 字体的大小
-   * @param mode 字体显示模式
-   * @n mode  0 ： 正常显示
-   *          1 ： 颜色反转
-   */
-  ui.drawString(/*x=*/10,/*y=*/200,/*c=*/"Page of loading",/*color=*/WHITE_RGB565,/*bg=*/DARKGREY_RGB565,/*size=*/2,/*mode=*/0);
-
-  //初始化进度条1，会对进度条的参数进行初始化
-  ui.initBar(&bar1);
-  //用户自定义进度条参数
-  bar1.posx = 10;
-  bar1.posy = 40;
-  bar1.mode =0;
-  bar1.callBack = barCallback1;
-  //在屏幕上创建一个进度条，根据自定义或初始化的参数绘制进度条
-  ui.creatBar(&bar1);
+  //在屏幕上显示字符串
+  ui.drawString(/*x=*/10,/*y=*/200,"Page of loading",COLOR_RGB565_WHITE,COLOR_RGB565_DGRAY,/*fontsize =*/2,/*Invert=*/0);
+  //创建一个进度条控件
+  DFRobot_UI::sObject_t *bar1 = ui.creatBar();
+  /**用户自定义进度条参数*/
+  ui.setBarStyle(bar1,0);
+  bar1->setCallBack(bar1,barCallback1);
+  ui.draw(bar1,27,160);
   
-  //初始化进度条2，会对进度条的参数进行初始化
-  ui.initBar(&bar2);
-  //用户自定义进度条参数
-  bar2.posx = 50;
-  bar2.posy = 100;
-  bar2.mode =1;
-  bar2.callBack = barCallback2;
-  //在屏幕上创建一个进度条，根据自定义或初始化的参数绘制进度条
-  ui.creatBar(&bar2);
+  DFRobot_UI::sObject_t *bar2 = ui.creatBar();
+  /**用户自定义进度条参数*/
+  ui.setBarStyle(bar2,1);
+  bar2->setCallBack(bar2,barCallback2);
+  ui.draw(bar2,120,100);
 
-  //初始化进度条3，会对进度条的参数进行初始化
-  ui.initBar(&bar3);
-  //用户自定义进度条参数
-  bar3.posx = 10;
-  bar3.posy = 160;
-  bar3.mode =2;
-  bar3.callBack = barCallback3;
-  //在屏幕上创建一个进度条，，根据自定义或初始化的参数绘制进度条
-  ui.creatBar(&bar3);
+  DFRobot_UI::sObject_t *bar3 = ui.creatBar();
+  /**用户自定义进度条参数*/
+  bar3->fgColor=COLOR_RGB565_SKYBLUE;
+  ui.setBarStyle(bar3,2);
+  bar3->setCallBack(bar3,barCallback3);
+  ui.draw(bar3,33,10);
 }
 
 
 void loop()
 {
   //刷新进度条
-  ui.refreshBar(&bar1);
-  ui.refreshBar(&bar2);
-  ui.refreshBar(&bar3);
+  ui.refresh();
 }

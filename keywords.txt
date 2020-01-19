@@ -12,6 +12,9 @@ DFRobot_ST7735S_80x160_HW_SPI	KEYWORD1
 DFRobot_SSD1306_128x32_HW_IIC	KEYWORD1
 DFRobot_ST7789_240x240_DMA_SPI	KEYWORD1
 DFRobot_ST7735S_80x160_DMA_SPI	KEYWORD1
+DFRobot_ILI9341_240x320_HW_SPI	KEYWORD1
+DFRobot_ILI9488_320x480_HW_SPI	KEYWORD1
+DFRobot_ILI9488_320x480_DMA_SPI	KEYWORD1
 
 begin	KEYWORD2
 drawPixel	KEYWORD2
@@ -29,6 +32,7 @@ write	KEYWORD2
 utf8ToUnicode	KEYWORD2
 getUtf_8Bytes	KEYWORD2
 drawCharBitmaps	KEYWORD2
+update	KEYWORD2
 
 uMadctlArgs_t	LITERAL1
 sMadctlCmd_t	LITERAL1
@@ -42,6 +46,8 @@ gdl_Dev_ST7735S_R80x160_HW_SPI	LITERAL1
 gdl_Dev_ILI9488_R480x320_HW_SPI	LITERAL1
 gdl_Dev_ST7789_R240x240_DMA_SPI	LITERAL1
 gdl_Dev_ST7735S_R80x160_DMA_SPI	LITERAL1
+gdl_Dev_ILI9488_R320x480_HW_SPI	LITERAL1
+gdl_Dev_ILI9488_R320x480_DMA_SPI	LITERAL1
 
 #######################################
 # Touch
@@ -69,38 +75,41 @@ _pNum	LITERAL1
 DFRobot_UI	KEYWORD1
 
 begin	KEYWORD2
-initButton	KEYWORD2
 creatButton	KEYWORD2
-refreshButton	KEYWORD2
 setTheme	KEYWORD2
-setTouchFunction	KEYWORD2
 drawString	KEYWORD2
-refreshSliser	KEYWORD2
-initSlider	KEYWORD2
 creatSlider	KEYWORD2
-initBar	KEYWORD2
 creatBar	KEYWORD2
-refreshBar	KEYWORD2
 creatTableview	KEYWORD2
-refreshTableview	KEYWORD2
-initText	KEYWORD2
-initSwitch	KEYWORD2
 creatSwitch	KEYWORD2
-refreshSwitch	KEYWORD2
 creatText		KEYWORD2
-refreshTextBox		KEYWORD2
 setText	KEYWORD2
 textDeleteChar	KEYWORD2
 textAddChar	KEYWORD2
-updateCoordinate	KEYWORD2
 setGestureArea	KEYWORD2
 getGestures	KEYWORD2
-scan	KEYWORD2
-refreshKeyBoard	KEYWORD2
-creatKeyBoard	KEYWORD2
 endInput	KEYWORD2
 changeTableview	KEYWORD2
 
+KeyBoardEvent	KEYWORD2
+creatKeyPad	KEYWORD2
+setKeyPadMode	KEYWORD2
+refresh	KEYWORD2
+draw	KEYWORD2
+creatButton	KEYWORD2
+setButtonText	KEYWORD2
+creatText	KEYWORD2
+getTextState	KEYWORD2
+creatSlider	KEYWORD2
+creatSwitch	KEYWORD2
+setBarValue	KEYWORD2
+creatTableview	KEYWORD2
+setTableviewName	KEYWORD2
+creatBar	KEYWORD2
+setBarStyle	KEYWORD2
+
+setCallBack	KEYWORD2
+sObject_t	LITERAL1
 sTextState_t	LITERAL1
 sPoint_t	LITERAL1
 sSwitch_t	LITERAL1
@@ -182,7 +191,8 @@ COLOR_RGB565_MAGENTA	LITERAL1
 COLOR_RGB565_YELLOW	LITERAL1
 COLOR_RGB565_ORANGE	LITERAL1
 COLOR_RGB565_WHITE	LITERAL1
-
+COLOR_RGB565_PINK	LITERAL1
+COLOR_RGB565_SKYBLUE	LITERAL1
 
 #######################################
 # gfx

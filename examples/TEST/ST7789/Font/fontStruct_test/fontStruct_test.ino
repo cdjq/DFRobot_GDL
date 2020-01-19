@@ -18,7 +18,7 @@ void setup() {
   Serial.begin(115200);
   screen.begin();
   screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFonts(&SIMKAIFont48pt);
+  screen.setFont(&SIMKAIFont48pt);
   screen.setTextColor(COLOR_RGB565_RED);
   screen.print("你好，世界！");
   #ifdef ARDUINO_SAM_ZERO

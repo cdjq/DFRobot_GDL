@@ -159,7 +159,7 @@ uint8_t interfaceComHardwareIIC(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
           while(len){
               p->pro.iic->beginTransmission(p->pinList[IF_PIN_ADDR]);
               uint32_t n = 0;
-              if(p->dev->devName == DEV_TYPE_SCREEN)
+			  if(p->dev->devName == DEV_TYPE_SCREEN)
               {
                   (len > I2C_BUFFER_LENGTH - 1) ? n = I2C_BUFFER_LENGTH - 1 : n = len;
                   p->pro.iic->write(0x40);

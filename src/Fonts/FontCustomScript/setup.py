@@ -7,6 +7,7 @@ import math
 import os
 import codecs
 import copy
+import chardet
 
 def setup():
   if not os.path.exists('ttf'):
@@ -32,9 +33,15 @@ def setup():
 
 def readText():
   if os.path.exists('text.txt'):
-    fp = open('text.txt', 'r')
+    fp = open('text.txt', 'rb')
+    r = fp.read()
+    fp.close();
+    f_charInfo = chardet.detect(r)
+    fp = open('text.txt', 'r', encoding=f_charInfo['encoding'])
+    #print(f_charInfo)
     charList = fp.readlines()
     fp.close()
+    #charList = ["nihao"]
     return charList
 
 def getFontDict():

@@ -59,7 +59,7 @@
 #endif
 
 #if defined(ESP32)||defined(ESP8266)
-#define DEFAULT_SPI_FREQ  10000000//10M
+#define DEFAULT_SPI_FREQ  1000000//1M
 #else
 #define DEFAULT_SPI_FREQ  4000000L
 #endif

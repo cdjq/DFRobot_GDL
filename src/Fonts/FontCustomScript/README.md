@@ -8,6 +8,7 @@
 - **安装完毕后，需要用下列命令安装python第三方依赖包:** <br>
     - pip3 install numpy
     - pip install freetype-py 
+    - pip install chardet
 
 ## 生成自定义字体
 - **将TTF字体文件存放在ttf文件夹里，例如：SIMKAI.TTF（简体字 楷体）**

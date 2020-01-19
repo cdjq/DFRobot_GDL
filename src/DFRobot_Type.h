@@ -49,5 +49,9 @@
 #define COLOR_RGB565_YELLOW    0xFFE0   //  黄色
 #define COLOR_RGB565_ORANGE    0xFD20   //  橙色        
 #define COLOR_RGB565_WHITE     0xFFFF   //  白色  
+#define COLOR_RGB565_PINK     0xFE19    //粉色
+#define COLOR_RGB565_SKYBLUE     0x867D    //天蓝
+#define SET_COLOR     1
+#define CLR_COLOR     0
 
 #endif

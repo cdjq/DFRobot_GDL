@@ -8,29 +8,26 @@
 uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_t len){
   if((p == NULL))
       return 0;
-  if(p->isBegin){
+  if(p->isBegin && cmd != IF_COM_SET_FREQUENCY){
       #if defined(SPI_HAS_TRANSACTION)
       #if defined(ARDUINO_SAM_ZERO)
-      if(p->freq > 12000000)
-      {
-          sercom4.disableSPI();
-          while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
-          SERCOM4->SPI.BAUD.reg = 0; 
-          sercom4.enableSPI();
-      }else{
-          p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
-      }
+      uint8_t baud = 48000000/(p->freq*2) - 1;
+      sercom4.disableSPI();
+      while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
+         SERCOM4->SPI.BAUD.reg = baud; 
+         sercom4.enableSPI();
+
       #else
-           p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
+         p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
       #endif
       #else
       #if defined(__AVR__)
-             p->pro.spi->setClockDivider(SPI_CLOCK_DIV2);
+         p->pro.spi->setClockDivider(SPI_CLOCK_DIV2);
       #elif defined(ESP8266) || defined(ESP32)
-             p->pro.spi->setFrequency(p->freq);
+         p->pro.spi->setFrequency(p->freq);
       #endif
-             p->pro.spi->setBitOrder(MSBFIRST);
-             p->pro.spi->setDataMode(SPI_MODE0);
+         p->pro.spi->setBitOrder(MSBFIRST);
+         p->pro.spi->setDataMode(SPI_MODE0);
       #endif
   }
   switch(cmd){
@@ -41,29 +38,25 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
            if(p->freq == 0) {
              p->freq = DEFAULT_SPI_FREQ;
            }else{
-               #if defined(SPI_HAS_TRANSACTION)
-               #if defined(ARDUINO_SAM_ZERO)
-               if(p->freq > 12000000)
-               {
-                   sercom4.disableSPI();
-                   while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
-                   SERCOM4->SPI.BAUD.reg = 0; 
-                   sercom4.enableSPI();
-               }else{
-                   p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
-               }
-               #else
-                    p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
-               #endif
-               #else
-               #if defined(__AVR__)
-                      p->pro.spi->setClockDivider(SPI_CLOCK_DIV2);
-               #elif defined(ESP8266) || defined(ESP32)
-                      p->pro.spi->setFrequency(p->freq);
-               #endif
-                      p->pro.spi->setBitOrder(MSBFIRST);
-                      p->pro.spi->setDataMode(SPI_MODE0);
-               #endif 
+             #if defined(SPI_HAS_TRANSACTION)
+             #if defined(ARDUINO_SAM_ZERO)
+             uint8_t baud = 48000000/(p->freq*2) - 1;
+             sercom4.disableSPI();
+             while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
+             SERCOM4->SPI.BAUD.reg = baud; 
+             sercom4.enableSPI();
+             #else
+                  p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
+             #endif
+             #else
+             #if defined(__AVR__)
+                    p->pro.spi->setClockDivider(SPI_CLOCK_DIV2);
+             #elif defined(ESP8266) || defined(ESP32)
+                    p->pro.spi->setFrequency(p->freq);
+             #endif
+                    p->pro.spi->setBitOrder(MSBFIRST);
+                    p->pro.spi->setDataMode(SPI_MODE0);
+             #endif 
            }
            p->isBegin = true;
       }
@@ -74,17 +67,13 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
            if(!p->freq) return 0;
            #if defined(SPI_HAS_TRANSACTION)
            #if defined(ARDUINO_SAM_ZERO)
-            if(p->freq > 12000000)
-           {
-               sercom4.disableSPI();
-               while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
-               SERCOM4->SPI.BAUD.reg = 0; 
-               sercom4.enableSPI();
-           }else{
-               p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
-           }
+           uint8_t baud = 48000000/(p->freq*2) - 1;
+           sercom4.disableSPI();
+           while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
+           SERCOM4->SPI.BAUD.reg = baud; 
+           sercom4.enableSPI();
            #else
-                p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
+                 p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
            #endif
            #else // No transactions, configure SPI manually...
            #if defined(__AVR__)
@@ -116,7 +105,7 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
            break;
       case IF_COM_READ_DATA:
       {
-           //Serial.println("IF_COM_READ_DATA");
+          // delay(10);
            if(!(p->isBegin)) return 0;
            PIN_LOW(p->pinList[IF_PIN_CS]);
            for(uint8_t i = 0; i < pBuf[0]; i++){
