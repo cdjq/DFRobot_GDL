@@ -103,6 +103,7 @@ void setup()
   //创建一个进度条控件
   DFRobot_UI::sBar_t &bar1 = ui.creatBar();
   /**用户自定义进度条参数*/
+  //设置进度条的样式 有三种选择1:COLUMN,2:CIRCULAR,3:BAR.
   bar1.setStyle(DFRobot_UI::COLUMN);
   bar1.setCallback(barCallback1);
   ui.draw(&bar1,/*x=*/10,/*y=*/160);

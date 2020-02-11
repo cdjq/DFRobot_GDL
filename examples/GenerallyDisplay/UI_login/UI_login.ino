@@ -76,7 +76,7 @@ void setup()
   ui.draw(&btn1,/**x=*/30,/**y=*/120,/*width*/180,/*height*/30);
   //创建数字键盘控件
   DFRobot_UI::sKeyPad_t & kp = ui.creatKeyPad();
-  //设置数值键盘模式 0：自带文本框,1:需要外部定义文本框
+  //设置数值键盘模式 NOCHOICE：自带文本框,CHOICE:需要外部定义文本框
   kp.setMode(DFRobot_UI::CHOICE);
   ui.draw(&kp);
   ui.drawString(/*x=*/30, /*y=*/10, "login interface", COLOR_RGB565_CYAN, ui.bgColor,/*字体大小=*/ 2, /*反显*/0);

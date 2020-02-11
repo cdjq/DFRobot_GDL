@@ -1,7 +1,7 @@
 /*!
  * @file bitmap.ino
- * @brief 根据位图软件生成的图像数组画单色图、彩色图和灰度图，主控需要40000字节的动态内存，ESP8266和ESP32可运行，项目使用了近38万字节
- * @n 本示例支持的主板有ESP32, ESP8266, FireBeetle-M0
+ * @brief 根据位图软件生成的图像数组画单色图、彩色图和灰度图，主控需要40000字节的动态内存，FireBeetle-ESP8266和FireBeetle-ESP32可运行，项目使用了近38万字节
+ * @n 本示例支持的主板有FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [YeHangYu](hangyu.ye@dfrobot.com)
