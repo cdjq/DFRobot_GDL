@@ -2,7 +2,7 @@
  * @file UI_tableview.ino
  * @brief 在屏幕上创建一个tableview控件，用户可以自定义在屏幕上创建一个tableview控件的参数
  * @n 用户可以选择不同的页来显示不同的内容
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -50,8 +50,8 @@ DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS);
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
-//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
+DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
@@ -63,22 +63,24 @@ DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
  * @param width 屏幕的宽度.
  * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, &touch,/*width=*/240,/*height=*/320);
+DFRobot_UI ui(&screen, &touch);
 //   tableview 回调函数
 void tbCallback(void * highLightPage){
   uint8_t * hl = (uint8_t *)highLightPage;
-  if (*hl == 1) {
+  switch (*hl) {
+     case 1:{
     //在屏幕上显示字符串
-    ui.drawString(10, 200, "this is tab1", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
+       ui.drawString(10, 200, "this is tab1", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
+       }
+    case 2: {
+       ui.drawString(10, 200, "this is tab2", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
+       }
+    case 3:  {
+       ui.drawString(10, 200, "this is tab3", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
+      }
+    case 4:  {
+       ui.drawString(10, 200, "this is tab4", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
   }
-  if (*hl == 2) {
-    ui.drawString(10, 200, "this is tab2", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
-  }
-  if (*hl == 3) {
-    ui.drawString(10, 200, "this is tab3", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
-  }
-  if (*hl == 4) {
-    ui.drawString(10, 200, "this is tab4", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
   }
 }
 void setup()
@@ -90,19 +92,18 @@ void setup()
 
 
  //创建一个tableview控件
- DFRobot_UI::sObject_t * tb = ui.creatTableview();
+ DFRobot_UI::sTableview_t &tb = ui.creatTableview();
   //设置tableview的个数 和名字 最大页数为4
- ui.setTableviewName(tb,/*page=*/4,/*page1 name=*/"tab1",/*page2 name=*/"tab2",/*page3 name=*/"tab3",/*page4 name=*/"tab4");
+ tb.setName(/*page=*/4,/*page1 name=*/"tab1",/*page2 name=*/"tab2",/*page3 name=*/"tab3",/*page4 name=*/"tab4");
   //设置回调函数
- tb->setCallBack(tb,tbCallback);
- ui.draw(tb);
+ tb.setCallback(tbCallback);
+ ui.draw(&tb);
+
+
 }
-
-
 void loop()
 {  
    //刷新
    ui.refresh();
-
 
 }

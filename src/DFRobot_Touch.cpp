@@ -127,7 +127,7 @@ void DFRobot_Touch_XPT2046::begin(uint32_t freq){
   initTouch();
 }
 String DFRobot_Touch_XPT2046::scan(){
-      uint16_t x,y,x1,y1,x2,y2;
+    uint16_t x,y,x1,y1,x2,y2;
       String s = "";
       x1 = readxy(0x90);
       y1 = readxy(0xD0);
@@ -157,6 +157,22 @@ String DFRobot_Touch_XPT2046::scan(){
     //delay(10);
     s += String(1) + "," + String(x) + "," + String(y) + "," + String(10) + ","+ String(10) + " ";
     return s;
+
+	/*if(millis()  < 5000){
+		
+		return "1,40,40,0,0 ";
+	}
+	else if(millis() > 5000 && millis()<5500){
+		return "1,45,210,0,0 ";
+	}
+	else if(millis() > 6000 && millis()<6500){
+		return "1,160,210,0,0 ";
+		
+	}
+	else{
+		return "255,0,0,0,0 ";
+	}
+	*/
 }
 uint16_t DFRobot_Touch_XPT2046::readxy(uint8_t cmd){
     uint16_t i, j;

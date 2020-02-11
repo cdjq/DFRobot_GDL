@@ -3,7 +3,7 @@
  * @brief 在屏幕上创建一个按钮控件，用户可以自定义按钮的参数
  * @n 示例里面创建了三个按钮A,B,C,按下A,B按钮会在文本框内显示，按下C按钮会删除文本框的一个字符
  * @n 需要文本框显示时，需要点击文本框以使光标移到文本框内
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -52,8 +52,8 @@ DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS);
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
-//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
+DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
@@ -66,33 +66,20 @@ DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
  * @param width 屏幕的宽度.
  * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, &touch,/*width=*/240,/*height=*/320);
-
-
-
-//声明一个控件的对象
-DFRobot_UI::sObject_t * tb;
-
-
+DFRobot_UI ui(&screen, &touch);
 //三个按钮的回调函数
-void buCallback(void * text) {
-  char *c = (char *)text;
-  switch (*c) {
-    case 'A' : {
-        //在文本框添加一个字符
-        ui.textAddChar(tb,'A');
-        break;
-      }
-    case 'B' : {
-        ui.textAddChar(tb,'B');
-        break;
-      }
-    case 'C' : {
-      //在文本框删除一个字符
-        ui.textDeleteChar(tb);; break;
+void buCallback(DFRobot_UI::sButton_t &btn,DFRobot_UI::sTextBox_t &obj) {
+   String text((char *)btn.text);
+   if(text == "A"){
+    obj.addChar('A');
     }
-    default  :  break;
-  }
+   else if(text == "B"){
+    obj.addChar('B');
+    }
+   else if(text == "C"){
+    obj.deleteChar();
+    }
+    
 }
 
 void setup()
@@ -103,32 +90,33 @@ void setup()
   ui.begin();
   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
   ui.setTheme(DFRobot_UI::MODERN);
-
-
-  //在屏幕上创建一个按钮控件
-  DFRobot_UI::sObject_t * btn1 = ui.creatButton();
-  ui.setButtonText(btn1,"A");
-  btn1->setCallBack(btn1,buCallback);
-  ui.draw(btn1,/**x=*/10,/**y=*/150,/*width*/60,/*height*/60);
-  
-  DFRobot_UI::sObject_t * btn2 = ui.creatButton();
-  ui.setButtonText(btn2,"B");
-  btn2->setCallBack(btn2,buCallback);
-  ui.draw(btn2,/**x=*/90,/**y=*/150,/*width*/60,/*height*/60);
- 
-  DFRobot_UI::sObject_t * btn3 = ui.creatButton();
-  ui.setButtonText(btn3,"C");
-  //设置按钮的回调函数
-  btn3->setCallBack(btn3,buCallback);
-  //绘制对应的控件函数
-  ui.draw(btn3,/**x=*/170,/**y=*/150,/*width*/60,/*height*/60);
- 
   //创建一个文本框控件
-  tb = ui.creatText();
-  ui.draw(tb,/**x=*/10,/**y=*/10,/*width*/220,/*height*/80);
+  DFRobot_UI::sTextBox_t & tb = ui.creatText();
+  ui.draw(&tb,/**x=*/10,/**y=*/10,/*width*/220,/*height*/80);
+  //在屏幕上创建一个按钮控件
+  DFRobot_UI::sButton_t & btn1 = ui.creatButton();
+  //设置按钮的名字
+  btn1.setText("A");
+  btn1.setCallback(buCallback);
+  //每个按钮都有一个文本框的参数，需要自己设定
+  btn1.setOutput(&tb);
+  ui.draw(&btn1,/**x=*/10,/**y=*/150,/*width*/60,/*height*/60);
+  
+  DFRobot_UI::sButton_t & btn2 = ui.creatButton();
+  btn2.setText("B");
+  btn2.setCallback(buCallback);
+  //每个按钮都有一个文本框的参数，需要自己设定
+  btn2.setOutput(&tb);
+  ui.draw(&btn2,/**x=*/90,/**y=*/150,/*width*/60,/*height*/60);
+ 
+  DFRobot_UI::sButton_t & btn3 = ui.creatButton();
+  btn3.setText("C");
+  //设置按钮的回调函数
+  btn3.setCallback(buCallback);
+  //每个按钮都有一个文本框的参数，需要自己设定
+  btn3.setOutput(&tb);
+  ui.draw(&btn3,/**x=*/170,/**y=*/150,/*width*/60,/*height*/60);
 }
-
-
 void loop()
 {
   //刷新所有控件

@@ -1,7 +1,7 @@
 /*!
  * @file UI_gesture.ino
  * @brief 在屏幕指定区域可以识别到用户所使用的手势，手势的名称会显示到文本框内
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * @n 需要文本框显示时，需要点击文本框以使光标移到文本框内
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -61,13 +61,10 @@ DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
  * @brief 构造函数
  * @param gdl 屏幕对象
  * @param touch 触摸对象
- * @param width 屏幕的宽度.
- * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, &touch,/*width=*/240,/*height=*/320);
+DFRobot_UI ui(&screen, &touch);
 
-//声明文本框
-DFRobot_UI::sObject_t *tb;
+
 
 void setup()
 {
@@ -78,31 +75,34 @@ void setup()
   ui.setTheme(DFRobot_UI::MODERN);
   
   //创建一个文本框控件
-  tb = ui.creatText();
+  DFRobot_UI::sTextBox_t &tb = ui.creatText();
   //在屏幕上创建一个文本框控件，根据自定义或初始化的参数绘制文本框
-  ui.draw(tb);
+  ui.draw(&tb);
   /**
    * @brief 设置触摸的手势识别区域
    */
   ui.setGestureArea(/*x=*/screen.width()/2-75,/*y=*/100,/*width=*/150,/*height=*/150);
+  while(true){
+     //刷新
+    ui.refresh();
+    // getGestures()： 获取手势
+    switch(ui.getGestures()){
+      //setText：使文本框显示字符串
+      case ui.UPGLIDE : tb.setText("upwards slide"); break;
+      case ui.DOWNGLIDE : tb.setText("down slide"); break;
+      case ui.LEFTGLIDE : tb.setText("left slide"); break;
+      case ui.RIGHTGLIDE : tb.setText("right slide"); break;
+      case ui.LONGPRESSDE : tb.setText("long press"); break;
+      case ui.SINGLECLICK : tb.setText("click"); break;
+      case ui.DOUBLECLICK : tb.setText("double click"); break;
+      default  :  break;
+      }
+  }
 }
 
 
 void loop()
 {
-   //刷新
-   ui.refresh();
-    // getGestures()： 获取手势
-    switch(ui.getGestures()){
-      //setText：使文本框显示字符串
-      case ui.UPGLIDE : ui.setText(tb,"upwards slide"); break;
-      case ui.DOWNGLIDE : ui.setText(tb,"down slide"); break;
-      case ui.LEFTGLIDE : ui.setText(tb,"left slide"); break;
-      case ui.RIGHTGLIDE : ui.setText(tb,"right slide"); break;
-      case ui.LONGPRESSDE : ui.setText(tb,"long press"); break;
-      case ui.SINGLECLICK : ui.setText(tb,"click"); break;
-      case ui.DOUBLECLICK : ui.setText(tb,"double click"); break;
-      default  :  break;
-      }
+
 
 }

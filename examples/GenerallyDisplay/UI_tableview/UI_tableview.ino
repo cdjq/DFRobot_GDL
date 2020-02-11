@@ -2,7 +2,7 @@
  * @file UI_tableview.ino
  * @brief 在屏幕上创建一个tableview控件，用户可以自定义在屏幕上创建一个tableview控件的参数
  * @n 用户可以选择不同的页来显示不同的内容
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -53,22 +53,24 @@ DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST
  * @param width 屏幕的宽度.
  * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, NULL,/*width=*/240,/*height=*/240);
-DFRobot_UI::sObject_t * tv;
+DFRobot_UI ui(&screen, NULL);
+
 void tbCallback(void * highLightPage){
   uint8_t * hl = (uint8_t *)highLightPage;
-  if (*hl == 1) {
+  switch (*hl) {
+     case 1:{
     //在屏幕上显示字符串
-    ui.drawString(10, 200, "this is tab1", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
+       ui.drawString(10, 200, "this is tab1", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
+       }
+    case 2: {
+       ui.drawString(10, 200, "this is tab2", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
+       }
+    case 3:  {
+       ui.drawString(10, 200, "this is tab3", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
+      }
+    case 4:  {
+       ui.drawString(10, 200, "this is tab4", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);break;
   }
-  if (*hl == 2) {
-    ui.drawString(10, 200, "this is tab2", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
-  }
-  if (*hl == 3) {
-    ui.drawString(10, 200, "this is tab3", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
-  }
-  if (*hl == 4) {
-    ui.drawString(10, 200, "this is tab4", COLOR_RGB565_YELLOW, ui.bgColor, 3, 0);
   }
 }
 void setup()
@@ -80,19 +82,22 @@ void setup()
   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
  ui.setTheme(DFRobot_UI::MODERN);
  //创建一个tableview控件
- tv = ui.creatTableview();
+ DFRobot_UI::sTableview_t &tv = ui.creatTableview();
  //设置tableview的个数 和名字 最大页数为4
- ui.setTableviewName(tv,/*page=*/4,/*page1 name=*/"tab1",/*page2 name=*/"tab2",/*page3 name=*/"tab3",/*page4 name=*/"tab4");
+ tv.setName(/*page=*/4,/*page1 name=*/"tab1",/*page2 name=*/"tab2",/*page3 name=*/"tab3",/*page4 name=*/"tab4");
  //设置回调函数
- tv->setCallBack(tv,tbCallback);
- ui.draw(tv);
-}
-void loop()
-{
-  for(uint8_t i=1 ; i<5 ;i++ ){
+ tv.setCallback(tbCallback);
+ ui.draw(&tv);
+ while(true){
+ for(uint8_t i=1 ; i<5 ;i++ ){
   //刷新
   ui.refresh();
   delay(500);
-  ui.changeTableview(tv,i);
+  tv.changeTableview(i);
   }
+ }
+}
+void loop()
+{
+
 }

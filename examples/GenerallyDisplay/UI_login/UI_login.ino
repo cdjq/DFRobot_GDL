@@ -1,7 +1,7 @@
 /*!
  * @file UI_login.ino
  * @brief 一个登录的界面
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, ESP32, ESP8266, FireBeetle-M0
+ * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -50,45 +50,36 @@ DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST
  * @brief 构造函数
  * @param gdl 屏幕对象
  * @param touch 触摸对象
- * @param width 屏幕的宽度.
- * @param height 屏幕的高度.
  */
-DFRobot_UI ui(&screen, NULL,/*width=*/240,/*height=*/240);
+DFRobot_UI ui(&screen, NULL);
 
-//声明文本框对象tb1,tb2.
-DFRobot_UI::sObject_t* tb1, *tb2;
+
 void setup()
 {
 
-  Serial.begin(115200);
-  
+  Serial.begin(9600);
   ui.begin();
   // 设置UI的主题，有两种主题可供选择 1.CLASSIC ，2.MODERN。
-  ui.setTheme(DFRobot_UI::MODERN);
- 
-
+  ui.setTheme(DFRobot_UI::CLASSIC);
   //创建一个文本框控件
-  tb1 = ui.creatText();
-  ui.draw(tb1,/**x=*/30,/**y=*/30,/*width*/180,/*height=*/30);
-  
-  
+  DFRobot_UI::sTextBox_t& tb1 = ui.creatText();
+   ui.draw(&tb1,/**x=*/30,/**y=*/30,/*width*/180,/*height=*/30);
   //创建一个文本框控件
-  tb2 = ui.creatText();
-  ui.draw(tb2,/**x=*/30,/**y=*/80,/*width*/180,/*height=*/30);
+  DFRobot_UI::sTextBox_t& tb2 = ui.creatText();
+  ui.draw(&tb2,/**x=*/30,/**y=*/80,/*width*/180,/*height=*/30);
 
   
   //在屏幕上创建一个按钮控件
-  DFRobot_UI::sObject_t * btn1 = ui.creatButton();
+  DFRobot_UI::sButton_t & btn1 = ui.creatButton();
   //设置按钮的名字
-  ui.setButtonText(btn1,"login");
-  ui.draw(btn1,/**x=*/30,/**y=*/120,/*width*/180,/*height*/30);
+  btn1.setText("login");
+  ui.draw(&btn1,/**x=*/30,/**y=*/120,/*width*/180,/*height*/30);
   //创建数字键盘控件
-  DFRobot_UI::sObject_t * kp = ui.creatKeyPad();
+  DFRobot_UI::sKeyPad_t & kp = ui.creatKeyPad();
   //设置数值键盘模式 0：自带文本框,1:需要外部定义文本框
-  ui.setKeyPadMode(kp,1);
-  ui.draw(kp);
-  
-  ui.drawString(30, 10, "login interface", COLOR_RGB565_CYAN, ui.bgColor, 2, 0);
+  kp.setMode(DFRobot_UI::CHOICE);
+  ui.draw(&kp);
+  ui.drawString(/*x=*/30, /*y=*/10, "login interface", COLOR_RGB565_CYAN, ui.bgColor,/*字体大小=*/ 2, /*反显*/0);
 }
 
 
