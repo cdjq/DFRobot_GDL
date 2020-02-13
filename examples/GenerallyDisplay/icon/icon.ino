@@ -50,19 +50,22 @@ void loop() {
   int w = screen.width();
   int h = screen.height();
   int a = millis()/1000;//获取时间
+     //0x00FF 是格式为RGB565的颜色数据
   uint16_t color = 0x00FF;
   
-  screen.fillScreen(0xFFFF);
+  screen.fillScreen(COLOR_RGB565_WHITE);
   
   while(1) {
     for(int i = 0;i < 12; i++){
       //用字库显示时间，程序执行秒数
-      screen.fillRect(16,16,w-16*2,35, 0xFFFF);
+      screen.fillRect(16,16,w-16*2,35, COLOR_RGB565_WHITE);
       screen.setTextWrap(false);
+	   //0x30FF 是格式为RGB565的颜色数据
       screen.setTextColor(0x30FF);
       screen.setTextSize(3);
       screen.setCursor(30, 30);
       screen.println("Time:");
+	   //0x00FF 是格式为RGB565的颜色数据
       screen.setTextColor(0x00FF);
       screen.setTextSize(3);
       screen.setCursor(120, 30);

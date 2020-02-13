@@ -72,7 +72,7 @@ void testDrawPixel() {
    *@brief 清屏
    *@param c 屏幕颜色
    */
-  screen.fillScreen(0x0000);
+  screen.fillScreen(COLOR_RGB565_WHITE);
   int x = 0;
   int y = screen.height();
   for(int i = 0; i <= screen.width()/2; i += 10){
@@ -106,8 +106,9 @@ void testDrawPixel() {
 
 /*测试画线*/
 void testLine(){
+	 //0x00FF 是格式为RGB565的颜色数据
   uint16_t color = 0x00FF;
-  screen.fillScreen(0x0000);
+  screen.fillScreen(COLOR_RGB565_WHITE);
   for (int16_t x=0; x < screen.width(); x+=6) {
     /*
      *@brief 画线段
@@ -195,6 +196,7 @@ void testRects(uint16_t color1, uint16_t color2) {
 /*测试画圆角矩形*/
 void testRoundRects() {
   screen.fillScreen(COLOR_RGB565_BLACK);
+   //0xF00F 是格式为RGB565的颜色数据
   int color = 0xF00F;
   int i;
   int x = 0;
@@ -312,6 +314,7 @@ void testTriangles(uint16_t color){
 }
 
 void testPrint() {
+ //0x00FF 是格式为RGB565的颜色数据
   int16_t color = 0x00FF;
   //设置文本自动换行模式
   //true=文本自动换行，false=不自动换行

@@ -18,11 +18,7 @@
 void DFRobot_UI::buttonEvent(void *btn1)
 {
 	
- // Serial.println(ob->posx);
-  //Serial.println(ob->posy);
-  
- // Serial.println("按钮处理函数");
- // sObject_t * ob = (sObject_t *)obj;
+
   sButton_t *btn = (sButton_t *)btn1;
 
   if(_touch == NULL){
@@ -86,10 +82,7 @@ void DFRobot_UI:: begin()
 }
 
 void  DFRobot_UI::sButton_t::setText(char * c){
-   //DFRobot_UI::sObject_t * ob = ( DFRobot_UI::sObject_t *)this;
-   //DFRobot_UI::sButton_t *btn = ( DFRobot_UI::sButton_t *)this->privateData;
   memcpy(this->text, c, strlen(c));
-  //Serial.println("setTerxe()");
 }
 void DFRobot_UI::sButton_t::setCallback(buttonCallback *callBack){
   this->callBack = callBack;
@@ -120,9 +113,7 @@ DFRobot_UI::sButton_t &DFRobot_UI::creatButton(){
   //btn->privateData = NULL;
   buttonData->next = NULL;
   buttonData->event = &DFRobot_UI::buttonEvent;
- // buttonData->privateData = buttonData;
   buttonData->draw = &DFRobot_UI::drawButton;
-  //buttonData->setCallBack = setButtonCallback;
   buttonData->posx = 0;
   buttonData->output = &textbox;
   buttonData->posy = 0;
@@ -153,7 +144,7 @@ DFRobot_UI::sTextBox_t &DFRobot_UI::creatText(){
   textData->cursory = 0;
   textData->next = NULL;
   textData->event = &DFRobot_UI::refreshTextBox;
- // textData->privateData = textData;
+
   textData->draw = &DFRobot_UI::drawText;
   textData->posx = 10;
   textData->posy = 10;
@@ -185,9 +176,7 @@ DFRobot_UI::sKeyPad_t &DFRobot_UI::creatKeyPad(){
   kbData->height= 100;
   kbData->next = NULL;
   kbData->event = &DFRobot_UI::KeyBoardEvent;
-  //kbData->privateData = kbData;
   kbData->draw = &DFRobot_UI::drawKeyBoard;
- // kbData->setCallBack = setKPCallback;
   sObject_t* obj= &head;
 
   if(kbData == NULL) while(1);
@@ -215,9 +204,7 @@ DFRobot_UI::sSwitch_t &DFRobot_UI::creatSwitch()
   swData->fgColor = LIGHTGREY_RGB565;
   swData->bgColor = bgColor;
   swData->event = &DFRobot_UI::switchEvent;
-  //swData->privateData = swData;
   swData->draw = &DFRobot_UI::drawSwitch;
-  //swData->setCallBack = setSwitchCallback;
   sObject_t* obj= &head;
 
   if(swData == NULL) while(1);
@@ -252,9 +239,7 @@ DFRobot_UI::sTableview_t &DFRobot_UI::creatTableview(){
   tbData->bgColor = bgColor;
   tbData->event = &DFRobot_UI::tableviewEvent;
   tbData->changeed = 0;
-  //tb->privateData = tbData;
   tbData->draw = &DFRobot_UI::drawTableview;
-  //tb->setCallBack = setTableviewCallback;
   sObject_t* obj= &head;
 
   if(tbData == NULL) while(1);
@@ -283,9 +268,7 @@ DFRobot_UI::sBar_t &DFRobot_UI::creatBar(){
   
   barData->next = NULL;
   barData->event = &DFRobot_UI::barEvent;
- // barData->privateData = barData;
   barData->draw = &DFRobot_UI::drawBar;
-//  barData->setCallBack = setBarCallback;
   sObject_t* obj= &head;
   if(barData == NULL) while(1);
 
@@ -310,7 +293,6 @@ void DFRobot_UI::draw(sObject_t *obj,uint16_t posx,uint16_t posy,uint16_t width,
   }
   obj->fontSize = 2;
   sButton_t *btn = (sButton_t *)obj;
- // Serial.println(btn->text[0]);
   (this->*obj->draw)(obj);
 }
 
@@ -328,8 +310,6 @@ DFRobot_UI::sSlider_t &DFRobot_UI::creatSlider()
   sliderData->next = NULL;
   sliderData->event = &DFRobot_UI::refreshSliser;
   sliderData->draw = &DFRobot_UI::drawSlider;
-  //sliderData->privateData = sliderData;
-  //sliderData->setCallBack = setSliserCallback;
   sliderData->posx = 10;
   sliderData->posy = lcdHeight - 100;
   sliderData->height = lcdHeight / 100;
@@ -355,8 +335,6 @@ void DFRobot_UI::refresh()
   updateCoordinate();
   while(obj->next != NULL){
     obj = obj->next;
-	// sButton_t *btn = (sButton_t *)obj;
-	// Serial.println(btn->text[0]);
    (this->*obj->event)(obj);
    
   }
@@ -543,7 +521,6 @@ void DFRobot_UI::drawKeyBoard(void *obj){
        kp->btn[button].posy =  kp->posy + i*((lcdHeight/b - 3)/4);
        memcpy(kp->btn[button].text,&keyPad[button],1);
 	   kp->btn[button].text[1] = '\0';
-	   //memcpy(&kp->btn[button].text[1],'\0',1);
        kp->btn[button].fgColor = BLACK_RGB565;
        kp->btn[button].bgColor = LIGHTGREY_RGB565;
        kp->btn[button].click  = 0;
@@ -610,25 +587,9 @@ void DFRobot_UI::sKeyPad_t::setOutput(sTextBox_t * text)
 
     text->selected = 1;
     this->text = 1;
-    //cursorPosx = text->posx + 5 ;
-    //cursorPosy = text->posy + 5 ;
 }
 
-/*
-void DFRobot_UI::initButton(sButton_t *bu) {
 
-  bu->posx = 0;
-  bu->posy = 0;
-  bu->width = lcdWidth / 4;
-  bu->height = lcdHeight / 8;
-  bu->fgColor = BLACK_RGB565;
-  bu->bgColor = LIGHTGREY_RGB565;
-  bu->fontSize = (lcdHeight * 3) / 480 ;
-  memset(bu->text, '\0', sizeof(bu->text));
-  bu->click  = 0 ;
-  bu->callBack = NULL ;
-}
-*/
 void DFRobot_UI::drawButton(void *obj) {
   sButton_t *btn = (sButton_t *)obj;
   if (theme == MODERN) {

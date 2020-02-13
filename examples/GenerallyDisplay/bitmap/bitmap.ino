@@ -56,7 +56,7 @@ void loop() {
    * @brief 将屏幕刷成白色
    * @param 0xFFFF 白色参数
    */
-  screen.fillScreen(0xFFFF);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   /**
    * @brief 画位顺序不同的单色图
    * @param x      0 设置画图起点是屏幕左上方，靠左
@@ -67,7 +67,7 @@ void loop() {
    * @param color  0x0000 黑色图片部分设置为黑色
    */
   screen.drawXBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/gImage_XBitmap,/*w=*/240,/*h=*/240,/*color=*/0x0000);
-  screen.fillScreen(0xFFFF);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   /**
    * @brief 画彩色图
    * @param x      0 设置画图起点是屏幕左上方，靠左
@@ -97,7 +97,7 @@ void loop() {
    * @param h      240 图片高度
    */
   screen.drawRGBBitmap(/*x=*/0,/*y=*/0,/*bitmap gImage_Bitmap=*/(const unsigned uint16_t*)gImage_RGBBitmap,/*mask=*/gImage_mask,/*w=*/240,/*h=*/240);
-  screen.fillScreen(0x0000);
+  screen.fillScreen(COLOR_RGB565_WHITE);
   /**
    * @brief 循环画无背景的单色图，颜色不断变化
    * @param x      0 设置画图起点是屏幕左上方，靠左

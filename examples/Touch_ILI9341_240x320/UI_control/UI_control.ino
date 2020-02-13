@@ -123,5 +123,6 @@ void setup()
 
 void loop()
 {
+  //刷新
   ui.refresh();
 }
