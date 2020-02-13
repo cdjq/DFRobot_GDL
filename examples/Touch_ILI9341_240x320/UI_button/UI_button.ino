@@ -36,7 +36,7 @@
 #define TFT_DC  2
 #define TFT_CS  3
 #define TFT_RST 4
-#define TOUCH_CS 6
+#define TOUCH_CS 5
 #endif
 /**
  * @brief Constructor  当触摸采用XPT2046芯片时，可以调用此构造函数
@@ -52,8 +52,8 @@ DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS);
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-//DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
-DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
@@ -68,16 +68,16 @@ DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST
  */
 DFRobot_UI ui(&screen, &touch);
 //三个按钮的回调函数
-void buCallback(DFRobot_UI::sButton_t &btn,DFRobot_UI::sTextBox_t &obj) {
+void buCallback(DFRobot_UI::sButton_t &btn,DFRobot_UI::sTextBox_t &tb) {
    String text((char *)btn.text);
    if(text == "A"){
-    obj.addChar('A');
+    tb.addChar('A');
     }
    else if(text == "B"){
-    obj.addChar('B');
+    tb.addChar('B');
     }
    else if(text == "C"){
-    obj.deleteChar();
+    tb.deleteChar();
     }
     
 }
