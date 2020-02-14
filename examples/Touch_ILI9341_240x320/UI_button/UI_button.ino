@@ -52,8 +52,8 @@ DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS);
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
-//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
+DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
@@ -68,16 +68,16 @@ DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
  */
 DFRobot_UI ui(&screen, &touch);
 //三个按钮的回调函数
-void buCallback(DFRobot_UI::sButton_t &btn,DFRobot_UI::sTextBox_t &tb) {
+void btnCallback(DFRobot_UI::sButton_t &btn,DFRobot_UI::sTextBox_t &obj) {
    String text((char *)btn.text);
-   if(text == "A"){
-    tb.addChar('A');
+   if(text == "ON"){
+    obj.setText("you have touch button on");
     }
-   else if(text == "B"){
-    tb.addChar('B');
+   else if(text == "OFF"){
+    obj.setText("you have touch button off");
     }
-   else if(text == "C"){
-    tb.deleteChar();
+   else if(text == "clr"){
+    obj.deleteChar();
     }
     
 }
@@ -96,23 +96,26 @@ void setup()
   //在屏幕上创建一个按钮控件
   DFRobot_UI::sButton_t & btn1 = ui.creatButton();
   //设置按钮的名字
-  btn1.setText("A");
-  btn1.setCallback(buCallback);
+  btn1.setText("ON");
+  btn1.bgColor = COLOR_RGB565_RED;
+  btn1.setCallback(btnCallback);
   //每个按钮都有一个文本框的参数，需要自己设定
   btn1.setOutput(&tb);
   ui.draw(&btn1,/**x=*/10,/**y=*/150,/*width*/60,/*height*/60);
   
   DFRobot_UI::sButton_t & btn2 = ui.creatButton();
-  btn2.setText("B");
-  btn2.setCallback(buCallback);
+  btn2.setText("OFF");
+  btn2.bgColor = COLOR_RGB565_BLUE;
+  btn2.setCallback(btnCallback);
   //每个按钮都有一个文本框的参数，需要自己设定
   btn2.setOutput(&tb);
   ui.draw(&btn2,/**x=*/90,/**y=*/150,/*width*/60,/*height*/60);
  
   DFRobot_UI::sButton_t & btn3 = ui.creatButton();
-  btn3.setText("C");
+  btn3.setText("clr");
+
   //设置按钮的回调函数
-  btn3.setCallback(buCallback);
+  btn3.setCallback(btnCallback);
   //每个按钮都有一个文本框的参数，需要自己设定
   btn3.setOutput(&tb);
   ui.draw(&btn3,/**x=*/170,/**y=*/150,/*width*/60,/*height*/60);

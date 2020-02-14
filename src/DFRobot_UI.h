@@ -235,6 +235,7 @@ public:
     uint16_t cursory;/**<文本框光标在y轴的坐标>**/
     bool selected;/**<文本框是否被选择>**/
 	void setText(char *text);/**<设置文本框的内容>**/
+	void setText(String &str);
 	void addChar(char txt) ;/**<向文本框添加一个字符>**/
 	void deleteChar();/**<删除文本框最后一个一个字符>**/
 	bool getState();/**<获取文本框状态**/

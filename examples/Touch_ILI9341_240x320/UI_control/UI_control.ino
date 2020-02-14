@@ -52,8 +52,8 @@ DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS);
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
-//DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
-DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS);
+DFRobot_ILI9341_240x320_HW_SPI screen(TFT_DC,TFT_CS,TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
@@ -68,18 +68,13 @@ DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS);
 DFRobot_UI ui(&screen, &touch);
 
 //滑条控件的回调函数
-void changeColor(DFRobot_UI::sSlider_t &sllider,DFRobot_UI::sTextBox_t &textBox) {
-  char str[3];
-  char text[30] = {0};
-  itoa((int)sllider.value, str, 10);
-  strcpy(text, "slider's value is ");
-  strcpy(text + 19, "\0");
-  strcpy(text + 18, str);
-  textBox.setText(text);
+void changeColor(DFRobot_UI::sSlider_t &slider,DFRobot_UI::sTextBox_t &textBox) {
+  String s(slider.value);
+  textBox.setText("slider's value is "+s);
 }
 
 //开关控件的回调函数
-void swCallBack(DFRobot_UI::sSwitch_t &sw,DFRobot_UI::sTextBox_t &textBox) {
+void switchCallBack(DFRobot_UI::sSwitch_t &sw,DFRobot_UI::sTextBox_t &textBox) {
   if (sw.state == 0) {
     textBox.setText("you have turn off the Switch!");
 
@@ -110,12 +105,12 @@ void setup()
   //在指定位置绘制滑条
   ui.draw(&slider,/*x = */40,/*y = */120);
   
-  DFRobot_UI::sSwitch_t &sw = ui.creatSwitch();
-  sw.setCallback(swCallBack);
+  DFRobot_UI::sSwitch_t &swh = ui.creatSwitch();
+  swh.setCallback(switchCallBack);
   //设置开关的输出文本框
-  sw.setOutput(&tb);
+  swh.setOutput(&tb);
   //在指定位置绘制开关
-  ui.draw(&sw,/*x = */40,/*y = */200,/*width=*/55,/*height=*/20);
+  ui.draw(&swh,/*x = */40,/*y = */200,/*width=*/55,/*height=*/20);
   
  
 }
@@ -123,6 +118,5 @@ void setup()
 
 void loop()
 {
-  //刷新
   ui.refresh();
 }
