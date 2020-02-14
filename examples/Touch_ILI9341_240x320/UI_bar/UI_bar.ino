@@ -99,26 +99,25 @@ void setup()
   ui.setTheme(DFRobot_UI::MODERN);
 
   //在屏幕上显示字符串
-  ui.drawString(/*x=*/10,/*y=*/200,"Page of loading",COLOR_RGB565_WHITE,ui.bgColor,/*fontsize =*/2,/*Invert=*/0);
+  ui.drawString(/*x=*/33,/*y=*/200,"Page of loading",COLOR_RGB565_WHITE,ui.bgColor,/*fontsize =*/2,/*Invert=*/0);
   //创建一个进度条控件
   DFRobot_UI::sBar_t &bar1 = ui.creatBar();
   /**用户自定义进度条参数*/
-  //设置进度条的样式 有三种选择1:COLUMN,2:CIRCULAR,3:BAR.
   bar1.setStyle(DFRobot_UI::COLUMN);
   bar1.setCallback(barCallback1);
-  ui.draw(&bar1,/*x=*/10,/*y=*/160);
+  ui.draw(&bar1,/*x=*/33,/*y=*/160);
   
   DFRobot_UI::sBar_t &bar2 = ui.creatBar();
   /**用户自定义进度条参数*/
   bar2.setStyle(DFRobot_UI::CIRCULAR);
   bar2.setCallback(barCallback2);
-  ui.draw(&bar2,/*x=*/100,/*y=*/100);
+  ui.draw(&bar2,/*x=*/120,/*y=*/100);
 
   DFRobot_UI::sBar_t &bar3 = ui.creatBar();
   /**用户自定义进度条参数*/
   bar3.setStyle(DFRobot_UI::BAR);
   bar3.setCallback(barCallback3);
-  ui.draw(&bar3,/*x=*/20,/*y=*/10);
+  ui.draw(&bar3,/*x=*/(screen.width()-bar3.width)/2,/*y=*/10);
 }
 
 
