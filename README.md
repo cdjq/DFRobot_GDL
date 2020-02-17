@@ -1,6 +1,9 @@
 # DFRobot_GDL
-DFRobot_GDL 是一个跨平台，集显示、触摸、UI于一体的综合显示交互框架。<br>
-支持多种显示IC和触摸IC。用户可以用GDL驱动各种各样的显示屏，如彩屏、黑白屏、墨水屏等等。<br>
+DFRobot_GDL 是一个跨平台，集显示、触摸、UI于一体的综合显示交互框架。
+DFRobot_GDL is a cross-platform display interactive framework that integrates display, touch and UI.<br>
+支持多种显示IC和触摸IC。用户可以用GDL驱动各种各样的显示屏，如彩屏、黑白屏、墨水屏等等。
+It supports a variety of display ICs and touch ICs. So that users can use GDL to drive a wide variety of displays, such as color screen, black and white screen, ink screen and so on.
+<br>
 
 ## Table of Contents
 * [Summary](#summary)
@@ -12,8 +15,10 @@ DFRobot_GDL 是一个跨平台，集显示、触摸、UI于一体的综合显示
 
 ## summary
 
- * 支持多种触摸IC和显示IC以及多种分辨率。<br>
- * 支持多种显示功能；支持画点、画线、画圆等等;支持位图的显示;支持多种字库;支持用户自定义字体功能等。<br>
+ * 支持多种触摸IC和显示IC以及多种分辨率。Supports multiple touch and display ICs as well as multiple resolutions.<br>
+ * 支持多种显示功能：支持画点、画线、画圆等等;支持位图的显示;支持多种字库;支持用户自定义字体功能等。<br>
+ * Supports a variety of display functions: supports drawing points, drawing lines, drawing circles, etc. Supports bitmap show and a 
+ * variety of font libraries and user-defined font and so on.
  * 支持多种触摸功能：手势操作、单击、双击、长按等。<br>
  * 支持多种UI功能：滑条,进度条,文本框,按钮,开关，tableView等。<br>
 
