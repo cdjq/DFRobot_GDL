@@ -1,7 +1,7 @@
 /*!
  * @file ChineseFont.ino
- * @brief 演示不同自带中文字库效果 
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
+ * @brief Present the effects of different Chinese font libraries 
+ * @n This demo supports Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)
@@ -21,7 +21,7 @@
 #define TFT_DC  D3
 #define TFT_CS  D4
 #define TFT_RST D5
-/*AVR系列主板*/
+/*AVR series mainboard*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
@@ -29,19 +29,19 @@
 #endif
 
 /**
- * @brief Constructor  硬件SPI通信的构造函数
- * @param dc  SPI通信的命令/数据线引脚
- * @param cs  SPI通信的片选引脚
- * @param rst  屏的复位引脚
+ * @brief Constructor  Constructor of hardware SPI communication
+ * @param dc  command of SPI communication/date line pin
+ * @param cs  chip select pin of SPI communication 
+ * @param rst  reset pin of screen 
  */
 DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
-/*M0主板下DMA传输*/
+/*DMA transmission under M0 board*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 
 /*
- *可供用户选择的宏定义颜色
+ *User-selectable macro-defined colors
  *COLOR_RGB565_BLACK   COLOR_RGB565_NAVY    COLOR_RGB565_DGREEN   COLOR_RGB565_DCYAN 
  *COLOR_RGB565_MAROON  COLOR_RGB565_PURPLE  COLOR_RGB565_OLIVE    COLOR_RGB565_LGRAY     
  *COLOR_RGB565_DGRAY   COLOR_RGB565_BLUE    COLOR_RGB565_GREEN    COLOR_RGB565_CYAN  
@@ -57,30 +57,30 @@ void setup() {
 }
 
 void loop() {
-  //设置字体字号为4 字号范围1-4
+  //set font size to 4, range 1 to 4
   screen.setTextSize(4);
-  /*设置屏幕颜色*/
+  /*set screen color */
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体文件
+  //set font file
   screen.setFont(&SIMKAIFont12pt);
   
   /*
-   *@brief 设置文本位置
-   *@param x 文本第一个字横坐标
-   *@param y 文本第一个字纵坐标
+   *@brief set text position 
+   *@param x the x-axis of the first word of text
+   *@param y the y -coordinate of the first word of text
    */
   screen.setCursor(/*x=*/10,/*y=*/120);
-  //设置文本颜色
-  //可选颜色列表和fillScreen函数中使用的颜色列表相同
+  //set text color 
+  //selectable color list is the same as the color list in fillscreen function
   screen.setTextColor(COLOR_RGB565_BLUE); 
-  //设置文本自动换行模式
-  //true=文本自动换行，false=不自动换行
+  //set the text to word wrap mode 
+  //true=word wrap，false=not 
   screen.setTextWrap(true);
-  // 输出文本  
+  // output the text   
   screen.print("你好");
   delay(2000);
   
-  //使用SIMKAIFont18pt字体
+  //use SIMKAIFont18pt font
   screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont18pt);
   screen.setCursor(10,120);
@@ -89,7 +89,7 @@ void loop() {
   screen.print("你好");
   delay(2000);
   
-  //使用SIMKAIFont24pt字体
+  //use SIMKAIFont24pt font 
   screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont24pt);
   screen.setCursor(10,120);
@@ -98,7 +98,7 @@ void loop() {
   screen.print("你好");
   delay(2000);
   
-  //使用SIMKAIFont36pt字体
+  //use SIMKAIFont36pt font
   screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont36pt);
   screen.setCursor(10,120);
@@ -107,7 +107,7 @@ void loop() {
   screen.print("你好");
   delay(2000);
   
-  //使用SIMKAIFont48pt字体
+  //use SIMKAIFont48pt font 
   screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont48pt);
   screen.setCursor(10,120);
@@ -116,7 +116,7 @@ void loop() {
   screen.print("你好");
   delay(2000);
   
-  //使用SIMKAIFont72pt字体
+  //use SIMKAIFont72pt font
   screen.fillScreen(COLOR_RGB565_BLACK);
   screen.setFont(&SIMKAIFont72pt);
   screen.setCursor(10,120);
