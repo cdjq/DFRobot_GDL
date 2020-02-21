@@ -1,7 +1,7 @@
 /*!
  * @file ballCollision.ino
- * @brief 演示小球在屏幕中运动碰撞的动画效果 
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
+ * @brief present the animation effect of balls moving and colliding in the screen  
+ * @n The demo supports Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [LuoYufeng](yufeng.luo@dfrobot.com)
@@ -21,7 +21,7 @@
 #define TFT_DC  D3
 #define TFT_CS  D4
 #define TFT_RST D5
-/*AVR系列主板*/
+/*AVR series board*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
