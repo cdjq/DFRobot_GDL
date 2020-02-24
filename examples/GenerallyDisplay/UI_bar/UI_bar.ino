@@ -60,22 +60,24 @@ uint8_t value2 = 0;
 uint8_t value3 = 0;
 //Callback function of progress bar1
 void barCallback1(DFRobot_UI:: sBar_t &obj){
-    //自动让进度条值每次+1;
+    //Enable the progress bar plus 1 in each time, it enters the callback function.
    delay(50);
     obj.setValue(value1);
 	if(value1 < 100) value1++;
 }
-//进度条bar2的回调函数
+//Callback function of progress bar2
 void barCallback2(DFRobot_UI:: sBar_t &obj){
-    //自动让进度条值每次+1;
+    //Enable the progress bar plus 1 in each time, it enters the callback function.
+   delay(50);
     delay(50);
     obj.setValue(value2);
 	if(value2 < 100) value2++;
 	
 }
-//进度条bar3的回调函数
+//Callback function of progress bar3
 void barCallback3(DFRobot_UI:: sBar_t &obj){
-    //自动让进度条值每次+1;
+    //Enable the progress bar plus 1 in each time, it enters the callback function.
+   delay(50);
     delay(50);
     obj.setValue(value3);
 	if(value3 < 100) value3++;
@@ -84,27 +86,27 @@ void setup()
 {
   
   Serial.begin(9600);
-  //ui初始化
+  //Initiailize ui
   ui.begin();
   ui.setTheme(DFRobot_UI::MODERN);
 
-  //在屏幕上显示字符串
+  //Show strings on the screen
   ui.drawString(/*x=*/33,/*y=*/200,"Page of loading",COLOR_RGB565_WHITE,ui.bgColor,/*fontsize =*/2,/*Invert=*/0);
-  //创建一个进度条控件
+  //Create a progress bar activex
   DFRobot_UI::sBar_t &bar1 = ui.creatBar();
-  /**用户自定义进度条参数*/
+  /**User-defined progress bar parameters*/
   bar1.setStyle(DFRobot_UI::COLUMN);
   bar1.setCallback(barCallback1);
   ui.draw(&bar1,/*x=*/33,/*y=*/160);
   
   DFRobot_UI::sBar_t &bar2 = ui.creatBar();
-  /**用户自定义进度条参数*/
+  /**User-defined progress bar parameters*/
   bar2.setStyle(DFRobot_UI::CIRCULAR);
   bar2.setCallback(barCallback2);
   ui.draw(&bar2,/*x=*/120,/*y=*/100);
 
   DFRobot_UI::sBar_t &bar3 = ui.creatBar();
-  /**用户自定义进度条参数*/
+  /**User-defined progress bar parameters*/
   bar3.setStyle(DFRobot_UI::BAR);
   bar3.setCallback(barCallback3);
   ui.draw(&bar3,/*x=*/(screen.width()-bar3.width)/2,/*y=*/10);
@@ -113,6 +115,6 @@ void setup()
 
 void loop()
 {
-  //刷新进度条
+  //Refresh 
   ui.refresh();
 }
