@@ -36,21 +36,21 @@
 
 /**
  * @brief Constructor  Constructors for hardware SPI communication
- * @param dc  SPI通信的命令/数据线引脚
- * @param cs  SPI通信的片选引脚
- * @param rst  屏的复位引脚
- * @param bl  屏幕的背光引脚
+ * @param dc  Command pin or data line pin of SPI communication 
+ * @param cs  Chip select pin for SPI communication
+ * @param rst Reset pin of the screen
+ * @param bl  Screen backlight pin
  */
 //DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
-/*M0主板下DMA传输*/
+/*DMA transmission under M0 motherboard*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 
 /**
- * @brief 构造函数
- * @param gdl 屏幕对象
- * @param touch 触摸对象
+ * @brief Construct a function
+ * @param gdl Screen object
+ * @param touch Touch object
  */
 DFRobot_UI ui(&screen, NULL);
 
@@ -58,7 +58,7 @@ DFRobot_UI ui(&screen, NULL);
 uint8_t value1 = 0;
 uint8_t value2 = 0;
 uint8_t value3 = 0;
-//进度条bar1的回调函数
+//Callback function of progress bar1
 void barCallback1(DFRobot_UI:: sBar_t &obj){
     //自动让进度条值每次+1;
    delay(50);
