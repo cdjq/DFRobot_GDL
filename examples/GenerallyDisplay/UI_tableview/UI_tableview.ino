@@ -1,8 +1,8 @@
 /*!
  * @file UI_tableview.ino
- * @brief 在屏幕上创建一个tableview控件，用户可以自定义在屏幕上创建一个tableview控件的参数
- * @n 用户可以选择不同的页来显示不同的内容
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
+ * @brief Create a tableview activex on the screen, which means users can create  a tableview activex on the screen.
+ * @n Users can select different pages to display different content.
+ * @n The example supports Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -29,7 +29,7 @@
 #define TFT_DC  D3
 #define TFT_CS  D4
 #define TFT_RST D5
-/*AVR系列主板*/
+/*AVR series*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
