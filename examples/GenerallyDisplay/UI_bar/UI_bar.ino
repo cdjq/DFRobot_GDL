@@ -3,7 +3,7 @@
  * @brief Create a progress bar control on the screen that allows the user to customize the parameters of the progress bar, or they can use the 
  * default parameters.
  * @n The user can control the value of the progress bar through the callback function of the progress bar.
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
+ * @n The example supports Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0.
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -27,7 +27,7 @@
 #define TFT_CS  D4
 #define TFT_RST D5
 
-/*AVR系列主板*/
+/*AVR serials*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3
@@ -35,7 +35,7 @@
 #endif
 
 /**
- * @brief Constructor  硬件SPI通信的构造函数
+ * @brief Constructor  Constructors for hardware SPI communication
  * @param dc  SPI通信的命令/数据线引脚
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
