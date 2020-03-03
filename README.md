@@ -5,7 +5,9 @@ DFRobot_GDL 是一个支持多种MCU，集显示、触摸、UI于一体的综合
 GDL旨在让用户能更简单快速上手和快速学习；从而实现多种显示效果，能让你的项目更加丰富多彩。
 
 ## GDL软件
-GDL集成了大量的功能组件；点击[此处](API网址)找到完成的API函数列表。
+GDL集成了大量的功能组件。<br>
+* 点击[此处](https://github.com/cdjq/DFRobot_GDL/wiki/%E4%B8%AD%E6%96%87WIKI)找到完整的中文API函数列表。<br>
+* 点击[此处](https://github.com/cdjq/DFRobot_GDL/wiki/英文WIKI)找到完整的英文API函数列表。
 
 #### 基础显示
 * 点、线、几何图形等的实现<br>
@@ -61,7 +63,7 @@ tableView    |      √       |       √       |      √        |       √   
 
 #### 显示IC
 GDL目前支持多种的显示驱动IC和分辨率，我们支持DFRobot系列屏幕和Adafruit系列屏幕，下表查看目前可用的驱动。<br>
-中文链接，请点击[此处](https://docs.qq.com/sheet/DWGRwa05PV3NSRGtI?tab=BB08J2&c=B11A0A0)。<br>
+中文链接，请点击[此处](【腾讯文档】GDL支持的屏幕https://docs.qq.com/sheet/DWGRwa05PV3NSRGtI?c=B11A0A0)。<br>
 英文连接，请点击[此处]()。
 
  
@@ -72,7 +74,7 @@ GDL支持多种触摸IC，下图查看目前支持的触摸驱动：<br>
 
 GDL：触摸IC      |  XPT2046     |    GT911     |   GT5688
 ---------------- | :----------: | :----------: |------------
-Work Well        |      √       |     √        |     √
+
 
 
 ## 安装GDL固件
@@ -120,22 +122,12 @@ GDL能满足不同软件开发水平的人使用。对于初学者，您不需�
 1. GDL-UI-直角坐标系控件--5分钟
  
 
-##常见问题
+## 常见问题
 
-1.问：为什么有的示例程序在Arduino UNO/Leonardo上运行不了
-  答：因为Arduino UNO/Leonardo内存大小，无法存储下整个存续；您可以换一个内存较大的主控，
-如Firebettle-ESP32等。
+1.问：为什么有的示例程序在Arduino UNO/Leonardo上运行不了<br>
+  答：因为Arduino UNO/Leonardo内存大小，无法存储下整个程序；您可以换一个内存较大的主控，如Firebettle-ESP32等。我们再每一个ino的头文件都有对应的说明，大家可以详细阅读。
 
-
-## 如何贡献：
-请参考本[教程](https://help.github.com/articles/creating-a-pull-request/)。
-1. 分叉存储库！
-1. 创建功能分支：`git checkout -b my-new-feature`
-1. 提交更改：`git commit -am`'添加一些功能'
-1. 推送到分支：`git push origin my-new-feature`
-1. 提交拉取请求
-
-## 关于分行
+## 关于分支
 **master**是当前的稳定版本。
 
 **开发**是研究版本。它具有未经完全测试的实验功能。例如，物联网集成，新主控等。
@@ -143,10 +135,14 @@ GDL能满足不同软件开发水平的人使用。对于初学者，您不需�
 **测试**是供团队与github一起练习的。当我们弄清楚如何使用github时，我们将删除。
 （我们是github的新手，所以请原谅任何愚蠢的错误。欢迎提出建议！）:)
 
-##待办事项清单
+## 待办事项清单
 - [ ]多点手势触摸功能
 
 
 ## 联系
 GDL团队的电子邮件地址<br>
 * 阿贾克斯Ajax.zhong@dfrobot.com
+
+## 感谢
+* 内部集成了Adafruit的GFX库，GFX库地址
+* 字体部分参考了u8g2的编码格式，u8g2库地址
