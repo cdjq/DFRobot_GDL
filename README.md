@@ -125,7 +125,7 @@ GDL能满足不同软件开发水平的人使用。对于初学者，您不需�
 ## 常见问题
 
 1.问：为什么有的示例程序在Arduino UNO/Leonardo上运行不了<br>
-  答：因为Arduino UNO/Leonardo内存大小，无法存储下整个程序；您可以换一个内存较大的主控，如Firebettle-ESP32等。我们再每一个ino的头文件都有对应的说明，大家可以详细阅读。
+&nbsp;&nbsp; 答：因为Arduino UNO/Leonardo内存大小，无法存储下整个程序；您可以换一个内存较大的主控，如Firebettle-ESP32等。我们再每一个ino的头文件都有对应的说明，大家可以详细阅读。
 
 ## 关于分支
 **master**是当前的稳定版本。
