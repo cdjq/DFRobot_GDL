@@ -63,7 +63,7 @@ tableView    |      √       |       √       |      √        |       √   
 
 #### 显示IC
 GDL目前支持多种的显示驱动IC和分辨率，我们支持DFRobot系列屏幕和Adafruit系列屏幕，下表查看目前可用的驱动。<br>
-中文链接，请点击[此处](【腾讯文档】GDL支持的屏幕https://docs.qq.com/sheet/DWGRwa05PV3NSRGtI?c=B11A0A0)。<br>
+中文链接，请点击[此处](https://docs.qq.com/sheet/DWGRwa05PV3NSRGtI?c=B11A0A0)。<br>
 英文连接，请点击[此处]()。
 
  
