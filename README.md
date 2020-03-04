@@ -6,8 +6,8 @@ GDL旨在让用户能更简单快速上手和快速学习；从而实现多种�
 
 ## GDL软件
 GDL集成了大量的功能组件。<br>
-* 点击[此处](https://github.com/cdjq/DFRobot_GDL/wiki/%E4%B8%AD%E6%96%87WIKI)找到完整的中文API函数列表。<br>
-* 点击[此处](https://github.com/cdjq/DFRobot_GDL/wiki/英文WIKI)找到完整的英文API函数列表。
+* 点击[此处](https://github.com/cdjq/DFRobot_GDL/wiki/%E4%B8%AD%E6%96%87WIKI)找到完整的中文wiki。<br>
+* 点击[此处](https://github.com/cdjq/DFRobot_GDL/wiki/英文WIKI)找到完整的英文wiki。
 
 #### 基础显示
 * 点、线、几何图形等的实现<br>
@@ -130,13 +130,11 @@ GDL能满足不同软件开发水平的人使用。对于初学者，您不需�
 ## 关于分支
 **master**是当前的稳定版本。
 
-**开发**是研究版本。它具有未经完全测试的实验功能。例如，物联网集成，新主控等。
-
-**测试**是供团队与github一起练习的。当我们弄清楚如何使用github时，我们将删除。
-（我们是github的新手，所以请原谅任何愚蠢的错误。欢迎提出建议！）:)
+**开发**是研究版本，它具有未经完全测试的实验功能。如多点手势、坐标系控件等。
 
 ## 待办事项清单
 - [ ]多点手势触摸功能
+- [ ]坐标系控件
 
 
 ## 联系
@@ -144,5 +142,5 @@ GDL团队的电子邮件地址<br>
 * 阿贾克斯Ajax.zhong@dfrobot.com
 
 ## 感谢
-* 内部集成了Adafruit的GFX库，GFX库地址
-* 字体部分参考了u8g2的编码格式，u8g2库地址
+* 内部集成了Adafruit的GFX库，[GFX](https://learn.adafruit.com/adafruit-gfx-graphics-library)库地址
+* 字体部分参考了u8g2的编码格式，[u8g2](https://github.com/olikraus/u8g2)库地址
