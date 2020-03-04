@@ -5,7 +5,8 @@ DFRobot_GDL 是一个支持多种MCU，集显示、触摸、UI于一体的综合
 GDL旨在让用户能更简单快速上手和快速学习；从而实现多种显示效果，能让你的项目更加丰富多彩。
 
 ## GDL软件
-GDL集成了大量的功能组件。<br>
+GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
+#### 查看wiki
 * 点击[此处查看中文wiki](https://github.com/cdjq/DFRobot_GDL/wiki/%E4%B8%AD%E6%96%87WIKI)<br>
 * 点击[此处查看英文wiki](https://github.com/cdjq/DFRobot_GDL/wiki/English-WIKI)
 
