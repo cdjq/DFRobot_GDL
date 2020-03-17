@@ -53,11 +53,11 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 
 #### UI功能
 * 滑条<br>
-![avatar](\image\1.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/tree/master/image/1.BMP)
 * 进度条<br>
-![avatar](\image\2.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/tree/master/image/2.BMP)
 * 文本框<br>
-![avatar](\image\3.BMP)
+![avatar](ttps://github.com/cdjq/DFRobot_GDL/tree/master/image/3.BMP)
 * 按键<br>
 ![avatar](\image\4.BMP)
 ![avatar](\image\5.BMP)
