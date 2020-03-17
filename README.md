@@ -62,7 +62,7 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 ![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/4.BMP)
 ![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/5.BMP)
 * 表格视图<br>
-![avatar](\https://github.com/cdjq/DFRobot_GDL/blob/master/image/6.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/6.BMP)
 * 坐标系控件(该功能暂未发布）<br>
 
 
