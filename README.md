@@ -12,9 +12,9 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 
 #### 基础显示
 * 点、线、几何图形等的实现<br>
-![avatar](\image\Triangle.BMP)
-![avatar](\image\Circle.BMP)
-![avatar](\image\Rect.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/Triangle.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/Circle.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/Rect.BMP)
 * 图形显示<br>
     * 支持16位、24位BMP格式的图片
     * 支持32位BMP格式的图片;但是其背景色可能会不被显示
@@ -53,16 +53,16 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 
 #### UI功能
 * 滑条<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/tree/master/image/1.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/1.BMP)
 * 进度条<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/tree/master/image/2.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/2.BMP)
 * 文本框<br>
-![avatar](ttps://github.com/cdjq/DFRobot_GDL/tree/master/image/3.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/3.BMP)
 * 按键<br>
-![avatar](\image\4.BMP)
-![avatar](\image\5.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/4.BMP)
+![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/5.BMP)
 * 表格视图<br>
-![avatar](\image\6.BMP)
+![avatar](\https://github.com/cdjq/DFRobot_GDL/blob/master/image/6.BMP)
 * 坐标系控件(该功能暂未发布）<br>
 
 
