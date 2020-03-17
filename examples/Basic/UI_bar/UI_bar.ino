@@ -41,11 +41,16 @@
  * @param rst Reset pin of the screen
  * @param bl  Screen backlight pin
  */
-//DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
-DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
-/*DMA transmission under M0 motherboard*/
+DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_HW_SPI  screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9488_320x480_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+/*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9488_320x480_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+
 
 /**
  * @brief Construct a function
@@ -86,30 +91,32 @@ void setup()
 {
   
   Serial.begin(9600);
-  //Initiailize ui
+  //ui初始化
   ui.begin();
   ui.setTheme(DFRobot_UI::MODERN);
 
-  //Show strings on the screen
-  ui.drawString(/*x=*/33,/*y=*/200,"Page of loading",COLOR_RGB565_WHITE,ui.bgColor,/*fontsize =*/2,/*Invert=*/0);
-  //Create a progress bar activex
+  //在屏幕上显示字符串
+  ui.drawString(/*x=*/33,/*y=*/screen.height()/5*4,"Page of loading",COLOR_RGB565_WHITE,ui.bgColor,/*fontsize =*/2,/*Invert=*/0);
+  //创建一个进度条控件
   DFRobot_UI::sBar_t &bar1 = ui.creatBar();
-  /**User-defined progress bar parameters*/
+  /**用户自定义进度条参数*/
   bar1.setStyle(DFRobot_UI::COLUMN);
+  bar1.fgColor = COLOR_RGB565_GREEN;
   bar1.setCallback(barCallback1);
-  ui.draw(&bar1,/*x=*/33,/*y=*/160);
+  ui.draw(&bar1,/*x=*/33,/*y=*/screen.height()/5*3);
   
   DFRobot_UI::sBar_t &bar2 = ui.creatBar();
-  /**User-defined progress bar parameters*/
+  /**用户自定义进度条参数*/
   bar2.setStyle(DFRobot_UI::CIRCULAR);
   bar2.setCallback(barCallback2);
-  ui.draw(&bar2,/*x=*/120,/*y=*/100);
+  ui.draw(&bar2,/*x=*/120,/*y=*/screen.height()/5*2);
 
   DFRobot_UI::sBar_t &bar3 = ui.creatBar();
-  /**User-defined progress bar parameters*/
+  /**用户自定义进度条参数*/
+  bar3.fgColor = COLOR_RGB565_BLUE;
   bar3.setStyle(DFRobot_UI::BAR);
   bar3.setCallback(barCallback3);
-  ui.draw(&bar3,/*x=*/(screen.width()-bar3.width)/2,/*y=*/10);
+  ui.draw(&bar3,/*x=*/(screen.width()-bar3.width)/2,/*y=*/screen.height()/10);
 }
 
 

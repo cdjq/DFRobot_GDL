@@ -36,9 +36,14 @@
  */
 DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_HW_SPI  screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9488_320x480_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9488_320x480_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+
 
 /*
  *可供用户选择的宏定义颜色
@@ -72,7 +77,7 @@ void testDrawPixel() {
    *@brief 清屏
    *@param c 屏幕颜色
    */
-  screen.fillScreen(COLOR_RGB565_WHITE);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   int x = 0;
   int y = screen.height();
   for(int i = 0; i <= screen.width()/2; i += 10){
@@ -108,7 +113,7 @@ void testDrawPixel() {
 void testLine(){
 	 //0x00FF 是格式为RGB565的颜色数据
   uint16_t color = 0x00FF;
-  screen.fillScreen(COLOR_RGB565_WHITE);
+  screen.fillScreen(COLOR_RGB565_BLACK);
   for (int16_t x=0; x < screen.width(); x+=6) {
     /*
      *@brief 画线段

@@ -36,9 +36,15 @@
  */
 DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_HW_SPI  screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9488_320x480_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9341_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9488_320x480_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+
+
 
 /*
  *可供用户选择的宏定义颜色
@@ -56,12 +62,19 @@ void setup() {
 }
 
 void loop() {
-  ///设置字体字号为4 字号范围1-4
+  //设置字体字号为4 字号范围1-4
   screen.setTextSize(2);
   /*设置屏幕颜色*/
   screen.fillScreen(COLOR_RGB565_BLACK);
-  //设置字体为FreeMono12pt7b
-  screen.setFont(&FreeMono12pt7b);
+  /*
+   *当前可使用的字体如下，可在gfxfont.h中添加其他字体文件(字体文件存放在src/Frame/Fonts文件夹中)
+   *FreeMono9pt7b, FreeMono12pt7b, FreeMonoBold12pt7b,
+   *FreeMonoBoldOblique12pt7b, FreeMonoOblique12pt7b,
+   *FreeSans12pt7b,FreeSansBold12pt7b, FreeSansBoldOblique12pt7b,
+   *FreeSansOblique12pt7b, FreeSerif12pt7b, FreeSerifBold12pt7b,
+   *FreeSerifBoldItalic12pt7b, FreeSerifItalic12pt7b, FreeMono24pt7b
+   */
+  screen.setFont(&FreeMono12pt7b);//设置字体为FreeMono12pt7b
   
   /*
    *@brief 设置文本位置
@@ -76,7 +89,7 @@ void loop() {
   //true=文本自动换行，false=不自动换行
   screen.setTextWrap(true);
   // 输出文本
-  screen.print("This is");
+  screen.print("DFRobot");
   delay(500);
   
   //使用FreeMonoBold12pt7b字体
@@ -85,7 +98,7 @@ void loop() {
   screen.setCursor(10,120);
   screen.setTextColor(COLOR_RGB565_GREEN);
   screen.setTextWrap(true);
-  screen.print("a function");
+  screen.print("GDL");
   delay(500);
   
   //使用FreeMonoBoldOblique12pt7b字体
@@ -94,7 +107,7 @@ void loop() {
   screen.setCursor(10,160);
   screen.setTextColor(COLOR_RGB565_RED);
   screen.setTextWrap(true);
-  screen.print("of every fonts");
+  screen.print("fonts test");
   delay(500);
   
   //使用FreeMonoOblique12pt7b字体
@@ -103,78 +116,6 @@ void loop() {
   screen.setCursor(80,160);
   screen.setTextColor(COLOR_RGB565_BLUE);
   screen.setTextWrap(true);
-  screen.print("You");
-  delay(500);
-  
-  //使用FreeSans12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSans12pt7b);
-  screen.setCursor(80,120);
-  screen.setTextColor(COLOR_RGB565_LGRAY);
-  screen.setTextWrap(true);
-  screen.print("can");
-  delay(500);
-  
-  //使用FreeSansBold12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSansBold12pt7b);
-  screen.setCursor(60,120);
-  screen.setTextColor(COLOR_RGB565_RED);
-  screen.setTextWrap(true);
-  screen.print("change");
-  delay(500);
-  
-  //使用FreeSansBoldOblique12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSansBoldOblique12pt7b);
-  screen.setCursor(80,120);
-  screen.setTextColor(COLOR_RGB565_BLUE);
-  screen.setTextWrap(true);
-  screen.print("all");
-  delay(500);
-  
-  //使用FreeSansOblique12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSansOblique12pt7b);
-  screen.setCursor(80,120);
-  screen.setTextColor(COLOR_RGB565_LGRAY);
-  screen.setTextWrap(true);
-  screen.print("the");
-  delay(500);
-  
-  //使用FreeSerif12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSerif12pt7b);
-  screen.setCursor(80,60);
-  screen.setTextColor(COLOR_RGB565_BLUE);
-  screen.setTextWrap(true);
-  screen.print("fonts");
-  delay(500);
-  
-  //使用FreeSerifBold12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSerifBold12pt7b);
-  screen.setCursor(50,60);
-  screen.setTextColor(COLOR_RGB565_LGRAY);
-  screen.setTextWrap(true);
-  screen.print("just");
-  delay(500);
-  
-  //使用FreeSerifBoldItalic12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSerifBoldItalic12pt7b);
-  screen.setCursor(20,50);
-  screen.setTextColor(COLOR_RGB565_GREEN);
-  screen.setTextWrap(true);
-  screen.print("like");
-  delay(500);
-  
-  //使用FreeSerifItalic12pt7b字体
-  screen.fillScreen(COLOR_RGB565_BLACK);
-  screen.setFont(&FreeSerifItalic12pt7b);
-  screen.setCursor(20,80);
-  screen.setTextColor(COLOR_RGB565_RED);
-  screen.setTextWrap(true);
-  screen.print("demo");
+  screen.print("hello,world!");
   delay(500);
 }

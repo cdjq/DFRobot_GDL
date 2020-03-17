@@ -12,35 +12,59 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 
 #### 基础显示
 * 点、线、几何图形等的实现<br>
-[效果图]
-* 图形解码(BMP)<br>
-[效果图]
+![avatar](\image\Triangle.BMP)
+![avatar](\image\Circle.BMP)
+![avatar](\image\Rect.BMP)
+* 图形显示<br>
+    * 支持16位、24位BMP格式的图片
+    * 支持32位BMP格式的图片;但是其背景色可能会不被显示
+    * 支持jpg格式的图片
+    * 我们也提供了一些图标，供大家使用，可点击[此处]()下载和查看
+
 * 内置字库<br>
-[效果图]
-* ttf字体（用户自定义）<br>
-[效果图]
+&nbsp;下面是内置可使用的字体列表<br>
+    * SIMKAIFont12pt
+    * SIMKAIFont18pt
+    * SIMKAIFont24pt
+    * SIMKAIFont36pt
+    * SIMKAIFont48pt
+    * SIMKAIFont72pt
+
+* ttf字体<br>
+    * 用户可以自定义字体;其生成和学习文件存放在DFRobot_GDL\src\Fonts\FontCustomScript中。
+    * 学习其使用方法，请点击[此处](https://github.com/cdjq/DFRobot_GDL/blob/master/src/Fonts/FontCustomScript/README.md)。
+
 
 #### 触摸功能
 * 单击/双击<br>
-[效果图]
+
 * 长按/滑动<br>
-[效果图]
-* 手势操作(单点手势和多点手势)<br>
-[效果图]
+
+* 手势操作<br>
+    * 单点手势(电阻屏和电容屏支持)
+        * 单指上、下、左、右滑动
+    * 多点手势(多点触控电容屏支持)
+        * 双指上、下、左、右滑动
+        * 双指放大或者缩小字体
+        * 双指旋转字体
+        * 双指旋转图片
+
+
 
 #### UI功能
 * 滑条<br>
-[效果图]
+![avatar](\image\1.BMP)
 * 进度条<br>
-[效果图]
+![avatar](\image\2.BMP)
 * 文本框<br>
-[效果图]
+![avatar](\image\3.BMP)
 * 按键<br>
-[效果图]
+![avatar](\image\4.BMP)
+![avatar](\image\5.BMP)
 * 表格视图<br>
-[效果图]
-* 坐标系控件<br>
-[效果图]
+![avatar](\image\6.BMP)
+* 坐标系控件(该功能暂未发布）<br>
+
 
 ## GDL兼容性
 
@@ -64,16 +88,14 @@ ttf字库      |      √       |       √       |      √        |       √ 
 
 #### 显示IC
 GDL目前支持多种的显示驱动IC和分辨率，我们支持DFRobot系列屏幕和Adafruit系列屏幕，下表查看目前可用的驱动。<br>
-中文链接，请点击[此处](https://docs.qq.com/sheet/DWGRwa05PV3NSRGtI?c=B11A0A0)。<br>
-英文连接，请点击[此处]()。
+
 
  
 
 #### 触摸<br>
 GDL支持多种触摸IC，下图查看目前支持的触摸驱动：<br>
 
-
-GDL：触摸IC      |  XPT2046     |    GT911     |   GT5688
+GDL：触摸IC       |  XPT2046     |    GT911     |   GT5688
 ---------------- | :----------: | :----------: |------------
 
 
@@ -83,7 +105,7 @@ GDL能满足不同软件开发水平的人使用。对于初学者，您不需�
 就可以实现炫酷的显示效果。随时在公共实验室或github上的Wiki页面上发布您的软件问题。
 
 1. 下载Arduino IDE
-1. 从[github](网址)下载GDL代码
+1. 从[github](https://github.com/dfrobot/DFRobot_GDL)下载GDL代码
 1. 使用`Arduino IDE`从下载的文件中打开“basicTest.ino”
 1. 连接您的`Arduino Uno`开发板
 1. 选择工具>板子：`Arduino Uno`和工具>端口：选择你的Arduino开发板
@@ -92,9 +114,9 @@ GDL能满足不同软件开发水平的人使用。对于初学者，您不需�
 ## 教学
 这是一个有120分钟的教学视频；旨在让初学者快速入门。
 
-1. GDL简介----5分钟
+1. GDL简介--5分钟
 
-1. GDL下载安装及基础使用 -5分钟
+1. GDL下载安装及基础使用--5分钟
 
 1. GDL图形显示--20分钟
 
@@ -134,13 +156,16 @@ GDL能满足不同软件开发水平的人使用。对于初学者，您不需�
 **其他分支** 是开发版本，用于存放未经完全测试的实验版本，使用者可以试用并通过issues提出改进意见或反馈bug
 
 ## 待办事项清单
-- [ ]多点手势触摸功能
 - [ ]坐标系控件
+- [ ]教学视频
+- [ ]支持屏幕的链接
 
 
 ## 联系
 GDL团队的电子邮件地址<br>
-* 阿贾克斯Ajax.zhong@dfrobot.com
+* 阿贾克斯 Ajax.zhong@dfrobot.com
+* 艾薇 Ivey.lu@dfrobot.com
+* 冯立 li.feng@dfrobot.com
 
 ## 感谢
 * 内部集成了Adafruit的GFX库，[GFX](https://learn.adafruit.com/adafruit-gfx-graphics-library)库地址

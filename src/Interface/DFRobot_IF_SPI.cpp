@@ -235,7 +235,7 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                pBuf[1+i*4 + 3] = buf[0];
             }
             if(bytesMod)
-                memcpy(buf, &pBuf[1+index], 2);
+                memcpy(buf, &pBuf[1+index], bytesMod);
             for(uint8_t i = 0; i < bytesMod; i++){
                pBuf[index+i+1] = buf[bytesMod - 1 - i];
             }
@@ -250,27 +250,60 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
                len -= datBytes;
                #if defined(ESP32)
                while(datBytes--){
-                   p->pro.spi->writePixels(pBuf+1, pBuf[0]);
+					if(pBuf[0] == 3){
+						p->pro.spi->writePixels(pBuf+3, 1);
+                        p->pro.spi->writePixels((const void *)(pBuf+1), 2);
+					}else{
+						p->pro.spi->writePixels((const void *)(pBuf+1), pBuf[0]);
+					}
                }
                #else
+		
                while(datBytes--){
                    if(pBuf[0] < 5){
                        #if defined(__AVR__)
+
+                       if(pBuf[0] == 1){
                        AVR_SPI_WRITE(pBuf[1]);
-                       if(pBuf[0] > 1)
-                           AVR_SPI_WRITE(pBuf[2]);
-                       else if(pBuf[0] > 2)
+					   }
+					   else if(pBuf[0] == 2){
+						  AVR_SPI_WRITE(pBuf[1]);
+					      AVR_SPI_WRITE(pBuf[2]);
+					   
+					   }
+                       else if(pBuf[0] == 3){
+					
+						  AVR_SPI_WRITE(pBuf[1]);
+					      AVR_SPI_WRITE(pBuf[2]);
                            AVR_SPI_WRITE(pBuf[3]);
-                       else if(pBuf[0] > 3)
+					   }
+                       else if(pBuf[0] == 4){
+						  AVR_SPI_WRITE(pBuf[1]);
+					      AVR_SPI_WRITE(pBuf[2]);
+                           AVR_SPI_WRITE(pBuf[3]);
                            AVR_SPI_WRITE(pBuf[4]);
+					   }
+					   
                        #else
-                       p->pro.spi->transfer(pBuf[1]);
-                       if(pBuf[0] > 1)
+                       if(pBuf[0] == 1)
+						   p->pro.spi->transfer(pBuf[1]);
+                       else if(pBuf[0] == 2){
+						   p->pro.spi->transfer(pBuf[1]);
                            p->pro.spi->transfer(pBuf[2]);
-                       else if(pBuf[0] > 2)
-                           p->pro.spi->transfer(pBuf[3]);
-                       else if(pBuf[0] > 3)
-                           p->pro.spi->transfer(pBuf[4]);
+					   }
+                       else if(pBuf[0] == 3){
+					   
+						   p->pro.spi->transfer(pBuf[1]);
+                           p->pro.spi->transfer(pBuf[2]);
+						   p->pro.spi->transfer(pBuf[3]);
+					   }
+                       else if(pBuf[0] == 4){
+                           
+						   p->pro.spi->transfer(pBuf[1]);
+                           p->pro.spi->transfer(pBuf[2]);
+						   p->pro.spi->transfer(pBuf[3]);
+						   p->pro.spi->transfer(pBuf[4]);
+					   }
                        #endif
                    }else{
                        for(uint8_t i = 0; i < pBuf[0];i++){

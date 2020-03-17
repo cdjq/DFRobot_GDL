@@ -51,15 +51,15 @@ void DFRobot_Touch::touchConfig(uint8_t *addr){
 }
 
 
-DFRobot_Touch_GTXXXX::DFRobot_Touch_GTXXXX(uint8_t addr, uint8_t rst, uint8_t irq)
+DFRobot_Touch_GT911::DFRobot_Touch_GT911(uint8_t addr, uint8_t rst, uint8_t irq)
   :DFRobot_Touch(&gdl_Dev_GTXXX_TOUCH_HW_IIC, addr, rst, irq){
   id = "";
   memset(_p, 0, sizeof(_p));
 }
-DFRobot_Touch_GTXXXX::~DFRobot_Touch_GTXXXX(){
+DFRobot_Touch_GT911::~DFRobot_Touch_GT911(){
   
 }
-void DFRobot_Touch_GTXXXX::begin(uint32_t freq){
+void DFRobot_Touch_GT911::begin(uint32_t freq){
   initTouch();
   char temp[4]={0};//获取芯片id
   uint16_t sizeReg = 0;
@@ -70,6 +70,7 @@ void DFRobot_Touch_GTXXXX::begin(uint32_t freq){
       _if.dev->addr = (uint8_t *)touchGt5688ConfigTable;
       sizeReg = 0x8051;
   }else if(id == "911"){
+
       _if.dev->addr = (uint8_t *)touchGT911ConfigTable;
       sizeReg = 0x8048;
   }else{
@@ -81,16 +82,16 @@ void DFRobot_Touch_GTXXXX::begin(uint32_t freq){
 
   _size.xw = ((uint8_t)temp[1] << 8) | (uint8_t)temp[0];
   _size.yh = ((uint8_t)temp[3] << 8) | (uint8_t)temp[2];
+  
   //Serial.println("_size.xw = ");Serial.println(_size.xw);
   //Serial.println("_size.yh = ");Serial.println(_size.yh);
 }
-String DFRobot_Touch_GTXXXX::scan(){
+String DFRobot_Touch_GT911::scan(){
   uint8_t flag = 0;
   uint8_t val = 0x00;
   String s = "";
   memset(_p, 0, sizeof(_p));
   readReg(0x814E, &flag, 1);
-  //Serial.print("flag = ");Serial.println(flag,HEX);
   if((flag & 0x80) ||((flag&0x0F)<6)){
       writeBuf(0x814E, &val, 1);
   }
@@ -110,10 +111,11 @@ String DFRobot_Touch_GTXXXX::scan(){
           }
       }
   }
+  //Serial.println(s);
   if(s.length() == 0){
      s = "255,0,0,0,0 ";
   }
-   delay(10);
+  delay(10);
   _points = s;
   return s;
 }
@@ -129,10 +131,10 @@ void DFRobot_Touch_XPT2046::begin(uint32_t freq){
 String DFRobot_Touch_XPT2046::scan(){
     uint16_t x,y,x1,y1,x2,y2;
       String s = "";
-      x1 = readxy(0x90);
-      y1 = readxy(0xD0);
-      x2 = readxy(0x90);
-      y2 = readxy(0xD0);
+      x1 = readxy(0xD0);
+      y1 = readxy(0x90);
+      x2 = readxy(0xD0);
+      y2 = readxy(0x90);
     if(((x2<=x1&&x1<x2+50)||(x1<=x2&&x2<x1+50))//Before and after the two samples are within +- ERR_RANGE.
     &&((y2<=y1&&y1<y2+50)||(y1<=y2&&y2<y1+50)))
     {
@@ -158,21 +160,7 @@ String DFRobot_Touch_XPT2046::scan(){
     s += String(1) + "," + String(x) + "," + String(y) + "," + String(10) + ","+ String(10) + " ";
     return s;
 
-	/*if(millis()  < 5000){
-		
-		return "1,40,40,0,0 ";
-	}
-	else if(millis() > 5000 && millis()<5500){
-		return "1,45,210,0,0 ";
-	}
-	else if(millis() > 6000 && millis()<6500){
-		return "1,160,210,0,0 ";
-		
-	}
-	else{
-		return "255,0,0,0,0 ";
-	}
-	*/
+
 }
 uint16_t DFRobot_Touch_XPT2046::readxy(uint8_t cmd){
     uint16_t i, j;

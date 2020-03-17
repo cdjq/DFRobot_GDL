@@ -91,10 +91,10 @@ public:
 };
 
 
-class DFRobot_Touch_GTXXXX: public DFRobot_Touch{
+class DFRobot_Touch_GT911: public DFRobot_Touch{
 public:
-  DFRobot_Touch_GTXXXX(uint8_t addr = 0x5D, uint8_t rst = 255, uint8_t irq = 255);
-  ~DFRobot_Touch_GTXXXX();
+  DFRobot_Touch_GT911(uint8_t addr = 0x5D, uint8_t rst = 255, uint8_t irq = 255);
+  ~DFRobot_Touch_GT911();
   void begin(uint32_t freq = 0);
   String scan();
 private:

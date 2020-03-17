@@ -3,7 +3,7 @@
  * @brief 在屏幕上创建一个数字键盘控件
  * @n 用户可以点击键盘上面的数字然后会看到输出的结果显示在上面的文本框里面，在输入时需要点击
  * @n 文本框确保文本框被选中
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
+ * @n 本示例支持的主板有Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  *
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -23,7 +23,7 @@
 #define TFT_DC  7
 #define TFT_CS  5
 #define TFT_RST 6
-#define TOUCH_CS 2
+#define TOUCH_CS A3
 /*ESP32 and ESP8266*/
 #elif defined(ESP32) || defined(ESP8266)
 #define TFT_DC  D3
@@ -39,23 +39,19 @@
 #endif
 
 /**
- * @brief Constructor  当触摸采用XPT2046芯片时，可以调用此构造函数
- * @param cs  SPI片选信号
- * @param rst  复位信号
- * @param irq  中断信号
+ * @brief Constructor  当触摸采用Gt911芯片时，可以调用此构造函数
  */
-DFRobot_Touch_XPT2046 touch(/*cs=*/TOUCH_CS); 
-
+DFRobot_Touch_GT911 touch;
+ 
 /**
- * @brief Constructor  当屏采用硬件SPI通信，驱动IC是ILI9341，屏幕分辨率是240x320时，可以调用此构造函数
+ * @brief Constructor  当屏采用硬件SPI通信，驱动IC是ILI9488，屏幕分辨率是320x480时，可以调用此构造函数
  * @param dc  SPI通信的命令/数据线引脚
  * @param cs  SPI通信的片选引脚
  * @param rst  屏的复位引脚
  */
- 
-DFRobot_ILI9341_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+DFRobot_ILI9488_320x480_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 /*M0主板下DMA传输*/
-//DFRobot_ILI9341_240x320_DMA_SPI  screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ILI9488_320x480_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 
 /**
  * @brief 构造函数

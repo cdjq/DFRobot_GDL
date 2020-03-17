@@ -20,7 +20,7 @@
 #else
 #define TOUCHPOINTS   5
 #endif
-
+#include "DFRobot_Gesture.h"
 #define BLACK_RGB565        0x0000
 #define BLUE_RGB565         0x001F
 #define RED_RGB565          0xF800
@@ -41,7 +41,7 @@
 #define GREENYELLOW_RGB565  0xAFE5
 #define DCYAN_RGB565        0x03EF
 
-class DFRobot_UI
+class DFRobot_UI : public DFRobot_Gesture
 {
 public:
   //不完全类型，在定义之前会使用到这些类型，
@@ -199,13 +199,6 @@ public:
     结构体类型，用来存储按钮控件的私有参数
   */
   struct button :object{
-    // uint16_t posx;/**<按钮在x轴的坐标>**/
-    // uint16_t posy;/**<按钮在y轴的坐标>**/
-    // uint16_t  width ;/**<按钮的宽度>**/
-    // uint16_t  height ;/**<按钮的高度>**/
-    // uint16_t fgColor;/**<按钮的前景色>**/
-    // uint16_t bgColor;/**<按钮的背景色>**/
-    // uint8_t fontSize;/**<按钮字体的大小>**/
     char  text[10] ;/**<按钮的名字>**/
     bool click;/**<按钮是否被点击的标志>**/
     buttonCallback  *callBack ;/**<按钮的回调函数的函数指针>**/
@@ -280,20 +273,6 @@ public:
     LEFT,
   } eLocation_t;
   
-  /*!
-    该枚举定义了不同的手势
-  */
-  typedef enum {
-    UPGLIDE ,/**<向上滑动>**/
-    DOWNGLIDE,/**<向下滑动>**/
-    LEFTGLIDE,/**<向左滑动>**/
-    RIGHTGLIDE,/**<向右滑动>**/
-    LONGPRESSDE,/**<长按屏幕>**/
-    SINGLECLICK,/**<单击屏幕>**/
-    DOUBLECLICK,/**<双击屏幕>**/
-    NONE,/**<没有识别到有效手势>**/
-  } eGestures_t;
-  
 
 protected:
   scanF * scan;
@@ -363,7 +342,7 @@ public:
    * @n      DOUBLECLICK ：双击屏幕
    * @n      NONE ：没有手势
     */
-  eGestures_t getGestures();
+  eGesture_t getGestures();
   
   /**
    * @brief 在屏幕上创建一个数字键盘
@@ -410,7 +389,6 @@ public:
   
   /**
    * @brief 在屏幕上创建一个进度条
-   * @param bar sBar_t类型的数据
    * @n 用户可以自定义结构体里面的数据或者使用经初始化的参数
    */
   sBar_t &creatBar();
@@ -485,6 +463,7 @@ private:
   void drawTableview(void *obj);
   uint8_t pointNum(String str);
   uint8_t stringToPoint(String str, sPoint_t *point);
+  uint8_t stringToPoint(String str);
   void drawClickButton(sObject_t *obj,char *text,bool click);
   void drawButtonString(sObject_t *obj, eLocation_t x, eLocation_t y, char * c,bool click);
   void drawkpString(sButton_t *kp, eLocation_t x, eLocation_t y, char * c);
@@ -514,8 +493,6 @@ private:
   uint8_t click;
   uint8_t pressed;
   uint8_t screenPressed; 
-  eGestures_t lastGestute;
-  uint16_t bx1,by1,bx2,by2;
   uint16_t gesturex,gesturey,gestureWidth,gestureHeight;
 };
 #endif

@@ -17,6 +17,7 @@ extern sGdlIFDev_t gdl_Dev_ST7789_R240x240_DMA_SPI;
 extern sGdlIFDev_t gdl_Dev_ST7789_R240x320_DMA_SPI;
 extern sGdlIFDev_t gdl_Dev_ST7735S_R80x160_DMA_SPI;
 extern sGdlIFDev_t gdl_Dev_ILI9488_R320x480_DMA_SPI;
+extern sGdlIFDev_t gdl_Dev_ILI9341_R240x320_DMA_SPI;
 #endif
 
 #endif
