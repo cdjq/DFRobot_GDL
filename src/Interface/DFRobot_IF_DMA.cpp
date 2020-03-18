@@ -8,21 +8,20 @@ uint8_t interfaceComDmaSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_t len
   if(p == NULL) return 0;
   if(p->isBegin){
       #if defined(ARDUINO_SAM_ZERO)
-      // if(p->freq > 12000000)
-      // {
-          // sercom4.disableSPI();
-          // while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
-          // SERCOM4->SPI.BAUD.reg = 0; 
-          // sercom4.enableSPI();
-      // }else{
+     if(p->freq > 12000000)
+           {
+          sercom4.disableSPI();
+          while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
+          SERCOM4->SPI.BAUD.reg = 0; 
+          sercom4.enableSPI();
+      }else{
            p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
-      // }
+      }
       #endif
   }
   switch(cmd){
     case IF_COM_PROTOCOL_INIT:
     {
-        Serial.println("IF_COM_PROTOCOL_INIT");
         p->pro.dma = &DMASPI;
         p->pro.dma->begin();
         p->isBegin = true;
@@ -111,6 +110,9 @@ uint8_t interfaceComDmaSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_t len
     default:
             break;
   }
+  
+  //  p->pro.spi->endTransaction();
+    SPI.setClockDivider(12);
 }
 
 #endif

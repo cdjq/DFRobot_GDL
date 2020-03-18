@@ -24,7 +24,7 @@
 #define TFT_DC  7
 #define TFT_CS  5
 #define TFT_RST 6
-#define TOUCH_CS 2
+#define TOUCH_CS A3
 /*ESP32 and ESP8266*/
 #elif defined(ESP32) || defined(ESP8266)
 #define TFT_DC  D3
