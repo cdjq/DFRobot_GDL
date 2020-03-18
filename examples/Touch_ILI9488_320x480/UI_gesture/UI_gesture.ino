@@ -1,7 +1,7 @@
 /*!
  * @file UI_gesture.ino
  * @brief 在屏幕指定区域可以识别到用户所使用的手势，手势的名称会显示到文本框内
- * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
+ * @n 本示例支持的主板有Arduino Uno, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * @n 需要文本框显示时，需要点击文本框以使光标移到文本框内
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)

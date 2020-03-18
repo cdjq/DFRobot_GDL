@@ -17,7 +17,7 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 ![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/Rect.BMP)
 * 图形显示<br>
     * 支持16位、24位BMP格式的图片
-    * 支持32位BMP格式的图片;但是其背景色可能会不被显示
+    * 支持32位BMP格式的图片,但是32位无法设置背景色,透明的地方是黑的
     * 支持jpg格式的图片
     * 我们也提供了一些图标，可点击[此处](https://github.com/cdjq/DFRobot_Icon)下载和查看
 

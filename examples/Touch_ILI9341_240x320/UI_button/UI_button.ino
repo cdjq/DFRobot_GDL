@@ -1,7 +1,7 @@
 /*!
  * @file UI_button.ino
  * @brief 在屏幕上创建一个按钮控件，用户可以自定义按钮的参数
- * @n 示例里面创建了三个按钮A,B,C,按下A,B按钮会在文本框内显示，按下C按钮会删除文本框的一个字符
+ * @n 示例里面创建了三个按钮on,off,clr,按下on,off按钮会在文本框内显示，按下clr按钮会删除文本框的一个字符
  * @n 需要文本框显示时，需要点击文本框以使光标移到文本框内
  * @n 本示例支持的主板有Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * 

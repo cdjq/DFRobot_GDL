@@ -11,13 +11,13 @@ uint8_t interfaceComHardwareSPI(sGdlIF_t *p, uint8_t cmd, uint8_t *pBuf, uint32_
   if(p->isBegin && cmd != IF_COM_SET_FREQUENCY){
       #if defined(SPI_HAS_TRANSACTION)
       #if defined(ARDUINO_SAM_ZERO)
-      uint8_t baud = 48000000/(p->freq*2) - 1;
-      sercom4.disableSPI();
-      while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
-         SERCOM4->SPI.BAUD.reg = baud; 
-         sercom4.enableSPI();
+      // uint8_t baud = 48000000/(p->freq*2) - 1;
+      // sercom4.disableSPI();
+      // while(SERCOM4->SPI.SYNCBUSY.bit.ENABLE);
+         // SERCOM4->SPI.BAUD.reg = baud; 
+         // sercom4.enableSPI();
 
-      #else
+      // #else
          p->pro.spi->beginTransaction(SPISettings(p->freq, MSBFIRST, SPI_MODE0));
       #endif
       #else
