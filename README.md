@@ -7,7 +7,7 @@ GDL旨在让用户能更简单快速上手和快速学习；从而实现多种�
 ## GDL软件
 GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 #### 查看wiki
-* 点击[此处查看中文wiki](https://github.com/cdjq/DFRobot_GDL/wiki/ChineseWIKI)<br>
+* 点击[此处查看中文wiki](https://github.com/cdjq/DFRobot_GDL/wiki/%E4%B8%AD%E6%96%87WIKI)<br>
 * 点击[此处查看英文wiki](https://github.com/cdjq/DFRobot_GDL/wiki/EnglishWIKI)
 
 #### 基础显示
