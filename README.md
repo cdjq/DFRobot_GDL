@@ -12,9 +12,9 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 
 #### 基础显示
 * 点、线、几何图形等的实现<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/Triangle.jpg)
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/Circle.jpg)
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/Rect.jpg)
+![三角形](https://github.com/cdjq/DFRobot_GDL/raw/master/image/Triangle.jpg)
+![圆](https://github.com/cdjq/DFRobot_GDL/raw/master/image/Circle.jpg)
+![矩形](https://github.com/cdjq/DFRobot_GDL/raw/master/image/Rect.jpg)
 * 图形显示<br>
     * 支持16位、24位BMP格式的图片
     * 支持32位BMP格式的图片,但是32位无法设置背景色,透明的地方是黑的
@@ -69,16 +69,16 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 
 #### UI功能
 * 滑条<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/1.jpg)
+![滑条](https://github.com/cdjq/DFRobot_GDL/raw/master/image/1.jpg)
 * 进度条<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/2.jpg)
+![进度条](https://github.com/cdjq/DFRobot_GDL/raw/master/image/2.jpg)
 * 文本框<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/3.jpg)
+![文本框](https://github.com/cdjq/DFRobot_GDL/raw/master/image/3.jpg)
 * 按键<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/4.jpg)
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/5.jpg)
+![按键1](https://github.com/cdjq/DFRobot_GDL/raw/master/image/4.jpg)
+![按键2](https://github.com/cdjq/DFRobot_GDL/raw/master/image/5.jpg)
 * 表格视图<br>
-![avatar](https://github.com/cdjq/DFRobot_GDL/blob/master/image/6.jpg)
+![表格视图](https://github.com/cdjq/DFRobot_GDL/raw/master/image/6.jpg)
 * 坐标系控件(该功能暂未发布）<br>
 
 
