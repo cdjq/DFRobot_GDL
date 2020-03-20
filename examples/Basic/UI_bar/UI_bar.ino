@@ -19,15 +19,15 @@
  
 /*M0*/ 
 #if defined ARDUINO_SAM_ZERO
- #define TFT_RST 6
-
+#define TFT_DC  7
+#define TFT_CS  5
+#define TFT_RST 6
 /*ESP32 and ESP8266*/
 #elif defined(ESP32) || defined(ESP8266)
 #define TFT_DC  D3
 #define TFT_CS  D4
 #define TFT_RST D5
-
-/*AVR serials*/
+/*AVR系列主板*/
 #else
 #define TFT_DC  2
 #define TFT_CS  3

@@ -23,6 +23,22 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
 
 * 内置字库<br>
 &nbsp;下面是内置可使用的字体列表<br>
+    * FreeMono9pt7b
+    * FreeMono12pt7b
+    * FreeMono18pt7b
+    * FreeMono24pt7b
+    * FreeMonoBold12pt7b
+    * FreeMonoBoldOblique12pt7b
+    * FreeMonoOblique12pt7b
+    * FreeSans12pt7b
+    * FreeSansBold9pt7b
+    * FreeSansBold12pt7b
+    * FreeSansBoldOblique12pt7b
+    * FreeSansOblique12pt7b
+    * FreeSerif12pt7b
+    * #FreeSerifBold12pt7b
+    * FreeSerifBoldItalic12pt7b
+    * FreeSerifItalic12pt7b
     * SIMKAIFont12pt
     * SIMKAIFont18pt
     * SIMKAIFont24pt
