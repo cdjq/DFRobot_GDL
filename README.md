@@ -36,7 +36,7 @@ GDL集成了大量的功能组件，wiki中包含这些组件的使用方法<br>
     * FreeSansBoldOblique12pt7b
     * FreeSansOblique12pt7b
     * FreeSerif12pt7b
-    * #FreeSerifBold12pt7b
+    * FreeSerifBold12pt7b
     * FreeSerifBoldItalic12pt7b
     * FreeSerifItalic12pt7b
     * SIMKAIFont12pt
