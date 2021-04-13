@@ -1,21 +1,20 @@
 /*!
  * @file DFRobot_IF.cpp
- * @brief Declaration the basic structure of class DFRobot_IF，兼容不同接口的读写
- * @n 支持硬件IIC
- * @n 支持硬件SPI
- * @n 支持M0的DMA
- * @n 支持从rom/ram读取数据
- * @n 支持SPI/IIC/SPI_DMA读写
- * @n 设置通信接口频率
+ * @brief Declaration the basic structure of class DFRobot_IF, compatible with reading and writing of different interfaces
+ * @n Supports hardware IIC
+ * @n Supports hardware SPI
+ * @n Supports DMA of M0
+ * @n Supports reading data from rom / ram
+ * @n Supports SPI / IIC / SPI_DMA read and write
+ * @n Set communication interface frequency
  *
- * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
- * @licence     The MIT License (MIT)
- * @author [Arya](xue.peng@dfrobot.com)
- * @version  V1.0
- * @date  2019-12-23
- * @https://github.com/DFRobot/DFRobot_GDL
+ * @copyright Copyright (c) 2010 DFRobot Co. Ltd (http://www.dfrobot.com)
+ * @licence The MIT License (MIT)
+ * @author [Arya] (xue.peng@dfrobot.com)
+ * @version V1.0
+ * @date 2019-12-23
+ * @https: //github.com/DFRobot/DFRobot_GDL
  */
-
 #include "DFRobot_IF.h"
 #include "DFRobot_Type.h"
 #include "Arduino.h"
@@ -70,8 +69,8 @@ void DFRobot_IF::initHWIIC(sGdlIFDev_t *dev, uint8_t addr, uint8_t rst, uint8_t 
   for(uint8_t i = 0; i < _if.interface; i++){
       if(_if.pinList[i] == GDL_PIN_NC)
           continue;
-      pinMode(_if.pinList[i], OUTPUT);
-      digitalWrite(_if.pinList[i], HIGH);
+          //pinMode(_if.pinList[i], OUTPUT);
+          //digitalWrite(_if.pinList[i], HIGH);
   }
   _if.length = I2C_BUFFER_LENGTH;
   _if.dev = dev;
@@ -139,9 +138,9 @@ void DFRobot_IF::readReg(uint16_t reg, void *pBuf, uint32_t len, bool flag)
   buf[0] = reg >> 8;
   buf[1] = reg;
   if(flag)
-      readBuf(buf, 2, pBuf, len, false, 2);//16位寄存器，16位数据
-  else
-      readBuf(buf, 2, pBuf, len, false, 1);//16位寄存器，8位数据
+      readBuf(buf, 2, pBuf, len, false, 2);//16-bit register, 16-bit data
+  else 
+      readBuf(buf, 2, pBuf, len, false, 1);//16-bit register, 8-bit data
 }
 void DFRobot_IF::readCommand(uint8_t cmd, void *pBuf, uint32_t len){
   readBuf(&cmd, 1, pBuf, len, true);
@@ -154,7 +153,7 @@ bool DFRobot_IF::readBuf(void *reg, uint8_t regBytes, void *pBuf, uint32_t len, 
   memcpy(bufPre+1, reg,regBytes);
   uint32_t left = len;
   len = 0;
-  if(regIscmd){//代表reg不是寄存器，是命令
+  if(regIscmd){//Reg is not a register, but a command
       while(left){
           left > _if.length ? len = _if.length : len = left;
           uint8_t buf[sizeof(bufPre)+len];

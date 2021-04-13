@@ -40,11 +40,11 @@
  * @param rst  Reset pin of the screen
  * @param bl  Screen backlight pin
  */
-DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
+//DFRobot_ST7789_240x240_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ILI9341_240x320_HW_SPI  screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ILI9488_320x480_HW_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
-/*M0主板下DMA传输*/
+/* M0 mainboard DMA transfer */
 //DFRobot_ST7789_240x240_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ST7789_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
 //DFRobot_ILI9341_240x320_DMA_SPI screen(/*dc=*/TFT_DC,/*cs=*/TFT_CS,/*rst=*/TFT_RST);
@@ -84,7 +84,7 @@ void setup()
   //Set the numeric keyboard mode: NOCHOICE-bring the text box itself; CHOICE-the text box needed to be defined externally.
   kp.setMode(DFRobot_UI::CHOICE);
   ui.draw(&kp);
-  ui.drawString(/*x=*/30, /*y=*/10, "login interface", COLOR_RGB565_CYAN, ui.bgColor,/*字体大小=*/ 2, /*反显*/0);
+  ui.drawString(/*x=*/30, /*y=*/10, "login interface", COLOR_RGB565_CYAN, ui.bgColor,/*Font size=*/ 2, /*Reversely display*/0);
 }
 
 
