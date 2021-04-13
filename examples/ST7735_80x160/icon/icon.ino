@@ -4,9 +4,9 @@
  * @n The demo supports Arduino Uno, Leonardo, Mega2560, FireBeetle-ESP32, FireBeetle-ESP8266, FireBeetle-M0
  * @copyright Copyright (c) 2010 DFRobot Co. Ltd (http://www.dfrobot.com)
  * @licence The MIT License (MIT)
- * @author [YeHangYu] (hangyu.ye@dfrobot.com)
- * @version V0.1
- * @date 2020-01-07
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V0.1
+ * @date  2021-04-13
  * @url https://github.com/DFRobot/DFRobot_GDL
  */
 #include "DFRobot_GDL.h"
